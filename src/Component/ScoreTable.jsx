@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import FinalScore from './FinalScore'
 
 const ScoreTable = () => {
   const [matchInfo, setMatchInfo] = useState(null)
@@ -300,6 +301,7 @@ const ScoreTable = () => {
 
   return (
     <div className=" container-fluid mt-5">
+      <FinalScore />
       {renderTable(matchInfo.team1, 1, team1Data)}
       <br />
       {/* <hr /> */}
