@@ -303,7 +303,7 @@ const ScoreTable = () => {
   }
 
   return (
-    <div className="container-fluid p-0" style={{ height: '100vh', overflow: 'hidden' }}>
+    <div className=" container-fluid p-0" style={{ height: '100vh', overflow: 'hidden' }}>
       <div id='finalScore' style={{ 
         height: '30vh', 
         position: 'fixed',

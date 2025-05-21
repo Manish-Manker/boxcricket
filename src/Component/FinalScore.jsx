@@ -32,7 +32,7 @@ const FinalScore = () => {
     const value = ball.toUpperCase()
     
     switch(value) {
-      case 'W': return 'White Ball (+2 runs)'
+      case 'W': return 'Wide ball (+2 runs)'
       case 'R': return 'Run Out (-5 runs)'
       case 'C': return 'Catch Out (-5 runs)'
       case 'B': return 'Bowled (-5 runs)'
@@ -125,7 +125,8 @@ const FinalScore = () => {
                   </td>
                 ))}
                 <td className="fw-bold">
-                  {calculateTeamTotal(team1Data).total} ({calculateTeamTotal(team1Data).skins} skins)
+                  {calculateTeamTotal(team1Data).total} 
+                  {/* ({calculateTeamTotal(team1Data).skins} skins) */}
                 </td>
               </tr>
               <tr>
@@ -136,7 +137,8 @@ const FinalScore = () => {
                   </td>
                 ))}
                 <td className="fw-bold">
-                  {calculateTeamTotal(team2Data).total} ({calculateTeamTotal(team2Data).skins} skins)
+                  {calculateTeamTotal(team2Data).total} 
+                  {/* ({calculateTeamTotal(team2Data).skins} skins) */}
                 </td>
               </tr>
             </tbody>
@@ -154,7 +156,7 @@ const FinalScore = () => {
               <p className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</p>
             </>
           ) : (
-            <p className="text-center text-muted mb-0">Waiting for next ball...</p>
+            <p className="text-center text-muted mb-0">Waiting for ball...</p>
           )}
         </div>
       </div>
