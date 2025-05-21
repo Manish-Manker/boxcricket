@@ -56,20 +56,29 @@ const FinalScore = () => {
 
     teamData.forEach(pair => {
       pair.batsmen.forEach(batsman => {
-        batsman.overs.forEach(over => {
+        batsman.overs.forEach((over) => {
           // Get the actual over number (1-based)
           const overNumber = parseInt(over.bowlerNum)
           // Check if this over belongs to the current skin
           if (overNumber > startOver && overNumber <= endOver) {
-            skinTotal += over.balls.reduce((sum, ball) => {
-              if (!ball) return sum
-              const value = ball.toUpperCase()
-              if (value === 'W') return sum 
-              if (value === 'N') return sum 
-              if (['R', 'C', 'B'].includes(value)) return sum - 5
-              const numValue = parseInt(value)
-              return sum + (numValue >= 0 && numValue <= 7 ? numValue : 0)
-            }, 0)
+            over.balls.forEach((ball, index) => {
+              if (!ball) return;
+              const value = ball.toUpperCase();
+              const extraRun = parseInt(over.extraRuns[index] || 0);
+
+              if (value === 'W') {
+                skinTotal +=  + extraRun; // Add wide ball (2) plus extra runs
+              } else if (value === 'N') {
+                skinTotal += extraRun; // Add no ball runs
+              } else if (['R', 'C', 'B'].includes(value)) {
+                skinTotal -= 5; // Subtract 5 for wickets
+              } else {
+                const numValue = parseInt(value);
+                if (numValue >= 0 && numValue <= 7) {
+                  skinTotal += numValue;
+                }
+              }
+            });
           }
         })
       })
