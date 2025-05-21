@@ -79,12 +79,41 @@ const ScoreTable = () => {
   const numberOfRows = Math.ceil(parseInt(matchInfo.totalOvers) / parseInt(matchInfo.oversPerSkin))
   const numberOfCols = parseInt(matchInfo.oversPerSkin)
 
+  // Calculate score for a single ball including special characters
+  const calculateBallValue = (ball) => {
+    if (!ball) return 0
+    
+    // Handle special characters
+    switch(ball.toUpperCase()) {
+      case 'W': return 2
+      case 'R':
+      case 'C':
+      case 'B': return -5
+      default:
+        // Handle numeric values
+        const numValue = parseInt(ball)
+        return numValue >= 0 && numValue <= 6 ? numValue : 0
+    }
+  }
+
   // Calculate total for one over (6 balls)
   const calculateOverTotal = (balls) => {
     return balls.reduce((sum, ball) => {
-      const value = parseInt(ball) || 0
-      return sum + value
-    }, 0)
+      if (!ball) return sum;
+      const value = ball.toUpperCase();
+      if (value === 'W') return sum + 2;
+      if (['R', 'C', 'B'].includes(value)) return sum - 5;
+      const numValue = parseInt(value);
+      return sum + (numValue >= 0 && numValue <= 6 ? numValue : 0);
+    }, 0);
+  }
+
+  // Count wickets (R/C/B) in an over
+  const countWickets = (balls) => {
+    return balls.reduce((count, ball) => {
+      if (!ball) return count;
+      return ['R', 'C', 'B'].includes(ball.toUpperCase()) ? count + 1 : count;
+    }, 0);
   }
 
   // Calculate total for one batsman (all overs)
@@ -94,26 +123,53 @@ const ScoreTable = () => {
     }, 0)
   }
 
+  // Calculate total for a pair (both batsmen)
+  const calculatePairTotal = (pair) => {
+    return pair.batsmen.reduce((sum, batsman) => {
+      return sum + calculateBatsmanTotal(batsman.overs);
+    }, 0);
+  };
+
+  const isValidInput = (value) => {
+    if (!value) return true;
+    const upperValue = value.toUpperCase();
+    return (
+      ['W', 'R', 'C', 'B'].includes(upperValue) ||
+      (parseInt(value) >= 0 && parseInt(value) <= 6)
+    );
+  };
+
   const handleBallChange = (teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, value) => {
-    const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data
+    // Only allow valid inputs
+    if (!isValidInput(value)) {
+      return;
+    }
+
+    const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data;
     
     setTeamData(prevData => {
-      const newData = JSON.parse(JSON.stringify(prevData))
-      const over = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex]
+      const newData = [...prevData];
+      // Update the ball value
+      newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].balls[ballIndex] = value;
       
-      // Update ball value
-      over.balls[ballIndex] = value
-
-      // Recalculate over total
-      over.overTotal = calculateOverTotal(over.balls).toString()
-
-      // Update row totals
-      const pair = newData[rowIndex]
-      pair.totals[overIndex] = `${calculateOverTotal(pair.batsmen[0].overs[overIndex].balls)}/${calculateOverTotal(pair.batsmen[1].overs[overIndex].balls)}`
-
-      return newData
-    })
-  }
+      // Calculate new over total and wickets
+      const overBalls = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].balls;
+      const overTotal = calculateOverTotal(overBalls);
+      const wickets = countWickets(overBalls);
+      
+      // Update over stats
+      newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].overTotal = overTotal.toString();
+      
+      // Update pair totals for this over
+      const pairOverTotal = calculateOverTotal(newData[rowIndex].batsmen[0].overs[overIndex].balls) +
+                           calculateOverTotal(newData[rowIndex].batsmen[1].overs[overIndex].balls);
+      const pairOverWickets = countWickets(newData[rowIndex].batsmen[0].overs[overIndex].balls) +
+                             countWickets(newData[rowIndex].batsmen[1].overs[overIndex].balls);
+      newData[rowIndex].totals[overIndex] = `${pairOverWickets}/${pairOverTotal}`;
+      
+      return newData;
+    });
+  };
 
   const handleBowlerNameChange = (teamNumber, rowIndex, overIndex, value) => {
     const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data
@@ -135,6 +191,42 @@ const ScoreTable = () => {
       return newData
     })
   }
+
+  const renderBowlerStats = (over) => {
+    const total = over.total || 0;
+    const wickets = over.wickets || 0;
+    return `${wickets}/${total}`;
+  };
+
+  const renderOverRow = (pair, pairIndex) => {
+    return (
+      <tr key={pairIndex}>
+        <td>{pairIndex + 1}</td>
+        {pair.batsmen.map((batsman, batsmanIndex) => (
+          <React.Fragment key={batsmanIndex}>
+            <td>{batsman.name || `Batsman ${batsmanIndex + 1}`}</td>
+            {batsman.overs.map((over, overIndex) => (
+              <React.Fragment key={overIndex}>
+                {over.balls.map((ball, ballIndex) => (
+                  <td key={ballIndex}>
+                    <input
+                      type="text"
+                      value={ball || ''}
+                      maxLength={1}
+                      onChange={(e) => handleBallChange(e, pairIndex, batsmanIndex, overIndex, ballIndex)}
+                      className="ball-input"
+                    />
+                  </td>
+                ))}
+                <td className="over-total">{renderBowlerStats(over)}</td>
+              </React.Fragment>
+            ))}
+          </React.Fragment>
+        ))}
+        <td className="pair-total">{calculatePairTotal(pair)}</td>
+      </tr>
+    );
+  };
 
   const renderTable = (teamName, teamNumber, teamData) => {
     return (
