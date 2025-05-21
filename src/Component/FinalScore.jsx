@@ -48,14 +48,17 @@ const FinalScore = () => {
   const calculateSkinScore = (teamData, skinIndex, oversPerSkin) => {
     if (!teamData) return 0
     
-    const startOver = skinIndex * oversPerSkin
-    const endOver = startOver + oversPerSkin
+    // Calculate the over range for this skin
+    const startOver = skinIndex * parseInt(oversPerSkin)
+    const endOver = Math.min(startOver + parseInt(oversPerSkin), parseInt(matchInfo.totalOvers))
     let skinTotal = 0
 
     teamData.forEach(pair => {
       pair.batsmen.forEach(batsman => {
-        batsman.overs.forEach((over, overIndex) => {
+        batsman.overs.forEach(over => {
+          // Get the actual over number (1-based)
           const overNumber = parseInt(over.bowlerNum)
+          // Check if this over belongs to the current skin
           if (overNumber > startOver && overNumber <= endOver) {
             skinTotal += over.balls.reduce((sum, ball) => {
               if (!ball) return sum
@@ -92,7 +95,8 @@ const FinalScore = () => {
     return <div className="container mt-5">Loading...</div>
   }
 
-  const skinColumns = Array(parseInt(matchInfo.oversPerSkin)).fill(0)
+  const numberOfSkins = Math.ceil(parseInt(matchInfo.totalOvers) / parseInt(matchInfo.oversPerSkin))
+  const skinColumns = Array(numberOfSkins).fill(0)
     .map((_, index) => index + 1)
 
   return (
@@ -126,7 +130,7 @@ const FinalScore = () => {
                 ))}
                 <td className="fw-bold">
                   {calculateTeamTotal(team1Data).total} 
-                  {/* ({calculateTeamTotal(team1Data).skins} skins) */}
+                  ({calculateTeamTotal(team1Data).skins} skins)
                 </td>
               </tr>
               <tr>
@@ -138,7 +142,7 @@ const FinalScore = () => {
                 ))}
                 <td className="fw-bold">
                   {calculateTeamTotal(team2Data).total} 
-                  {/* ({calculateTeamTotal(team2Data).skins} skins) */}
+                  ({calculateTeamTotal(team2Data).skins} skins)
                 </td>
               </tr>
             </tbody>
