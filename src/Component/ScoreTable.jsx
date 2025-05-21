@@ -15,9 +15,7 @@ const ScoreTable = () => {
     return <div className="container mt-5">Loading...</div>
   }
 
-  // Calculate number of rows based on totalOvers/oversPerSkin
   const numberOfRows = Math.ceil(parseInt(matchInfo.totalOvers) / parseInt(matchInfo.oversPerSkin))
-  // Number of columns is equal to oversPerSkin
   const numberOfCols = parseInt(matchInfo.oversPerSkin)
 
   const createRows = (rowCount) => {
@@ -26,12 +24,11 @@ const ScoreTable = () => {
       batsmen: [
         {
           name: '',
-          // Each row has oversPerSkin number of overs
           overs: Array(numberOfCols).fill().map((_, overIndex) => ({
             bowlerNum: (rowIndex * numberOfCols + overIndex + 1),
             bowlerName: '',
             balls: Array(6).fill(''),
-            overTotal: '0/0'
+            overTotal: '0'
           }))
         },
         {
@@ -40,11 +37,10 @@ const ScoreTable = () => {
             bowlerNum: (rowIndex * numberOfCols + overIndex + 1),
             bowlerName: '',
             balls: Array(6).fill(''),
-            overTotal: '0/0'
+            overTotal: '0'
           }))
         }
       ],
-      // Total for each over in the row
       totals: Array(numberOfCols).fill('0/0')
     }))
   }
@@ -62,7 +58,7 @@ const ScoreTable = () => {
             <tbody>
               {rows.map((pair) => (
                 <React.Fragment key={pair.pairId}>
-                  {/* First row - Bowler numbers */}
+                  {/* First row - Over numbers */}
                   <tr>
                     <td colSpan="2"></td>
                     {Array(numberOfCols).fill().map((_, i) => (
@@ -102,26 +98,55 @@ const ScoreTable = () => {
                         />
                       </td>
                       {batsman.overs.map((over, overIndex) => (
-                        <td key={overIndex} className="p-0 position-relative">
-                          <div className="d-flex flex-wrap" style={{minWidth: '120px'}}>
+                        <td key={overIndex} className="p-2">
+                          <div className="d-flex justify-content-center align-items-center gap-1" style={{minWidth: '160px'}}>
+                            {/* 6 balls */}
                             {over.balls.map((_, ballIndex) => (
                               <input
                                 key={ballIndex}
                                 type="text"
-                                className="form-control form-control-sm border-0"
-                                style={{width: '20px'}}
+                                className="form-control form-control-sm"
+                                style={{
+                                  width: '28px',
+                                  height: '28px',
+                                  padding: '2px',
+                                  textAlign: 'center',
+                                  border: '1px solid #dee2e6'
+                                }}
                               />
                             ))}
+                            {/* 7th box for over total */}
+                            <input
+                              type="text"
+                              className="form-control form-control-sm"
+                              style={{
+                                width: '28px',
+                                height: '28px',
+                                padding: '2px',
+                                textAlign: 'center',
+                                backgroundColor: '#f8f9fa',
+                                border: '1px solid #dee2e6'
+                              }}
+                              value={over.overTotal}
+                              readOnly
+                            />
                           </div>
+                          {/* Over total below 7th box */}
+                          {batsmanIndex === 1 && (
+                            <div className="d-flex justify-content-end" style={{marginTop: '4px', paddingRight: '4px'}}>
+                              <div style={{width: '28px', textAlign: 'center'}}>
+                                <small>{over.overTotal}</small>
+                              </div>
+                            </div>
+                          )}
                         </td>
                       ))}
                       <td className="align-middle text-center">0</td>
                     </tr>
                   ))}
-                  {/* Over totals row */}
+                  {/* Total row */}
                   <tr className="border-bottom border-dark">
                     <td colSpan="2" className="text-end pe-3">
-                      {/* Show over range for this row */}
                       {(pair.pairId - 1) * numberOfCols + 1}/{pair.pairId * numberOfCols}
                     </td>
                     {pair.totals.map((total, idx) => (
