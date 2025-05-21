@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 const ScoreTable = () => {
   const [matchInfo, setMatchInfo] = useState(null)
-  const [scoreData, setScoreData] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -16,38 +15,42 @@ const ScoreTable = () => {
     return <div className="container mt-5">Loading...</div>
   }
 
-  // Calculate number of rows based on total overs
-  const numberOfPairs = Math.ceil(parseInt(matchInfo.totalOvers) / 6)
+  // Calculate number of rows based on totalOvers/oversPerSkin
+  const numberOfRows = Math.ceil(parseInt(matchInfo.totalOvers) / parseInt(matchInfo.oversPerSkin))
+  // Number of columns is equal to oversPerSkin
+  const numberOfCols = parseInt(matchInfo.oversPerSkin)
 
-  const createRows = (count) => {
-    return Array(count).fill().map((_, index) => ({
-      pairId: index + 1,
+  const createRows = (rowCount) => {
+    return Array(rowCount).fill().map((_, rowIndex) => ({
+      pairId: rowIndex + 1,
       batsmen: [
         {
           name: '',
-          overs: Array(6).fill().map((_, overIndex) => ({
-            bowlerNum: (index * 6 + overIndex + 1),
+          // Each row has oversPerSkin number of overs
+          overs: Array(numberOfCols).fill().map((_, overIndex) => ({
+            bowlerNum: (rowIndex * numberOfCols + overIndex + 1),
             bowlerName: '',
             balls: Array(6).fill(''),
-            overTotal: '0/0' // runs/wickets for this over
+            overTotal: '0/0'
           }))
         },
         {
           name: '',
-          overs: Array(6).fill().map((_, overIndex) => ({
-            bowlerNum: (index * 6 + overIndex + 1),
+          overs: Array(numberOfCols).fill().map((_, overIndex) => ({
+            bowlerNum: (rowIndex * numberOfCols + overIndex + 1),
             bowlerName: '',
             balls: Array(6).fill(''),
             overTotal: '0/0'
           }))
         }
       ],
-      totals: Array(6).fill('0/0') // Combined totals for each over
+      // Total for each over in the row
+      totals: Array(numberOfCols).fill('0/0')
     }))
   }
 
   const renderTable = (teamName) => {
-    const rows = createRows(numberOfPairs)
+    const rows = createRows(numberOfRows)
 
     return (
       <div className="mb-5">
@@ -62,9 +65,9 @@ const ScoreTable = () => {
                   {/* First row - Bowler numbers */}
                   <tr>
                     <td colSpan="2"></td>
-                    {pair.batsmen[0].overs.map((over, idx) => (
-                      <td key={idx} className="text-center fw-bold">
-                        {over.bowlerNum}
+                    {Array(numberOfCols).fill().map((_, i) => (
+                      <td key={i} className="text-center fw-bold">
+                        {pair.pairId * numberOfCols - numberOfCols + i + 1}
                       </td>
                     ))}
                     <td>Total</td>
@@ -72,8 +75,8 @@ const ScoreTable = () => {
                   {/* Second row - Bowler names */}
                   <tr>
                     <td colSpan="2"></td>
-                    {pair.batsmen[0].overs.map((over, idx) => (
-                      <td key={idx}>
+                    {Array(numberOfCols).fill().map((_, i) => (
+                      <td key={i}>
                         <input 
                           type="text" 
                           className="form-control form-control-sm" 
@@ -110,29 +113,21 @@ const ScoreTable = () => {
                               />
                             ))}
                           </div>
-                          {batsmanIndex === 1 && (
-                            <div className="border-top text-center">
-                              {over.overTotal}
-                            </div>
-                          )}
                         </td>
                       ))}
-                      <td className="align-middle text-center">
-                        {/* Individual batsman total */}
-                        0
-                      </td>
+                      <td className="align-middle text-center">0</td>
                     </tr>
                   ))}
-                  {/* Total row after each pair */}
+                  {/* Over totals row */}
                   <tr className="border-bottom border-dark">
-                    <td colSpan="2" className="text-end pe-3">Total</td>
+                    <td colSpan="2" className="text-end pe-3">
+                      {/* Show over range for this row */}
+                      {(pair.pairId - 1) * numberOfCols + 1}/{pair.pairId * numberOfCols}
+                    </td>
                     {pair.totals.map((total, idx) => (
                       <td key={idx} className="text-center">{total}</td>
                     ))}
-                    <td className="text-center">
-                      {/* Grand total for this pair */}
-                      0
-                    </td>
+                    <td className="text-center">0</td>
                   </tr>
                 </React.Fragment>
               ))}
