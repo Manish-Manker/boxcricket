@@ -5,39 +5,45 @@ const FinalScore = () => {
   const [matchInfo, setMatchInfo] = useState(null)
   const [team1Data, setTeam1Data] = useState(null)
   const [team2Data, setTeam2Data] = useState(null)
+  const [currentBall, setCurrentBall] = useState(null)
 
-  // Load initial data
   useEffect(() => {
+    // Load match info and team data from localStorage
     const loadData = () => {
       const matchData = JSON.parse(localStorage.getItem('matchInfo'))
       const team1ScoreData = JSON.parse(localStorage.getItem('team1ScoreData'))
       const team2ScoreData = JSON.parse(localStorage.getItem('team2ScoreData'))
+      const lastBall = localStorage.getItem('currentBall')
       
       setMatchInfo(matchData)
       setTeam1Data(team1ScoreData)
       setTeam2Data(team2ScoreData)
+      setCurrentBall(lastBall)
     }
 
-    loadData() // Load initial data
+    loadData()
+    const interval = setInterval(loadData, 500) // Check every half second for updates
 
-    // Add event listener for storage changes
-    const handleStorageChange = (e) => {
-      if (e.key === 'team1ScoreData' || e.key === 'team2ScoreData' || e.key === 'matchInfo') {
-        loadData() // Reload all data when any team's data changes
-      }
-    }
-
-    window.addEventListener('storage', handleStorageChange)
-    
-    // Also set up an interval to check for changes
-    const interval = setInterval(loadData, 1000)
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('storage', handleStorageChange)
-      clearInterval(interval)
-    }
+    return () => clearInterval(interval)
   }, [])
+
+  const getBallDescription = (ball) => {
+    if (!ball) return ''
+    const value = ball.toUpperCase()
+    
+    switch(value) {
+      case 'W': return 'White Ball (+2 runs)'
+      case 'R': return 'Run Out (-5 runs)'
+      case 'C': return 'Catch Out (-5 runs)'
+      case 'B': return 'Bowled (-5 runs)'
+      default:
+        const runs = parseInt(value)
+        if (runs >= 0 && runs <= 6) {
+          return `${runs} ${runs === 1 ? 'Run' : 'Runs'}`
+        }
+        return ''
+    }
+  }
 
   const calculateSkinScore = (teamData, skinIndex, oversPerSkin) => {
     if (!teamData) return 0
@@ -90,49 +96,67 @@ const FinalScore = () => {
     .map((_, index) => index + 1)
 
   return (
-    <div className="container mt-5">
-      <h2 className="mb-4">Final Score</h2>
-      <div className="table-responsive">
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th></th>
-              <th colSpan={skinColumns.length} className="text-center">Skins</th>
-              <th>TOTAL</th>
-            </tr>
-            <tr>
-              <th></th>
-              {skinColumns.map(num => (
-                <th key={num} className="text-center">{num}</th>
-              ))}
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="fw-bold">{matchInfo.team1}</td>
-              {skinColumns.map((_, index) => (
-                <td key={index} className="text-center">
-                  {calculateSkinScore(team1Data, index, parseInt(matchInfo.oversPerSkin))}
+    <div className="d-flex h-100">
+      {/* Final Score Table - 60% width */}
+      <div style={{ width: '60%', borderRight: '1px solid #dee2e6', padding: '10px' }}>
+        <h4 className="mb-3">Final Score</h4>
+        <div className="table-responsive">
+          <table className="table table-bordered table-sm">
+            <thead>
+              <tr>
+                <th></th>
+                <th colSpan={skinColumns.length} className="text-center">Skins</th>
+                <th>TOTAL</th>
+              </tr>
+              <tr>
+                <th></th>
+                {skinColumns.map(num => (
+                  <th key={num} className="text-center">{num}</th>
+                ))}
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="fw-bold">{matchInfo.team1}</td>
+                {skinColumns.map((_, index) => (
+                  <td key={index} className="text-center">
+                    {calculateSkinScore(team1Data, index, parseInt(matchInfo.oversPerSkin))}
+                  </td>
+                ))}
+                <td className="fw-bold">
+                  {calculateTeamTotal(team1Data).total} ({calculateTeamTotal(team1Data).skins} skins)
                 </td>
-              ))}
-              <td className="fw-bold">
-                {calculateTeamTotal(team1Data).total} ({calculateTeamTotal(team1Data).skins} skins)
-              </td>
-            </tr>
-            <tr>
-              <td className="fw-bold">{matchInfo.team2}</td>
-              {skinColumns.map((_, index) => (
-                <td key={index} className="text-center">
-                  {calculateSkinScore(team2Data, index, parseInt(matchInfo.oversPerSkin))}
+              </tr>
+              <tr>
+                <td className="fw-bold">{matchInfo.team2}</td>
+                {skinColumns.map((_, index) => (
+                  <td key={index} className="text-center">
+                    {calculateSkinScore(team2Data, index, parseInt(matchInfo.oversPerSkin))}
+                  </td>
+                ))}
+                <td className="fw-bold">
+                  {calculateTeamTotal(team2Data).total} ({calculateTeamTotal(team2Data).skins} skins)
                 </td>
-              ))}
-              <td className="fw-bold">
-                {calculateTeamTotal(team2Data).total} ({calculateTeamTotal(team2Data).skins} skins)
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Current Ball Info - 40% width */}
+      <div style={{ width: '40%', padding: '10px' }}>
+        <h4 className="mb-3">Last Ball Status</h4>
+        <div className="p-3 bg-light rounded">
+          {currentBall ? (
+            <>
+              {/* <h2 className="mb-3 text-center">{currentBall.toUpperCase()}</h2> */}
+              <p className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</p>
+            </>
+          ) : (
+            <p className="text-center text-muted mb-0">Waiting for next ball...</p>
+          )}
+        </div>
       </div>
     </div>
   )

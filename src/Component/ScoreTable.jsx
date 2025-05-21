@@ -125,6 +125,9 @@ const ScoreTable = () => {
       return;
     }
 
+    // Save current ball to localStorage
+    localStorage.setItem('currentBall', value);
+
     const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data;
 
     setTeamData(prevData => {
