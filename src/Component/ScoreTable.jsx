@@ -48,7 +48,7 @@ const ScoreTable = () => {
     if (matchInfo && (!team1Data || !team2Data)) {
       const numberOfRows = Math.ceil(parseInt(matchInfo.totalOvers) / parseInt(matchInfo.oversPerSkin))
       const numberOfCols = parseInt(matchInfo.oversPerSkin)
-      
+
       // Initialize both teams' data
       if (!team1Data) {
         setTeam1Data(createRows(numberOfRows, numberOfCols))
@@ -108,7 +108,7 @@ const ScoreTable = () => {
     }, 0)
   }
 
- 
+
 
   const isValidInput = (value) => {
     if (!value) return true;
@@ -126,34 +126,34 @@ const ScoreTable = () => {
     }
 
     const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data;
-    
+
     setTeamData(prevData => {
       const newData = [...prevData];
       // Update the ball value
       newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].balls[ballIndex] = value;
-      
+
       // Calculate new over total and wickets
       const overBalls = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].balls;
       const overTotal = calculateOverTotal(overBalls);
       const wickets = countWickets(overBalls);
-      
+
       // Update over stats
       newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].overTotal = overTotal.toString();
-      
+
       // Update pair totals for this over
       const pairOverTotal = calculateOverTotal(newData[rowIndex].batsmen[0].overs[overIndex].balls) +
-                           calculateOverTotal(newData[rowIndex].batsmen[1].overs[overIndex].balls);
+        calculateOverTotal(newData[rowIndex].batsmen[1].overs[overIndex].balls);
       const pairOverWickets = countWickets(newData[rowIndex].batsmen[0].overs[overIndex].balls) +
-                             countWickets(newData[rowIndex].batsmen[1].overs[overIndex].balls);
+        countWickets(newData[rowIndex].batsmen[1].overs[overIndex].balls);
       newData[rowIndex].totals[overIndex] = `${pairOverWickets}/${pairOverTotal}`;
-      
+
       return newData;
     });
   };
 
   const handleBowlerNameChange = (teamNumber, rowIndex, overIndex, value) => {
     const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data
-    
+
     setTeamData(prevData => {
       const newData = [...prevData]
       newData[rowIndex].batsmen[0].overs[overIndex].bowlerName = value
@@ -164,14 +164,14 @@ const ScoreTable = () => {
 
   const handleBatsmanNameChange = (teamNumber, rowIndex, batsmanIndex, value) => {
     const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data
-    
+
     setTeamData(prevData => {
       const newData = [...prevData]
       newData[rowIndex].batsmen[batsmanIndex].name = value
       return newData
     })
   }
-  
+
 
   const renderTable = (teamName, teamNumber, teamData) => {
     return (
@@ -199,9 +199,9 @@ const ScoreTable = () => {
                     <td colSpan="2"></td>
                     {pair.batsmen[0].overs.map((over, overIndex) => (
                       <td key={overIndex}>
-                        <input 
-                          type="text" 
-                          className="form-control form-control-sm" 
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
                           placeholder="Bowler name"
                           value={over.bowlerName}
                           onChange={(e) => handleBowlerNameChange(teamNumber, rowIndex, overIndex, e.target.value)}
@@ -214,14 +214,14 @@ const ScoreTable = () => {
                   {pair.batsmen.map((batsman, batsmanIndex) => (
                     <tr key={`${pair.pairId}-${batsmanIndex}`}>
                       {batsmanIndex === 0 && (
-                        <td rowSpan="2" className="align-middle text-center" style={{width: '40px'}}>
+                        <td rowSpan="2" className="align-middle text-center" style={{ width: '40px' }}>
                           {pair.pairId}
                         </td>
                       )}
-                      <td style={{width: '150px'}}>
-                        <input 
-                          type="text" 
-                          className="form-control form-control-sm" 
+                      <td style={{ width: '150px' }}>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
                           placeholder="Batsman name"
                           value={batsman.name}
                           onChange={(e) => handleBatsmanNameChange(teamNumber, rowIndex, batsmanIndex, e.target.value)}
@@ -229,7 +229,7 @@ const ScoreTable = () => {
                       </td>
                       {batsman.overs.map((over, overIndex) => (
                         <td key={overIndex} className="p-2">
-                          <div className="d-flex justify-content-center align-items-center gap-1" style={{minWidth: '160px'}}>
+                          <div className="d-flex justify-content-center align-items-center gap-1" style={{ minWidth: '160px' }}>
                             {/* 6 balls */}
                             {over.balls.map((ball, ballIndex) => (
                               <input
@@ -265,8 +265,8 @@ const ScoreTable = () => {
                           </div>
                           {/* Over total below 7th box */}
                           {batsmanIndex === 1 && (
-                            <div className="d-flex justify-content-end" style={{marginTop: '4px', paddingRight: '4px'}}>
-                              <div style={{width: '28px', textAlign: 'center'}}>
+                            <div className="d-flex justify-content-end" style={{ marginTop: '4px', paddingRight: '4px' }}>
+                              <div style={{ width: '28px', textAlign: 'center' }}>
                                 {/* <small>{pair.totals[overIndex]}</small> */}
                               </div>
                             </div>
@@ -300,13 +300,35 @@ const ScoreTable = () => {
   }
 
   return (
-    <div className=" container-fluid mt-5">
-      <FinalScore />
-      {renderTable(matchInfo.team1, 1, team1Data)}
-      <br />
-      {/* <hr /> */}
-      <br />
-      {renderTable(matchInfo.team2, 2, team2Data)}
+    <div className="container-fluid p-0" style={{ height: '100vh', overflow: 'hidden' }}>
+      <div id='finalScore' style={{ 
+        height: '30vh', 
+        position: 'fixed',
+        marginBottom:'10px',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        backgroundColor: 'white',
+        borderBottom: '1px solid #dee2e6',
+        padding: '15px'
+      }}>
+        <FinalScore />
+      </div>
+      <br></br>
+      <br></br>
+      <div id='scoreTable' style={{
+        marginTop: '30vh',
+        height: '70vh',
+        overflowY: 'auto',
+        padding: '15px'
+      }}>
+        
+        {renderTable(matchInfo.team1, 1, team1Data)}
+        <br />
+        <br />
+        {renderTable(matchInfo.team2, 2, team2Data)}
+      </div>
     </div>
   )
 }
