@@ -299,8 +299,11 @@ const ScoreTable = () => {
   }
 
   return (
-    <div className="container-fluid mt-3">
+    <div className=" container-fluid mt-5">
       {renderTable(matchInfo.team1, 1, team1Data)}
+      <br />
+      {/* <hr /> */}
+      <br />
       {renderTable(matchInfo.team2, 2, team2Data)}
     </div>
   )
