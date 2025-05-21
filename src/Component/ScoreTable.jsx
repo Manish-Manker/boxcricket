@@ -76,25 +76,25 @@ const ScoreTable = () => {
     return <div className="container mt-5">Loading...</div>
   }
 
-  const numberOfRows = Math.ceil(parseInt(matchInfo.totalOvers) / parseInt(matchInfo.oversPerSkin))
+  // const numberOfRows = Math.ceil(parseInt(matchInfo.totalOvers) / parseInt(matchInfo.oversPerSkin))
   const numberOfCols = parseInt(matchInfo.oversPerSkin)
 
   // Calculate score for a single ball including special characters
-  const calculateBallValue = (ball) => {
-    if (!ball) return 0
+  // const calculateBallValue = (ball) => {
+  //   if (!ball) return 0
     
-    // Handle special characters
-    switch(ball.toUpperCase()) {
-      case 'W': return 2
-      case 'R':
-      case 'C':
-      case 'B': return -5
-      default:
-        // Handle numeric values
-        const numValue = parseInt(ball)
-        return numValue >= 0 && numValue <= 6 ? numValue : 0
-    }
-  }
+  //   // Handle special characters
+  //   switch(ball.toUpperCase()) {
+  //     case 'W': return 2
+  //     case 'R':
+  //     case 'C':
+  //     case 'B': return -5
+  //     default:
+  //       // Handle numeric values
+  //       const numValue = parseInt(ball)
+  //       return numValue >= 0 && numValue <= 6 ? numValue : 0
+  //   }
+  // }
 
   // Calculate total for one over (6 balls)
   const calculateOverTotal = (balls) => {
@@ -198,35 +198,35 @@ const ScoreTable = () => {
     return `${wickets}/${total}`;
   };
 
-  const renderOverRow = (pair, pairIndex) => {
-    return (
-      <tr key={pairIndex}>
-        <td>{pairIndex + 1}</td>
-        {pair.batsmen.map((batsman, batsmanIndex) => (
-          <React.Fragment key={batsmanIndex}>
-            <td>{batsman.name || `Batsman ${batsmanIndex + 1}`}</td>
-            {batsman.overs.map((over, overIndex) => (
-              <React.Fragment key={overIndex}>
-                {over.balls.map((ball, ballIndex) => (
-                  <td key={ballIndex}>
-                    <input
-                      type="text"
-                      value={ball || ''}
-                      maxLength={1}
-                      onChange={(e) => handleBallChange(e, pairIndex, batsmanIndex, overIndex, ballIndex)}
-                      className="ball-input"
-                    />
-                  </td>
-                ))}
-                <td className="over-total">{renderBowlerStats(over)}</td>
-              </React.Fragment>
-            ))}
-          </React.Fragment>
-        ))}
-        <td className="pair-total">{calculatePairTotal(pair)}</td>
-      </tr>
-    );
-  };
+  // const renderOverRow = (pair, pairIndex) => {
+  //   return (
+  //     <tr key={pairIndex}>
+  //       <td>{pairIndex + 1}</td>
+  //       {pair.batsmen.map((batsman, batsmanIndex) => (
+  //         <React.Fragment key={batsmanIndex}>
+  //           <td>{batsman.name || `Batsman ${batsmanIndex + 1}`}</td>
+  //           {batsman.overs.map((over, overIndex) => (
+  //             <React.Fragment key={overIndex}>
+  //               {over.balls.map((ball, ballIndex) => (
+  //                 <td key={ballIndex}>
+  //                   <input
+  //                     type="text"
+  //                     value={ball || ''}
+  //                     maxLength={1}
+  //                     onChange={(e) => handleBallChange(e, pairIndex, batsmanIndex, overIndex, ballIndex)}
+  //                     className="ball-input"
+  //                   />
+  //                 </td>
+  //               ))}
+  //               <td className="over-total">{renderBowlerStats(over)}</td>
+  //             </React.Fragment>
+  //           ))}
+  //         </React.Fragment>
+  //       ))}
+  //       <td className="pair-total">{calculatePairTotal(pair)}</td>
+  //     </tr>
+  //   );
+  // };
 
   const renderTable = (teamName, teamNumber, teamData) => {
     return (
