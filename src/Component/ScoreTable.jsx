@@ -103,7 +103,7 @@ const ScoreTable = () => {
       const value = ball.toUpperCase();
       const extraRun = parseInt(extraRuns[index] || 0);
 
-      if (value === 'W') return sum + 2 + extraRun;
+      if (value === 'W') return sum  + extraRun;
       if (value === 'N') return sum + extraRun;
       if (['R', 'C', 'B'].includes(value)) return sum - 5;
       const numValue = parseInt(value);

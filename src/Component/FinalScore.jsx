@@ -32,13 +32,14 @@ const FinalScore = () => {
     const value = ball.toUpperCase()
     
     switch(value) {
-      case 'W': return 'Wide ball (+2 runs)'
+      case 'W': return 'Wide ball'
+      case 'N': return 'No ball'
       case 'R': return 'Run Out (-5 runs)'
       case 'C': return 'Catch Out (-5 runs)'
       case 'B': return 'Bowled (-5 runs)'
       default:
         const runs = parseInt(value)
-        if (runs >= 0 && runs <= 6) {
+        if (runs >= 0 && runs <= 7) {
           return `${runs} ${runs === 1 ? 'Run' : 'Runs'}`
         }
         return ''
@@ -63,10 +64,11 @@ const FinalScore = () => {
             skinTotal += over.balls.reduce((sum, ball) => {
               if (!ball) return sum
               const value = ball.toUpperCase()
-              if (value === 'W') return sum + 2
+              if (value === 'W') return sum 
+              if (value === 'N') return sum 
               if (['R', 'C', 'B'].includes(value)) return sum - 5
               const numValue = parseInt(value)
-              return sum + (numValue >= 0 && numValue <= 6 ? numValue : 0)
+              return sum + (numValue >= 0 && numValue <= 7 ? numValue : 0)
             }, 0)
           }
         })
