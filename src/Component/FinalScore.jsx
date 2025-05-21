@@ -32,7 +32,7 @@ const FinalScore = () => {
         const value = ball; // Keep the case to differentiate between N and n
         switch (value) {
             case 'W': return 'Wide ball (extra runs only)';
-            case 'N': return 'No ball (+2 runs and extra ball)';
+            case 'N': return 'No ball (extra ball)';
             case 'n': return 'No ball (extra runs only)';
             case 'R': return 'Run Out (-5 runs)';
             case 'C': return 'Catch Out (-5 runs)';
@@ -61,13 +61,14 @@ const FinalScore = () => {
                     const overNumber = parseInt(over.bowlerNum)
                     // Check if this over belongs to the current skin
                     if (overNumber > startOver && overNumber <= endOver) {
-                        over.balls.forEach((ball, index) => {                            if (!ball) return;
+                        over.balls.forEach((ball, index) => {
+                            if (!ball) return;
                             const value = ball; // Don't convert to uppercase to preserve N/n difference
                             const extraRun = parseInt(over.extraRuns[index] || 0);
                             if (value === 'W' || value === 'n') {
                                 skinTotal += extraRun; // Wide/No ball: only extra runs
                             } else if (value === 'N') {
-                                skinTotal += 2; // Capital N: add 2 runs (extra ball handled separately)
+                                skinTotal += 0; // Capital N: add 2 runs (extra ball handled separately)
                                 if (over.extraBalls && over.extraBalls[index]) {
                                     skinTotal += parseInt(over.extraBalls[index] || 0); // Add the extra ball runs for N
                                 }
