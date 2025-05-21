@@ -3,7 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 const ScoreTable = () => {
   const [matchInfo, setMatchInfo] = useState(null)
-  const [scoreData, setScoreData] = useState(null)
+  const [team1Data, setTeam1Data] = useState(null)
+  const [team2Data, setTeam2Data] = useState(null)
   const [loading, setLoading] = useState(true)
 
   // Helper function to create initial rows
@@ -43,14 +44,35 @@ const ScoreTable = () => {
 
   // Initialize score data when matchInfo is available
   useEffect(() => {
-    if (matchInfo && !scoreData) {
+    if (matchInfo && (!team1Data || !team2Data)) {
       const numberOfRows = Math.ceil(parseInt(matchInfo.totalOvers) / parseInt(matchInfo.oversPerSkin))
       const numberOfCols = parseInt(matchInfo.oversPerSkin)
-      setScoreData(createRows(numberOfRows, numberOfCols))
+      
+      // Initialize both teams' data
+      if (!team1Data) {
+        setTeam1Data(createRows(numberOfRows, numberOfCols))
+      }
+      if (!team2Data) {
+        setTeam2Data(createRows(numberOfRows, numberOfCols))
+      }
     }
-  }, [matchInfo, scoreData])
+  }, [matchInfo, team1Data, team2Data])
 
-  if (loading || !matchInfo) {
+  useEffect(() => {
+    // Save team1Data to localStorage whenever it changes
+    if (team1Data) {
+      localStorage.setItem('team1ScoreData', JSON.stringify(team1Data))
+    }
+  }, [team1Data])
+
+  useEffect(() => {
+    // Save team2Data to localStorage whenever it changes
+    if (team2Data) {
+      localStorage.setItem('team2ScoreData', JSON.stringify(team2Data))
+    }
+  }, [team2Data])
+
+  if (loading || !matchInfo || !team1Data || !team2Data) {
     return <div className="container mt-5">Loading...</div>
   }
 
@@ -72,8 +94,10 @@ const ScoreTable = () => {
     }, 0)
   }
 
-  const handleBallChange = (rowIndex, batsmanIndex, overIndex, ballIndex, value) => {
-    setScoreData(prevData => {
+  const handleBallChange = (teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, value) => {
+    const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data
+    
+    setTeamData(prevData => {
       const newData = JSON.parse(JSON.stringify(prevData))
       const over = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex]
       
@@ -91,9 +115,28 @@ const ScoreTable = () => {
     })
   }
 
-  const renderTable = (teamName) => {
-    if (!scoreData) return null
+  const handleBowlerNameChange = (teamNumber, rowIndex, overIndex, value) => {
+    const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data
+    
+    setTeamData(prevData => {
+      const newData = [...prevData]
+      newData[rowIndex].batsmen[0].overs[overIndex].bowlerName = value
+      newData[rowIndex].batsmen[1].overs[overIndex].bowlerName = value
+      return newData
+    })
+  }
 
+  const handleBatsmanNameChange = (teamNumber, rowIndex, batsmanIndex, value) => {
+    const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data
+    
+    setTeamData(prevData => {
+      const newData = [...prevData]
+      newData[rowIndex].batsmen[batsmanIndex].name = value
+      return newData
+    })
+  }
+
+  const renderTable = (teamName, teamNumber, teamData) => {
     return (
       <div className="mb-5">
         <div className="border p-2 mb-3">
@@ -102,7 +145,7 @@ const ScoreTable = () => {
         <div className="table-responsive">
           <table className="table table-bordered">
             <tbody>
-              {scoreData.map((pair, rowIndex) => (
+              {teamData.map((pair, rowIndex) => (
                 <React.Fragment key={pair.pairId}>
                   {/* First row - Over numbers */}
                   <tr>
@@ -124,12 +167,7 @@ const ScoreTable = () => {
                           className="form-control form-control-sm" 
                           placeholder="Bowler name"
                           value={over.bowlerName}
-                          onChange={(e) => {
-                            const newData = [...scoreData]
-                            newData[rowIndex].batsmen[0].overs[overIndex].bowlerName = e.target.value
-                            newData[rowIndex].batsmen[1].overs[overIndex].bowlerName = e.target.value
-                            setScoreData(newData)
-                          }}
+                          onChange={(e) => handleBowlerNameChange(teamNumber, rowIndex, overIndex, e.target.value)}
                         />
                       </td>
                     ))}
@@ -149,11 +187,7 @@ const ScoreTable = () => {
                           className="form-control form-control-sm" 
                           placeholder="Batsman name"
                           value={batsman.name}
-                          onChange={(e) => {
-                            const newData = [...scoreData]
-                            newData[rowIndex].batsmen[batsmanIndex].name = e.target.value
-                            setScoreData(newData)
-                          }}
+                          onChange={(e) => handleBatsmanNameChange(teamNumber, rowIndex, batsmanIndex, e.target.value)}
                         />
                       </td>
                       {batsman.overs.map((over, overIndex) => (
@@ -173,7 +207,7 @@ const ScoreTable = () => {
                                   border: '1px solid #dee2e6'
                                 }}
                                 value={ball}
-                                onChange={(e) => handleBallChange(rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
+                                onChange={(e) => handleBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
                               />
                             ))}
                             {/* 7th box for over total */}
@@ -230,8 +264,8 @@ const ScoreTable = () => {
 
   return (
     <div className="container-fluid mt-3">
-      {renderTable(matchInfo.team1)}
-      {renderTable(matchInfo.team2)}
+      {renderTable(matchInfo.team1, 1, team1Data)}
+      {renderTable(matchInfo.team2, 2, team2Data)}
     </div>
   )
 }
