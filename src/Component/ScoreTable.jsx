@@ -19,7 +19,8 @@ const ScoreTable = () => {
             bowlerNum: (rowIndex * oversPerSkin + overIndex + 1),
             bowlerName: '',
             balls: Array(6).fill(''),
-            extraRuns: Array(6).fill(''), // Store extra runs for W and N
+            extraBalls: [], // For storing extra balls from capital N
+            extraRuns: Array(6).fill(''), // Store extra runs for W and n
             overTotal: '0'
           }))
         },
@@ -29,7 +30,8 @@ const ScoreTable = () => {
             bowlerNum: (rowIndex * oversPerSkin + overIndex + 1),
             bowlerName: '',
             balls: Array(6).fill(''),
-            extraRuns: Array(6).fill(''), // Store extra runs for W and N
+            extraBalls: [], // For storing extra balls from capital N
+            extraRuns: Array(6).fill(''), // Store extra runs for W and n
             overTotal: '0'
           }))
         }
@@ -80,12 +82,11 @@ const ScoreTable = () => {
   }
 
   const numberOfCols = parseInt(matchInfo.oversPerSkin)
-
   const isValidInput = (value) => {
     if (!value) return true;
     const upperValue = value.toUpperCase();
     return (
-      ['W', 'N', 'R', 'C', 'B'].includes(upperValue) ||
+      ['W', 'N', 'n', 'R', 'C', 'B'].includes(value) ||
       (parseInt(value) >= 0 && parseInt(value) <= 7)
     );
   };
@@ -96,19 +97,28 @@ const ScoreTable = () => {
     return !isNaN(num) && num >= 0 && num <= 7;
   };
 
-  // Calculate total for one over (6 balls)
-  const calculateOverTotal = (balls, extraRuns) => {
-    return balls.reduce((sum, ball, index) => {
+  // Calculate total for one over (6 balls + extra balls)
+  const calculateOverTotal = (balls, extraRuns, extraBalls = []) => {
+    const mainBallsTotal = balls.reduce((sum, ball, index) => {
       if (!ball) return sum;
-      const value = ball.toUpperCase();
-      const extraRun = parseInt(extraRuns[index] || 0);
-
-      if (value === 'W') return sum  + extraRun;
-      if (value === 'N') return sum + extraRun;
-      if (['R', 'C', 'B'].includes(value)) return sum - 5;
+      const value = ball;  // Don't convert to uppercase to differentiate N and n
+      const extraRun = parseInt(extraRuns[index] || 0);      
+      if (value === 'W') return sum  + extraRun;  // Wide ball: 2 runs plus extra runs
+      if (value === 'N') return sum + 2;  // Capital N: 2 runs plus extra ball (handled separately)
+      if (value === 'n') return sum + extraRun;  // Small n: only extra runs
+      if (['R', 'C', 'B'].includes(value.toUpperCase())) return sum - 5;
       const numValue = parseInt(value);
       return sum + (numValue >= 0 && numValue <= 7 ? numValue : 0);
     }, 0);
+
+    // Add runs from extra balls (due to capital N)
+    const extraBallsTotal = extraBalls.reduce((sum, ball) => {
+      if (!ball) return sum;
+      const numValue = parseInt(ball);
+      return sum + (numValue >= 0 && numValue <= 7 ? numValue : 0);
+    }, 0);
+
+    return mainBallsTotal + extraBallsTotal;
   };
 
   // Count wickets (R/C/B) in an over
@@ -189,6 +199,47 @@ const ScoreTable = () => {
       ) + calculateOverTotal(
         newData[rowIndex].batsmen[1].overs[overIndex].balls,
         newData[rowIndex].batsmen[1].overs[overIndex].extraRuns
+      );
+
+      const pairOverWickets = countWickets(newData[rowIndex].batsmen[0].overs[overIndex].balls) +
+        countWickets(newData[rowIndex].batsmen[1].overs[overIndex].balls);
+      
+      newData[rowIndex].totals[overIndex] = `${pairOverWickets}/${pairOverTotal}`;
+
+      return newData;
+    });
+  };
+
+  const handleExtraBallChange = (teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, value) => {
+    if (!isValidInput(value)) {
+      return;
+    }
+
+    const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data;
+
+    setTeamData(prevData => {
+      const newData = [...prevData];
+      // Update the extra ball value
+      newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraBalls[ballIndex] = value;
+
+      // Calculate new over total including extra balls
+      const overBalls = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].balls;
+      const overExtraRuns = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns;
+      const overExtraBalls = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraBalls;
+      const overTotal = calculateOverTotal(overBalls, overExtraRuns, overExtraBalls);
+
+      // Update over stats
+      newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].overTotal = overTotal.toString();
+
+      // Update pair totals for this over
+      const pairOverTotal = calculateOverTotal(
+        newData[rowIndex].batsmen[0].overs[overIndex].balls,
+        newData[rowIndex].batsmen[0].overs[overIndex].extraRuns,
+        newData[rowIndex].batsmen[0].overs[overIndex].extraBalls
+      ) + calculateOverTotal(
+        newData[rowIndex].batsmen[1].overs[overIndex].balls,
+        newData[rowIndex].batsmen[1].overs[overIndex].extraRuns,
+        newData[rowIndex].batsmen[1].overs[overIndex].extraBalls
       );
 
       const pairOverWickets = countWickets(newData[rowIndex].batsmen[0].overs[overIndex].balls) +
@@ -281,21 +332,40 @@ const ScoreTable = () => {
                           <div className="d-flex justify-content-center align-items-center gap-1" style={{ minWidth: '160px' }}>
                             {/* 6 balls */}
                             {over.balls.map((ball, ballIndex) => (
-                              <div key={ballIndex} className="d-flex flex-column align-items-center">
-                                <input
-                                  type="text"
-                                  className="form-control form-control-sm"
-                                  style={{
-                                    width: '28px',
-                                    height: '28px',
-                                    padding: '2px',
-                                    textAlign: 'center',
-                                    border: '1px solid #dee2e6'
-                                  }}
-                                  value={ball}
-                                  onChange={(e) => handleBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
-                                />
-                                {(ball?.toUpperCase() === 'W' || ball?.toUpperCase() === 'N') && (
+                              <div key={ballIndex} className="d-flex flex-column align-items-center">                                <div className="d-flex">
+                                  <input
+                                    type="text"
+                                    className="form-control form-control-sm"
+                                    style={{
+                                      width: '28px',
+                                      height: '28px',
+                                      padding: '2px',
+                                      textAlign: 'center',
+                                      border: '1px solid #dee2e6'
+                                    }}
+                                    value={ball}
+                                    onChange={(e) => handleBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
+                                  />
+                                  {/* Show extra ball input for N to the right */}
+                                  {ball === 'N' && (
+                                    <input
+                                      type="text"
+                                      className="form-control form-control-sm ms-1"
+                                      style={{
+                                        width: '28px',
+                                        height: '28px',
+                                        padding: '2px',
+                                        textAlign: 'center',
+                                        border: '1px solid #dee2e6'
+                                      }}
+                                      value={over.extraBalls[ballIndex] || ''}
+                                      onChange={(e) => handleExtraBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
+                                      placeholder="+"
+                                    />
+                                  )}
+                                </div>
+                                {/* Show extra runs input for W and n below */}
+                                {(ball === 'W' || ball === 'n') && (
                                   <input
                                     type="text"
                                     className="form-control form-control-sm mt-1"
