@@ -26,69 +26,63 @@ const FinalScore = () => {
 
         return () => clearInterval(interval)
     }, [])
-
     const getBallDescription = (ball) => {
         if (!ball) return '';
-        const value = ball; // Keep the case to differentiate between N and n
+        const value = ball.toUpperCase(); // Convert to uppercase for case-insensitive comparison
         switch (value) {
             case 'W': return 'Wide ball (extra runs only)';
-            // case 'N': return 'No ball (+2 runs and extra ball)';
-            case 'n': return 'No ball (extra runs only)';
-            // case 'R': return 'Run Out (-5 runs)';
-            case 'C': return  <>
+            case 'N': return 'No ball (+2 runs and extra ball)';
+            case 'C': return <>
                 <div className='bc_show_score_b_img'>
-                <img src='./images/gravinPRO.jpg'></img>
-                 </div>
+                    <img src='./images/gravinPRO.jpg' alt="Catch out" />
+                </div>
                 <h6 className='bc_show_score_b_run'>Catch Out (-5 runs)</h6>
-            </>;;
-            // case 'B': return 'Bowled (-5 runs)';
+            </>;
             case '4': return <>
                 <div className='bc_show_score_b_img'>
-                <img src='./images/Ninth_Cloud.png'></img>
-                 </div>
+                    <img src='./images/Ninth_Cloud.png' alt="4 runs" />
+                </div>
                 <h6 className='bc_show_score_b_run'>4 Runs</h6>
             </>;
-             case '5': return <>
+            case '5': return <>
                 <div className='bc_show_score_b_img'>
-                <img src='./images/khuber.jpg'></img>
-                 </div>
+                    <img src='./images/khuber.jpg' alt="5 runs" />
+                </div>
                 <h6 className='bc_show_score_b_run'>5 Runs</h6>
             </>;
-             case '7': return <>
+            case '7': return <>
                 <div className='bc_show_score_b_img'>
-                <img src='./images/THINKCLOUD.png'></img>
-                 </div>
+                    <img src='./images/THINKCLOUD.png' alt="7 runs" />
+                </div>
                 <h6 className='bc_show_score_b_run'>7 Runs</h6>
             </>;
-             case 'B': return <>
+            case 'B': return <>
                 <div className='bc_show_score_b_img'>
-                <img src='./images/storyWala.png'></img>
-                 </div>
+                    <img src='./images/storyWala.png' alt="Bowled" />
+                </div>
                 <h6 className='bc_show_score_b_run'>Bowled (-5 runs)</h6>
             </>;
             case 'R': return <>
                 <div className='bc_show_score_b_img'>
-                <img src='./images/logo.svg'></img>
-                 </div>
+                    <img src='./images/logo.svg' alt="Run out" />
+                </div>
                 <h6 className='bc_show_score_b_run'>Run-out -5 Runs</h6>
             </>;
-
-             case 'S': return <>
+            case 'S': return <>
                 <div className='bc_show_score_b_img'>
-                <img src='./images/gravin.jpg'></img>
-                 </div>
+                    <img src='./images/gravin.jpg' alt="Stumped" />
+                </div>
                 <h6 className='bc_show_score_b_run'>Stumped -5 Runs</h6>
             </>;
-
-             case 'H': return <>
+            case 'H': return <>
                 <div className='bc_show_score_b_img'>
-                <img src='./images/SevenHeavenFinal.png'></img>
-                 </div>
+                    <img src='./images/SevenHeavenFinal.png' alt="Hit wicket" />
+                </div>
                 <h6 className='bc_show_score_b_run'>Hit Wicket -5 Runs</h6>
             </>;
             default:
                 const runs = parseInt(value);
-                if (runs >= 0 && runs <= 7) {
+                if (!isNaN(runs) && runs >= 0) {
                     return `${runs} ${runs === 1 ? 'Run' : 'Runs'}`;
                 }
                 return '';
@@ -113,18 +107,17 @@ const FinalScore = () => {
                         over.balls.forEach((ball, index) => {
                             if (!ball) return;
                             const value = ball; // Don't convert to uppercase to preserve N/n difference
-                            const extraRun = parseInt(over.extraRuns[index] || 0);
-                            if (value === 'W' ) {
-                                skinTotal += extraRun; // Wide/No ball: only extra runs
-                            }else if( value === 'n'){
-                                skinTotal += 2+extraRun;
-                            }
-                              else if (['R', 'C', 'B', 'S', 'H'].includes(value.toUpperCase())) {
+                            const extraRun = parseInt(over.extraRuns[index] || 0); const upperValue = value.toUpperCase();
+                            if (upperValue === 'W') {
+                                skinTotal += extraRun; // Wide ball: only extra runs
+                            } else if (upperValue === 'N') {
+                                skinTotal += 2 + extraRun; // No ball: 2 runs plus extra runs
+                            } else if (['R', 'C', 'B', 'S', 'H'].includes(upperValue)) {
                                 skinTotal -= 5; // Subtract 5 for wickets
                             } else {
                                 const numValue = parseInt(value);
-                                if (numValue >= 0 && numValue <= 7) {
-                                    skinTotal += numValue;
+                                if (!isNaN(numValue) && numValue >= 0) {
+                                    skinTotal += numValue; // Add any valid number of runs
                                 }
                             }
                         });

@@ -100,50 +100,54 @@ const ScoreTable = () => {
     </div>
   }
 
-  const numberOfCols = parseInt(matchInfo.oversPerSkin)
+  const numberOfCols = parseInt(matchInfo.oversPerSkin)  
   const isValidInput = (value) => {
     if (!value) return true;
     const upperValue = value.toUpperCase();
-    return (
-      ['W', 'n', 'R', 'C', 'B', 'S', 'H'].includes(value) ||
-      (parseInt(value) >= 0 && parseInt(value) <= 7)
-    );
+    // Check for special characters (case-insensitive)
+    if (['W', 'N', 'R', 'C', 'B', 'S', 'H'].includes(upperValue)) {
+      return true;
+    }
+    // Check for any valid number
+    const numValue = parseInt(value);
+    return !isNaN(numValue) && numValue >= 0 && numValue <= 99;
   };
 
   const isValidExtraRun = (value) => {
     if (!value) return true;
     const num = parseInt(value);
-    return !isNaN(num) && num >= 0 && num <= 7;
+    return !isNaN(num) && num >= 0 && num <= 99;
   };
   // Calculate total for one over (6 balls + extra balls)
   const calculateOverTotal = (balls, extraRuns, extraBalls = []) => {
     const mainBallsTotal = balls.reduce((sum, ball, index) => {
       if (!ball) return sum;
-      const value = ball;  // Don't convert to uppercase to differentiate N and n
+      const value = ball.toUpperCase();  // Make it case-insensitive
       const extraRun = parseInt(extraRuns[index] || 0);
 
       // Handle special ball types
       if (value === 'W') return sum + extraRun;  // Wide ball: only extra runs
-      if (value === 'n') return sum + 2 + extraRun;  // n: base 2 runs + extra runs
-      if (['R', 'C', 'B', 'S', 'H'].includes(value.toUpperCase())) return sum - 5;  // Wickets: -5 runs
+      if (value === 'N') return sum + 2 + extraRun;  // No ball: 2 runs + extra runs
+      if (['R', 'C', 'B', 'S', 'H'].includes(value)) return sum - 5;  // Wickets: -5 runs
 
-      // Handle numeric values
+      // Handle numeric values (now allowing any positive number)
       const numValue = parseInt(value);
-      return sum + (numValue >= 0 && numValue <= 7 ? numValue : 0);
+      return sum + (numValue >= 0 ? numValue : 0);
     }, 0);
 
-    // Calculate total from extra balls (for 'N' balls)
+    // Calculate total from extra balls
     const extraBallsTotal = extraBalls.reduce((sum, ball) => {
       if (!ball) return sum;
+      const value = ball.toUpperCase();
 
       // Handle wickets in extra balls
-      if (['R', 'C', 'B', 'S', 'H'].includes(ball.toUpperCase())) {
+      if (['R', 'C', 'B', 'S', 'H'].includes(value)) {
         return sum - 5;
       }
 
       // Handle numeric values in extra balls
       const numValue = parseInt(ball);
-      return sum + (numValue >= 0 && numValue <= 7 ? numValue : 0);
+      return sum + (numValue >= 0 ? numValue : 0);
     }, 0);
 
     return mainBallsTotal + extraBallsTotal;
@@ -153,7 +157,8 @@ const ScoreTable = () => {
   const countWickets = (balls) => {
     return balls.reduce((count, ball) => {
       if (!ball) return count;
-      return ['R', 'C', 'B', 'S', 'H'].includes(ball.toUpperCase()) ? count + 1 : count;
+      const value = ball.toUpperCase();
+      return ['R', 'C', 'B', 'S', 'H'].includes(value) ? count + 1 : count;
     }, 0);
   }
   // Calculate total for one batsman (all overs)
@@ -259,12 +264,12 @@ const ScoreTable = () => {
         // Wickets should not have extra runs in box cricket
         newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns[ballIndex] = '0';
       }
-      
+
       // Calculate new over total including extra balls
       const overBalls = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].balls;
       const overExtraRuns = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns;
       const overExtraBalls = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraBalls;
-      
+
       // Calculate over total with updated values
       const overTotal = calculateOverTotal(overBalls, overExtraRuns, overExtraBalls);
 
@@ -283,7 +288,7 @@ const ScoreTable = () => {
       );
 
       // Calculate wickets from both regular and extra balls
-      const pairOverWickets = 
+      const pairOverWickets =
         countWickets(newData[rowIndex].batsmen[0].overs[overIndex].balls) +
         countWickets(newData[rowIndex].batsmen[0].overs[overIndex].extraBalls) +
         countWickets(newData[rowIndex].batsmen[1].overs[overIndex].balls) +
@@ -306,7 +311,7 @@ const ScoreTable = () => {
       event.preventDefault();
       event.stopPropagation();
     }
-    
+
     const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data;
 
     setTeamData(prevData => {
@@ -322,6 +327,7 @@ const ScoreTable = () => {
       }
       return newData;
     });
+    return
   };
 
   const handleBowlerNameChange = (teamNumber, rowIndex, overIndex, value) => {
@@ -416,7 +422,7 @@ const ScoreTable = () => {
                                     />
                                   </div>
                                   {/* Show extra runs input for W and n below */}
-                                  {(ball === 'W' || ball === 'n') && (
+                                  {(ball === 'W' || ball === 'n' || ball === 'N' || ball === 'w') && (
                                     <input
                                       type="text"
                                       className="form-control form-control-sm mt-1"
@@ -432,7 +438,7 @@ const ScoreTable = () => {
                                       placeholder=""
                                     />
                                   )}
-                                </div>                              ))}
+                                </div>))}
 
                               {/* Extra balls section */}
                               {over.extraBalls && over.extraBalls.map((extraBall, extraBallIndex) => (
@@ -457,7 +463,7 @@ const ScoreTable = () => {
                                   display: 'flex',
                                   alignItems: 'center',
                                   justifyContent: 'center'
-                                }}                                onClick={(e) => handleAddExtraBall(teamNumber, rowIndex, batsmanIndex, overIndex, e)}
+                                }} onClick={(e) => handleAddExtraBall(teamNumber, rowIndex, batsmanIndex, overIndex, e)}
                               >
                                 +
                               </button>
