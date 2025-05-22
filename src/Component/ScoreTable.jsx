@@ -8,6 +8,10 @@ const ScoreTable = () => {
   const [team2Data, setTeam2Data] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  useEffect(() => {
+  localStorage.removeItem('currentBall');
+}, []); 
+
   // Helper function to create initial rows
   const createRows = (rowCount, oversPerSkin) => {
     return Array(rowCount).fill().map((_, rowIndex) => ({
@@ -78,16 +82,30 @@ const ScoreTable = () => {
   }, [team2Data])
 
   if (loading || !matchInfo || !team1Data || !team2Data) {
-    return <div className="container mt-5">Loading...</div>
+    return <div className='bc_loader_box'>
+      <div className='bc_loader_box_div'>
+        <div className="card-content">
+          <div className="loader-1">
+            <div className="pulse-container">
+              <div className="pulse-circle"></div>
+              <div className="pulse-circle"></div>
+              <div className="pulse-circle"></div>
+            </div>
+          </div>
+        </div>
+        <img src='./images/logo.svg'></img>
+        <h6>Pixa-Score created by PixelNX-FZCO</h6>
+      </div>
+
+    </div>
   }
 
-  const numberOfCols = parseInt(matchInfo.oversPerSkin)  
-   const isValidInput = (value) => {
+  const numberOfCols = parseInt(matchInfo.oversPerSkin)
+  const isValidInput = (value) => {
     if (!value) return true;
     const upperValue = value.toUpperCase();
-    // Allow all valid inputs (0-7, W, N, n, R, C, B) for any ball including extra balls
     return (
-      ['W', 'N', 'n', 'R', 'C', 'B'].includes(value) ||
+      ['W', 'N', 'n', 'R', 'C', 'B','S','H'].includes(value) ||
       (parseInt(value) >= 0 && parseInt(value) <= 7)
     );
   };
@@ -103,29 +121,19 @@ const ScoreTable = () => {
     const mainBallsTotal = balls.reduce((sum, ball, index) => {
       if (!ball) return sum;
       const value = ball;  // Don't convert to uppercase to differentiate N and n
-      const extraRun = parseInt(extraRuns[index] || 0);      
-      if (value === 'W') return sum  + extraRun;  // Wide ball: 2 runs plus extra runs
-      if (value === 'N') return sum ;  // Capital N: 2 runs plus extra ball (handled separately)
+      const extraRun = parseInt(extraRuns[index] || 0);
+      if (value === 'W') return sum + extraRun;  // Wide ball: 2 runs plus extra runs
+      if (value === 'N') return sum + 2;  // Capital N: 2 runs plus extra ball (handled separately)
       if (value === 'n') return sum + extraRun;  // Small n: only extra runs
-      if (['R', 'C', 'B'].includes(value.toUpperCase())) return sum - 5;
+      if (['R', 'C', 'B','S','H'].includes(value.toUpperCase())) return sum - 5;
       const numValue = parseInt(value);
       return sum + (numValue >= 0 && numValue <= 7 ? numValue : 0);
-    }, 0);    // Add runs from extra balls (due to capital N)
-    const extraBallsTotal = extraBalls.reduce((sum, ball, index) => {
+    }, 0);
+
+    // Add runs from extra balls (due to capital N)
+    const extraBallsTotal = extraBalls.reduce((sum, ball) => {
       if (!ball) return sum;
-      const value = ball;  // Keep case to differentiate between N and n
-      const extraRun = parseInt(extraRuns[index] || 0);
-      
-      if (value === 'W' || value === 'n') {
-        return sum + extraRun;  // Wide/small no-ball: only extra runs
-      }
-      if (value === 'N') {
-        return sum ;  // Capital N: 2 runs
-      }
-      if (value === 'R' || value === 'C' || value === 'B') {
-        return sum - 5;  // Wickets: -5 runs
-      }
-      const numValue = parseInt(value);
+      const numValue = parseInt(ball);
       return sum + (numValue >= 0 && numValue <= 7 ? numValue : 0);
     }, 0);
 
@@ -136,7 +144,7 @@ const ScoreTable = () => {
   const countWickets = (balls) => {
     return balls.reduce((count, ball) => {
       if (!ball) return count;
-      return ['R', 'C', 'B'].includes(ball.toUpperCase()) ? count + 1 : count;
+      return ['R', 'C', 'B','S','H'].includes(ball.toUpperCase()) ? count + 1 : count;
     }, 0);
   }
 
@@ -214,12 +222,14 @@ const ScoreTable = () => {
 
       const pairOverWickets = countWickets(newData[rowIndex].batsmen[0].overs[overIndex].balls) +
         countWickets(newData[rowIndex].batsmen[1].overs[overIndex].balls);
-      
+
       newData[rowIndex].totals[overIndex] = `${pairOverWickets}/${pairOverTotal}`;
 
       return newData;
     });
-  };  const handleExtraBallChange = (teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, value) => {
+  };
+
+  const handleExtraBallChange = (teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, value) => {
     if (!isValidInput(value)) {
       return;
     }
@@ -253,7 +263,7 @@ const ScoreTable = () => {
 
       const pairOverWickets = countWickets(newData[rowIndex].batsmen[0].overs[overIndex].balls) +
         countWickets(newData[rowIndex].batsmen[1].overs[overIndex].balls);
-      
+
       newData[rowIndex].totals[overIndex] = `${pairOverWickets}/${pairOverTotal}`;
 
       return newData;
@@ -284,40 +294,40 @@ const ScoreTable = () => {
 
   const renderTable = (teamName, teamNumber, teamData) => {
     return (
-      <div className="mb-5">
-        <div className="border p-2 mb-3">
+      <div className=" box_cric_team_box">
+        <div className="box_cric_team_heading">
           <h3 className="m-0">Batting Team: {teamName}</h3>
         </div>
-        <div className="table-responsive">
+        <div className="table-responsive boc_cric_table">
           <table className="table table-bordered">
             <tbody>
               {teamData.map((pair, rowIndex) => (
                 <React.Fragment key={pair.pairId}>
                   {/* First row - Over numbers */}
                   <tr>
-                    <td colSpan="2"></td>
+                    <td className="border-head" colSpan="2"></td>
                     {Array(numberOfCols).fill().map((_, i) => (
-                      <td key={i} className="text-center fw-bold">
+                      <td key={i} className="text-center fw-bold border-head">
                         {pair.pairId * numberOfCols - numberOfCols + i + 1}
                       </td>
                     ))}
-                    <td>Total</td>
+                    <td className="fw-bold border-head">Total</td>
                   </tr>
                   {/* Second row - Bowler names */}
                   <tr>
-                    <td colSpan="2"></td>
+                    <td className="bb-1" colSpan="2"></td>
                     {pair.batsmen[0].overs.map((over, overIndex) => (
-                      <td key={overIndex}>
+                      <td key={overIndex} className="bb-1">
                         <input
                           type="text"
-                          className="form-control form-control-sm"
+                          className="form-control  box_cric_input_filed_name"
                           placeholder="Bowler name"
                           value={over.bowlerName}
                           onChange={(e) => handleBowlerNameChange(teamNumber, rowIndex, overIndex, e.target.value)}
                         />
                       </td>
                     ))}
-                    <td></td>
+                    <td className="bb-1"></td>
                   </tr>
                   {/* Batsmen rows */}
                   {pair.batsmen.map((batsman, batsmanIndex) => (
@@ -330,7 +340,7 @@ const ScoreTable = () => {
                       <td style={{ width: '150px' }}>
                         <input
                           type="text"
-                          className="form-control form-control-sm"
+                          className="form-control box_cric_input_filed_name"
                           placeholder="Batsman name"
                           value={batsman.name}
                           onChange={(e) => handleBatsmanNameChange(teamNumber, rowIndex, batsmanIndex, e.target.value)}
@@ -342,9 +352,17 @@ const ScoreTable = () => {
                             {/* 6 balls */}
                             {over.balls.map((ball, ballIndex) => (
                               <div key={ballIndex} className="d-flex flex-column align-items-center">                                <div className="d-flex">
+                                <input
+                                  type="text"
+                                  className="form-control box_cric_input_score"
+                                  value={ball}
+                                  onChange={(e) => handleBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
+                                />
+                                {/* Show extra ball input for N to the right */}
+                                {ball === 'N' && (
                                   <input
                                     type="text"
-                                    className="form-control form-control-sm"
+                                    className="form-control form-control-sm ms-1 ddddd"
                                     style={{
                                       width: '28px',
                                       height: '28px',
@@ -352,45 +370,12 @@ const ScoreTable = () => {
                                       textAlign: 'center',
                                       border: '1px solid #dee2e6'
                                     }}
-                                    value={ball}
-                                    onChange={(e) => handleBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
-                                  />                                  {/* Show extra ball input for N to the right */}
-                                  {ball === 'N' && (
-                                    <div className="d-flex flex-column ms-1">
-                                      <input
-                                        type="text"
-                                        className="form-control form-control-sm"
-                                        style={{
-                                          width: '28px',
-                                          height: '28px',
-                                          padding: '2px',
-                                          textAlign: 'center',
-                                          border: '1px solid #dee2e6'
-                                        }}
-                                        value={over.extraBalls[ballIndex] || ''}
-                                        onChange={(e) => handleExtraBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
-                                        placeholder=""
-                                      />
-                                      {/* Show extra runs input for W and n in extra ball */}
-                                      {(over.extraBalls[ballIndex] === 'W' || over.extraBalls[ballIndex] === 'n') && (
-                                        <input
-                                          type="text"
-                                          className="form-control form-control-sm mt-1"
-                                          style={{
-                                            width: '28px',
-                                            height: '28px',
-                                            padding: '2px',
-                                            textAlign: 'center',
-                                            border: '1px solid #dee2e6'
-                                          }}
-                                          value={over.extraRuns[ballIndex] || ''}
-                                          onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
-                                          placeholder=""
-                                        />
-                                      )}
-                                    </div>
-                                  )}
-                                </div>
+                                    value={over.extraBalls[ballIndex] || ''}
+                                    onChange={(e) => handleExtraBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
+                                    placeholder=""
+                                  />
+                                )}
+                              </div>
                                 {/* Show extra runs input for W and n below */}
                                 {(ball === 'W' || ball === 'n') && (
                                   <input
@@ -413,15 +398,7 @@ const ScoreTable = () => {
                             {/* 7th box for over total */}
                             <input
                               type="text"
-                              className="form-control form-control-sm"
-                              style={{
-                                width: '28px',
-                                height: '28px',
-                                padding: '2px',
-                                textAlign: 'center',
-                                backgroundColor: '#f8f9fa',
-                                border: '1px solid #dee2e6'
-                              }}
+                              className="form-control box_cric_input_score box_cric_input_scoreTT"
                               value={over.overTotal}
                               readOnly
                             />
@@ -463,33 +440,26 @@ const ScoreTable = () => {
   }
 
   return (
-    <div className=" container-fluid p-0" style={{ height: '100vh', overflow: 'hidden' }}>
-      <div id='finalScore' style={{ 
-        height: '30vh', 
-        position: 'fixed',
-        marginBottom:'10px',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000,
-        backgroundColor: 'white',
-        borderBottom: '1px solid #dee2e6',
-        padding: '15px'
-      }}>
+    <div className=" container-fluid p-0" style={{ height: "100vh" }}>
+      <div id='finalScore' className="bc_finalScore">
         <FinalScore />
+
+        <div className="d-flex justify-content-end my-4">
+          <div><button
+            className="box_cric_btn"
+            onClick={() => window.open('/finalscore', '_blank')}
+          >
+            Open Final Score in New Tab
+          </button></div>
+        </div>
       </div>
-      <br></br>
-      <br></br>
-      <div id='scoreTable' style={{
-        marginTop: '30vh',
-        height: '70vh',
-        overflowY: 'auto',
-        padding: '15px'
-      }}>
-        
+
+
+
+      <div id='scoreTable' className='bc_score_table' >
         {renderTable(matchInfo.team1, 1, team1Data)}
-        <br />
-        <br />
+
+
         {renderTable(matchInfo.team2, 2, team2Data)}
       </div>
     </div>

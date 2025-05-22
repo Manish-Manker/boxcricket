@@ -32,11 +32,55 @@ const FinalScore = () => {
         const value = ball; // Keep the case to differentiate between N and n
         switch (value) {
             case 'W': return 'Wide ball (extra runs only)';
-            case 'N': return 'No ball (extra ball)';
+            case 'N': return 'No ball (+2 runs and extra ball)';
             case 'n': return 'No ball (extra runs only)';
-            case 'R': return 'Run Out (-5 runs)';
+            // case 'R': return 'Run Out (-5 runs)';
             case 'C': return 'Catch Out (-5 runs)';
-            case 'B': return 'Bowled (-5 runs)';
+            // case 'B': return 'Bowled (-5 runs)';
+            case '4': return <>
+                <div className='bc_show_score_b_img'>
+                <img src='./images/Ninth_Cloud.png'></img>
+                 </div>
+                <h6 className='bc_show_score_b_run'>4 Runs</h6>
+            </>;
+             case '5': return <>
+                <div className='bc_show_score_b_img'>
+                <img src='./images/khuber.jpg'></img>
+                 </div>
+                <h6 className='bc_show_score_b_run'>5 Runs</h6>
+            </>;
+             case '7': return <>
+                <div className='bc_show_score_b_img'>
+                <img src='./images/THINKCLOUD.png'></img>
+                 </div>
+                <h6 className='bc_show_score_b_run'>7 Runs</h6>
+            </>;
+             case 'B': return <>
+                <div className='bc_show_score_b_img'>
+                <img src='./images/storyWala.png'></img>
+                 </div>
+                <h6 className='bc_show_score_b_run'>Bowled (-5 runs)</h6>
+            </>;
+            case 'R': return <>
+                <div className='bc_show_score_b_img'>
+                <img src='./images/logo.svg'></img>
+                 </div>
+                <h6 className='bc_show_score_b_run'>Run-out -5 Runs</h6>
+            </>;
+
+             case 'S': return <>
+                <div className='bc_show_score_b_img'>
+                <img src='./images/gravin.jpg'></img>
+                 </div>
+                <h6 className='bc_show_score_b_run'>Stumped -5 Runs</h6>
+            </>;
+
+             case 'H': return <>
+                <div className='bc_show_score_b_img'>
+                <img src='./images/SevenHeavenFinal.png'></img>
+                 </div>
+                <h6 className='bc_show_score_b_run'>Hit Wicket -5 Runs</h6>
+            </>;
             default:
                 const runs = parseInt(value);
                 if (runs >= 0 && runs <= 7) {
@@ -68,11 +112,11 @@ const FinalScore = () => {
                             if (value === 'W' || value === 'n') {
                                 skinTotal += extraRun; // Wide/No ball: only extra runs
                             } else if (value === 'N') {
-                                skinTotal += 0; // Capital N: add 2 runs (extra ball handled separately)
+                                skinTotal += 2; // Capital N: add 2 runs (extra ball handled separately)
                                 if (over.extraBalls && over.extraBalls[index]) {
                                     skinTotal += parseInt(over.extraBalls[index] || 0); // Add the extra ball runs for N
                                 }
-                            } else if (['R', 'C', 'B'].includes(value.toUpperCase())) {
+                            } else if (['R', 'C', 'B', 'S', 'H'].includes(value.toUpperCase())) {
                                 skinTotal -= 5; // Subtract 5 for wickets
                             } else {
                                 const numValue = parseInt(value);
@@ -113,70 +157,93 @@ const FinalScore = () => {
         .map((_, index) => index + 1)
 
     return (
-        <div className="d-flex h-100">
-            {/* Final Score Table - 60% width */}
-            <div style={{ width: '60%', borderRight: '1px solid #dee2e6', padding: '10px' }}>
-                <h4 className="mb-3">Final Score</h4>
-                <div className="table-responsive">
-                    <table className="table table-bordered table-sm">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th colSpan={skinColumns.length} className="text-center">Skins</th>
-                                <th>TOTAL</th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                {skinColumns.map(num => (
-                                    <th key={num} className="text-center">{num}</th>
-                                ))}
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td className="fw-bold">{matchInfo.team1}</td>
-                                {skinColumns.map((_, index) => (
-                                    <td key={index} className="text-center">
-                                        {calculateSkinScore(team1Data, index, parseInt(matchInfo.oversPerSkin))}
-                                    </td>
-                                ))}
-                                <td className="fw-bold">
-                                    {calculateTeamTotal(team1Data).total}
-                                    ({calculateTeamTotal(team1Data).skins} skins)
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="fw-bold">{matchInfo.team2}</td>
-                                {skinColumns.map((_, index) => (
-                                    <td key={index} className="text-center">
-                                        {calculateSkinScore(team2Data, index, parseInt(matchInfo.oversPerSkin))}
-                                    </td>
-                                ))}
-                                <td className="fw-bold">
-                                    {calculateTeamTotal(team2Data).total}
-                                    ({calculateTeamTotal(team2Data).skins} skins)
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div className="">
+            <div className='row'>
+                <div className='col-xl-6 bc_mb-4'>
+                    <div className='bc_final_head_boxes' style={{ paddingRight: '30px' }}>
+
+                        <div className="box_cric_team_heading">
+                            <h3 className="m-0">Final Score</h3>
+                        </div>
+
+                        <div className="table-responsive  bc_final_score">
+                            <table className="table table-bordered box_cric_team_box p-0">
+                                <thead>
+                                    <tr>
+                                        <th className='bb-1 border-head'></th>
+                                        <th className='bb-1 text-center border-head' colSpan={skinColumns.length} >Skins</th>
+                                        <th className='bb-1 border-head'>TOTAL</th>
+                                    </tr>
+                                    <tr>
+                                        <th className='bb-1'></th>
+                                        {skinColumns.map(num => (
+                                            <th key={num} className="text-center bb-1 bc-lh-35">{num}</th>
+                                        ))}
+                                        <th className='bb-1'></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td className="fw-bold text-center">{matchInfo.team1}</td>
+                                        {skinColumns.map((_, index) => (
+                                            <td key={index} className="text-center">
+                                                {calculateSkinScore(team1Data, index, parseInt(matchInfo.oversPerSkin))}
+                                            </td>
+                                        ))}
+                                        <td className="fw-bold text-center">
+                                            {calculateTeamTotal(team1Data).total}
+                                            ({calculateTeamTotal(team1Data).skins} skins)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="fw-bold text-center">{matchInfo.team2}</td>
+                                        {skinColumns.map((_, index) => (
+                                            <td key={index} className="text-center">
+                                                {calculateSkinScore(team2Data, index, parseInt(matchInfo.oversPerSkin))}
+                                            </td>
+                                        ))}
+                                        <td className="fw-bold text-center">
+                                            {calculateTeamTotal(team2Data).total}
+                                            ({calculateTeamTotal(team2Data).skins} skins)
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div className='col-xl-6 '>
+                    <div className='bc_final_head_boxes'>
+                        <div className='row'>
+                            <div className='col-md-8'>
+                                <div >
+                                    <div className="box_cric_team_heading">
+                                        <h3 className="m-0">Last Ball Status</h3>
+                                    </div>
+
+                                    <div className="bc_score_box_show">
+                                        {currentBall ? (
+                                            <>
+                                                {/* <h2 className="mb-3 text-center">{currentBall.toUpperCase()}</h2> */}
+                                                <p className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</p>
+                                            </>
+                                        ) : (
+                                            <p className="text-center text-muted mb-0">Waiting for ball...</p>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='col-md-4'>
+                                <div className='bc_legend_img'> <img src='./images/cricket_legends.jpg'></img></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             {/* Current Ball Info - 40% width */}
-            <div style={{ width: '40%', padding: '10px' }}>
-                <h4 className="mb-3">Last Ball Status</h4>
-                <div className="p-3 bg-light rounded">
-                    {currentBall ? (
-                        <>
-                            {/* <h2 className="mb-3 text-center">{currentBall.toUpperCase()}</h2> */}
-                            <p className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</p>
-                        </>
-                    ) : (
-                        <p className="text-center text-muted mb-0">Waiting for ball...</p>
-                    )}
-                </div>
-            </div>
+
         </div>
     )
 }
