@@ -9,8 +9,8 @@ const ScoreTable = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-  localStorage.removeItem('currentBall');
-}, []); 
+    localStorage.removeItem('currentBall');
+  }, []);
 
   // Helper function to create initial rows
   const createRows = (rowCount, oversPerSkin) => {
@@ -105,7 +105,7 @@ const ScoreTable = () => {
     if (!value) return true;
     const upperValue = value.toUpperCase();
     return (
-      ['W', 'n', 'R', 'C', 'B','S','H'].includes(value) ||
+      ['W', 'n', 'R', 'C', 'B', 'S', 'H'].includes(value) ||
       (parseInt(value) >= 0 && parseInt(value) <= 7)
     );
   };
@@ -125,7 +125,7 @@ const ScoreTable = () => {
       if (value === 'W') return sum + extraRun;  // Wide ball: 2 runs plus extra runs
       // if (value === 'N') return sum + 2;  // Capital N: 2 runs plus extra ball (handled separately)
       if (value === 'n') return sum + 2 + extraRun;  // Small n: only extra runs
-      if (['R', 'C', 'B','S','H'].includes(value.toUpperCase())) return sum - 5;
+      if (['R', 'C', 'B', 'S', 'H'].includes(value.toUpperCase())) return sum - 5;
       const numValue = parseInt(value);
       return sum + (numValue >= 0 && numValue <= 7 ? numValue : 0);
     }, 0);
@@ -144,7 +144,7 @@ const ScoreTable = () => {
   const countWickets = (balls) => {
     return balls.reduce((count, ball) => {
       if (!ball) return count;
-      return ['R', 'C', 'B','S','H'].includes(ball.toUpperCase()) ? count + 1 : count;
+      return ['R', 'C', 'B', 'S', 'H'].includes(ball.toUpperCase()) ? count + 1 : count;
     }, 0);
   }
 
@@ -348,60 +348,64 @@ const ScoreTable = () => {
                       </td>
                       {batsman.overs.map((over, overIndex) => (
                         <td key={overIndex} className="p-2">
-                          <div className="d-flex justify-content-center align-items-center gap-1" style={{ minWidth: '160px' }}>
+                          <div className="d-flex justify-content-between  gap-1" style={{ minWidth: '160px' }}>
                             {/* 6 balls */}
-                            {over.balls.map((ball, ballIndex) => (
-                              <div key={ballIndex} className="d-flex flex-column align-items-center">                                <div className="d-flex">
-                                <input
-                                  type="text"
-                                  className="form-control box_cric_input_score"
-                                  value={ball}
-                                  onChange={(e) => handleBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
-                                />
-                                {/* Show extra ball input for N to the right */}
-                                {ball === 'N' && (
+                            <div className='d-flex justify-content-center  gap-1'>
+                              {over.balls.map((ball, ballIndex) => (
+                                <div key={ballIndex} className="d-flex flex-column align-items-center">                                <div className="d-flex">
                                   <input
                                     type="text"
-                                    className="form-control form-control-sm ms-1 ddddd"
-                                    style={{
-                                      width: '28px',
-                                      height: '28px',
-                                      padding: '2px',
-                                      textAlign: 'center',
-                                      border: '1px solid #dee2e6'
-                                    }}
-                                    value={over.extraBalls[ballIndex] || ''}
-                                    onChange={(e) => handleExtraBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
-                                    placeholder=""
+                                    className="form-control box_cric_input_score"
+                                    value={ball}
+                                    onChange={(e) => handleBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
                                   />
-                                )}
-                              </div>
-                                {/* Show extra runs input for W and n below */}
-                                {(ball === 'W' || ball === 'n') && (
-                                  <input
-                                    type="text"
-                                    className="form-control form-control-sm mt-1"
-                                    style={{
-                                      width: '28px',
-                                      height: '28px',
-                                      padding: '2px',
-                                      textAlign: 'center',
-                                      border: '1px solid #dee2e6'
-                                    }}
-                                    value={over.extraRuns[ballIndex] || ''}
-                                    onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
-                                    placeholder=""
-                                  />
-                                )}
-                              </div>
-                            ))}
+                                  {/* Show extra ball input for N to the right */}
+                                  {ball === 'N' && (
+                                    <input
+                                      type="text"
+                                      className="form-control form-control-sm ms-1 ddddd"
+                                      style={{
+                                        width: '28px',
+                                        height: '28px',
+                                        padding: '2px',
+                                        textAlign: 'center',
+                                        border: '1px solid #dee2e6'
+                                      }}
+                                      value={over.extraBalls[ballIndex] || ''}
+                                      onChange={(e) => handleExtraBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
+                                      placeholder=""
+                                    />
+                                  )}
+                                </div>
+                                  {/* Show extra runs input for W and n below */}
+                                  {(ball === 'W' || ball === 'n') && (
+                                    <input
+                                      type="text"
+                                      className="form-control form-control-sm mt-1"
+                                      style={{
+                                        width: '28px',
+                                        height: '28px',
+                                        padding: '2px',
+                                        textAlign: 'center',
+                                        border: '1px solid #dee2e6'
+                                      }}
+                                      value={over.extraRuns[ballIndex] || ''}
+                                      onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
+                                      placeholder=""
+                                    />
+                                  )}
+                                </div>
+                              ))}
+                            </div>
                             {/* 7th box for over total */}
-                            <input
-                              type="text"
-                              className="form-control box_cric_input_score box_cric_input_scoreTT"
-                              value={over.overTotal}
-                              readOnly
-                            />
+                            <div>
+                              <input
+                                type="text"
+                                className="form-control box_cric_input_score box_cric_input_scoreTT"
+                                value={over.overTotal}
+                                readOnly
+                              />
+                            </div>
                           </div>
                           {/* Over total below 7th box */}
                           {batsmanIndex === 1 && (
