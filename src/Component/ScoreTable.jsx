@@ -255,12 +255,25 @@ const ScoreTable = () => {
     const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data;
 
     setTeamData(prevData => {
-      const newData = [...prevData];
-      // Update the extra ball value
+      const newData = [...prevData];      // Update the extra ball value
       newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraBalls[ballIndex] = value;
 
-      // If value is a wicket type, add 0 extra runs
-      if (['R', 'C', 'B', 'S', 'H'].includes(value)) {
+      // Convert to uppercase for case-insensitive comparison
+      const upperValue = value.toUpperCase();
+
+      // Handle special cases for wide and no-ball
+      if (upperValue === 'W' || upperValue === 'N') {
+        // Initialize extraRuns array if not exists
+        if (!newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns) {
+          newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns = [];
+        }
+        // If it's not already showing the extra runs input, show it with default value '0'
+        if (!newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns[ballIndex]) {
+          newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns[ballIndex] = '0';
+        }
+      }
+      // Handle wicket types
+      else if (['R', 'C', 'B', 'S', 'H'].includes(upperValue)) {
         // Wickets should not have extra runs in box cricket
         newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns[ballIndex] = '0';
       }
@@ -440,15 +453,32 @@ const ScoreTable = () => {
                                   )}
                                 </div>))}
 
-                              {/* Extra balls section */}
-                              {over.extraBalls && over.extraBalls.map((extraBall, extraBallIndex) => (
-                                <input
-                                  key={`extra-${extraBallIndex}`}
-                                  type="text"
-                                  className="form-control box_cric_input_score"
-                                  value={extraBall}
-                                  onChange={(e) => handleExtraBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex, e.target.value)}
-                                />
+                              {/* Extra balls section */}                              {over.extraBalls && over.extraBalls.map((extraBall, extraBallIndex) => (
+                                <div key={`extra-${extraBallIndex}`} className="d-flex flex-column align-items-center">
+                                  <input
+                                    type="text"
+                                    className="form-control box_cric_input_score"
+                                    value={extraBall}
+                                    onChange={(e) => handleExtraBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex, e.target.value)}
+                                  />
+                                  {/* Show extra runs input for W and N below */}
+                                  {(extraBall?.toUpperCase() === 'W' || extraBall?.toUpperCase() === 'N') && (
+                                    <input
+                                      type="text"
+                                      className="form-control form-control-sm mt-1"
+                                      style={{
+                                        width: '28px',
+                                        height: '28px',
+                                        padding: '2px',
+                                        textAlign: 'center',
+                                        border: '1px solid #dee2e6'
+                                      }}
+                                      value={over.extraRuns[extraBallIndex] || ''}
+                                      onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex, e.target.value)}
+                                      placeholder=""
+                                    />
+                                  )}
+                                </div>
                               ))}
                             </div>
 
