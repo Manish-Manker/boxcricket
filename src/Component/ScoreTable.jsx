@@ -116,38 +116,35 @@ const ScoreTable = () => {
   const isValidExtraRun = (value) => {
     if (!value) return true;
     const num = parseInt(value);
-    return !isNaN(num) && num >= 0 && num <= 99;
-  };
-  // Calculate total for one over (6 balls + extra balls)
+    return !isNaN(num) && num >= 0 && num <= 99;  };  
+  
+  // Calculate total for one over (6 balls + extra balls)  
   const calculateOverTotal = (balls, extraRuns, extraBalls = []) => {
-    const mainBallsTotal = balls.reduce((sum, ball, index) => {
-      if (!ball) return sum;
-      const value = ball.toUpperCase();  // Make it case-insensitive
-      const extraRun = parseInt(extraRuns[index] || 0);
+    // Function to calculate total for a single ball
+    const calculateBallTotal = (ball, extraRun = 0) => {
+      if (!ball) return 0;
+      const value = ball.toUpperCase();
 
       // Handle special ball types
-      if (value === 'W') return sum + extraRun;  // Wide ball: only extra runs
-      if (value === 'N') return sum + 2 + extraRun;  // No ball: 2 runs + extra runs
-      if (['R', 'C', 'B', 'S', 'H'].includes(value)) return sum - 5;  // Wickets: -5 runs
-
-      // Handle numeric values (now allowing any positive number)
+      if (value === 'W') return  extraRun;  // Wide ball: 1 run + extra runs
+      if (value === 'N') return 2 + extraRun;  // No ball: 1 run + extra runs
+      if (['R', 'C', 'B', 'S', 'H'].includes(value)) return -5;  // Wickets: -5 runs
+      
+      // Handle numeric values
       const numValue = parseInt(value);
-      return sum + (numValue >= 0 ? numValue : 0);
+      return numValue >= 0 ? numValue : 0;
+    };
+
+    // Calculate total from main balls
+    const mainBallsTotal = balls.reduce((sum, ball, index) => {
+      const extraRun = parseInt(extraRuns[index] || 0);
+      return sum + calculateBallTotal(ball, extraRun);
     }, 0);
 
     // Calculate total from extra balls
-    const extraBallsTotal = extraBalls.reduce((sum, ball) => {
-      if (!ball) return sum;
-      const value = ball.toUpperCase();
-
-      // Handle wickets in extra balls
-      if (['R', 'C', 'B', 'S', 'H'].includes(value)) {
-        return sum - 5;
-      }
-
-      // Handle numeric values in extra balls
-      const numValue = parseInt(ball);
-      return sum + (numValue >= 0 ? numValue : 0);
+    const extraBallsTotal = extraBalls.reduce((sum, ball, index) => {
+      const extraRun = parseInt(extraRuns[index + balls.length] || 0);
+      return sum + calculateBallTotal(ball, extraRun);
     }, 0);
 
     return mainBallsTotal + extraBallsTotal;

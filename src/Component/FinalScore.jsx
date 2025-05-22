@@ -141,11 +141,11 @@ const FinalScore = () => {
                         over.balls.forEach((ball, index) => {
                             if (!ball) return;
                             const value = ball; // Don't convert to uppercase to preserve N/n difference
-                            const extraRun = parseInt(over.extraRuns[index] || 0); const upperValue = value.toUpperCase();
+                            const extraRun = parseInt(over.extraRuns[index] || 0); const upperValue = value.toUpperCase();                            
                             if (upperValue === 'W') {
-                                skinTotal += extraRun; // Wide ball: only extra runs
+                                skinTotal +=  extraRun; // Wide ball: 1 run plus extra runs
                             } else if (upperValue === 'N') {
-                                skinTotal += 2 + extraRun; // No ball: 2 runs plus extra runs
+                                skinTotal += 2 + extraRun; // No ball: 1 run plus extra runs
                             } else if (['R', 'C', 'B', 'S', 'H'].includes(upperValue)) {
                                 skinTotal -= 5; // Subtract 5 for wickets
                             } else {
