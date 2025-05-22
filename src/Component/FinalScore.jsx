@@ -138,10 +138,12 @@ const FinalScore = () => {
                     const overNumber = parseInt(over.bowlerNum)
                     // Check if this over belongs to the current skin
                     if (overNumber > startOver && overNumber <= endOver) {
+                        // Main balls
                         over.balls.forEach((ball, index) => {
                             if (!ball) return;
-                            const value = ball; // Don't convert to uppercase to preserve N/n difference
-                            const extraRun = parseInt(over.extraRuns[index] || 0); const upperValue = value.toUpperCase();                            
+                            const value = ball;
+                            const extraRun = parseInt(over.extraRuns[index] || 0);
+                            const upperValue = value.toUpperCase();
                             if (upperValue === 'W') {
                                 skinTotal +=  extraRun; // Wide ball: 1 run plus extra runs
                             } else if (upperValue === 'N') {
@@ -155,6 +157,27 @@ const FinalScore = () => {
                                 }
                             }
                         });
+                        // Extra balls
+                        if (over.extraBalls && over.extraBalls.length > 0) {
+                            over.extraBalls.forEach((ball, index) => {
+                                if (!ball) return;
+                                const value = ball;
+                                const extraRun = parseInt(over.extraRuns[index + over.balls.length] || 0);
+                                const upperValue = value.toUpperCase();
+                                if (upperValue === 'W') {
+                                    skinTotal +=  extraRun;
+                                } else if (upperValue === 'N') {
+                                    skinTotal += 2 + extraRun;
+                                } else if (['R', 'C', 'B', 'S', 'H'].includes(upperValue)) {
+                                    skinTotal -= 5;
+                                } else {
+                                    const numValue = parseInt(value);
+                                    if (!isNaN(numValue) && numValue >= 0) {
+                                        skinTotal += numValue;
+                                    }
+                                }
+                            });
+                        }
                     }
                 })
             })

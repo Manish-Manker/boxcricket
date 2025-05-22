@@ -117,8 +117,7 @@ const ScoreTable = () => {
     if (!value) return true;
     const num = parseInt(value);
     return !isNaN(num) && num >= 0 && num <= 99;  };  
-  
-  // Calculate total for one over (6 balls + extra balls)  
+    // Calculate total for one over (6 balls + extra balls)  
   const calculateOverTotal = (balls, extraRuns, extraBalls = []) => {
     // Function to calculate total for a single ball
     const calculateBallTotal = (ball, extraRun = 0) => {
@@ -126,8 +125,8 @@ const ScoreTable = () => {
       const value = ball.toUpperCase();
 
       // Handle special ball types
-      if (value === 'W') return  extraRun;  // Wide ball: 1 run + extra runs
-      if (value === 'N') return 2 + extraRun;  // No ball: 1 run + extra runs
+      if (value === 'W') return  parseInt(extraRun || 0);  // Wide ball: 1 run + extra runs
+      if (value === 'N') return 2 + parseInt(extraRun || 0);  // No ball: 1 run + extra runs
       if (['R', 'C', 'B', 'S', 'H'].includes(value)) return -5;  // Wickets: -5 runs
       
       // Handle numeric values
@@ -184,7 +183,8 @@ const ScoreTable = () => {
       // Calculate new over total and wickets
       const overBalls = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].balls;
       const overExtraRuns = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns;
-      const overTotal = calculateOverTotal(overBalls, overExtraRuns);
+      const overExtraBalls = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraBalls;
+      const overTotal = calculateOverTotal(overBalls, overExtraRuns, overExtraBalls);
       const wickets = countWickets(overBalls);
 
       // Update over stats
@@ -221,7 +221,8 @@ const ScoreTable = () => {
       // Calculate new over total
       const overBalls = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].balls;
       const overExtraRuns = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns;
-      const overTotal = calculateOverTotal(overBalls, overExtraRuns);
+      const overExtraBalls = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraBalls;
+      const overTotal = calculateOverTotal(overBalls, overExtraRuns, overExtraBalls);
 
       // Update over stats
       newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].overTotal = overTotal.toString();      // Update pair totals for this over
@@ -249,11 +250,16 @@ const ScoreTable = () => {
       return;
     }
 
-    const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data;
+    const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data;    setTeamData(prevData => {
+      const newData = [...prevData];      
+      // Get reference to current over
+      const currentOver = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex];
+      const balls = currentOver.balls;
+      const extraBalls = currentOver.extraBalls || [];
 
-    setTeamData(prevData => {
-      const newData = [...prevData];      // Update the extra ball value
-      newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraBalls[ballIndex] = value;
+      // Update extra ball value
+      extraBalls[ballIndex] = value;
+      currentOver.extraBalls = extraBalls;
 
       // Convert to uppercase for case-insensitive comparison
       const upperValue = value.toUpperCase();
@@ -261,12 +267,16 @@ const ScoreTable = () => {
       // Handle special cases for wide and no-ball
       if (upperValue === 'W' || upperValue === 'N') {
         // Initialize extraRuns array if not exists
-        if (!newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns) {
-          newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns = [];
+        if (!currentOver.extraRuns) {
+          currentOver.extraRuns = Array(6 + extraBalls.length).fill('0');
+        }
+        // Ensure we have enough slots in extraRuns array for extra balls
+        while (currentOver.extraRuns.length <= ballIndex + balls.length) {
+          currentOver.extraRuns.push('0');
         }
         // If it's not already showing the extra runs input, show it with default value '0'
-        if (!newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns[ballIndex]) {
-          newData[rowIndex].batsmen[batsmanIndex].overs[overIndex].extraRuns[ballIndex] = '0';
+        if (!currentOver.extraRuns[ballIndex + balls.length]) {
+          currentOver.extraRuns[ballIndex + balls.length] = '0';
         }
       }
       // Handle wicket types
@@ -470,8 +480,8 @@ const ScoreTable = () => {
                                         textAlign: 'center',
                                         border: '1px solid #dee2e6'
                                       }}
-                                      value={over.extraRuns[extraBallIndex] || ''}
-                                      onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex, e.target.value)}
+                                      value={over.extraRuns[extraBallIndex + over.balls.length] || ''}
+                                      onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex + over.balls.length, e.target.value)}
                                       placeholder=""
                                     />
                                   )}
