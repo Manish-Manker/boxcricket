@@ -32,10 +32,15 @@ const FinalScore = () => {
         const value = ball; // Keep the case to differentiate between N and n
         switch (value) {
             case 'W': return 'Wide ball (extra runs only)';
-            case 'N': return 'No ball (+2 runs and extra ball)';
+            // case 'N': return 'No ball (+2 runs and extra ball)';
             case 'n': return 'No ball (extra runs only)';
             // case 'R': return 'Run Out (-5 runs)';
-            case 'C': return 'Catch Out (-5 runs)';
+            case 'C': return  <>
+                <div className='bc_show_score_b_img'>
+                <img src='./images/gravinPRO.jpg'></img>
+                 </div>
+                <h6 className='bc_show_score_b_run'>Catch Out (-5 runs)</h6>
+            </>;;
             // case 'B': return 'Bowled (-5 runs)';
             case '4': return <>
                 <div className='bc_show_score_b_img'>
@@ -109,14 +114,12 @@ const FinalScore = () => {
                             if (!ball) return;
                             const value = ball; // Don't convert to uppercase to preserve N/n difference
                             const extraRun = parseInt(over.extraRuns[index] || 0);
-                            if (value === 'W' || value === 'n') {
+                            if (value === 'W' ) {
                                 skinTotal += extraRun; // Wide/No ball: only extra runs
-                            } else if (value === 'N') {
-                                skinTotal += 2; // Capital N: add 2 runs (extra ball handled separately)
-                                if (over.extraBalls && over.extraBalls[index]) {
-                                    skinTotal += parseInt(over.extraBalls[index] || 0); // Add the extra ball runs for N
-                                }
-                            } else if (['R', 'C', 'B', 'S', 'H'].includes(value.toUpperCase())) {
+                            }else if( value === 'n'){
+                                skinTotal += 2+extraRun;
+                            }
+                              else if (['R', 'C', 'B', 'S', 'H'].includes(value.toUpperCase())) {
                                 skinTotal -= 5; // Subtract 5 for wickets
                             } else {
                                 const numValue = parseInt(value);

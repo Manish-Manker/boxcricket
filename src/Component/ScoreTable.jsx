@@ -105,7 +105,7 @@ const ScoreTable = () => {
     if (!value) return true;
     const upperValue = value.toUpperCase();
     return (
-      ['W', 'N', 'n', 'R', 'C', 'B','S','H'].includes(value) ||
+      ['W', 'n', 'R', 'C', 'B','S','H'].includes(value) ||
       (parseInt(value) >= 0 && parseInt(value) <= 7)
     );
   };
@@ -123,8 +123,8 @@ const ScoreTable = () => {
       const value = ball;  // Don't convert to uppercase to differentiate N and n
       const extraRun = parseInt(extraRuns[index] || 0);
       if (value === 'W') return sum + extraRun;  // Wide ball: 2 runs plus extra runs
-      if (value === 'N') return sum + 2;  // Capital N: 2 runs plus extra ball (handled separately)
-      if (value === 'n') return sum + extraRun;  // Small n: only extra runs
+      // if (value === 'N') return sum + 2;  // Capital N: 2 runs plus extra ball (handled separately)
+      if (value === 'n') return sum + 2 + extraRun;  // Small n: only extra runs
       if (['R', 'C', 'B','S','H'].includes(value.toUpperCase())) return sum - 5;
       const numValue = parseInt(value);
       return sum + (numValue >= 0 && numValue <= 7 ? numValue : 0);
