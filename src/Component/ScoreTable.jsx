@@ -485,15 +485,8 @@ const ScoreTable = () => {
                             {/* Score total and Add Extra Ball button side by side */}
                             <div className="d-flex align-items-center gap-2">
                               <button
-                                className="btn btn-sm box_cric_btn"
-                                style={{
-                                  width: '28px',
-                                  height: '28px',
-                                  padding: '0',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center'
-                                }} onClick={(e) => handleAddExtraBall(teamNumber, rowIndex, batsmanIndex, overIndex, e)}
+                                className="box_cric_btn  box_cric_btn_sm"
+                                onClick={(e) => handleAddExtraBall(teamNumber, rowIndex, batsmanIndex, overIndex, e)}
                               >
                                 +
                               </button>

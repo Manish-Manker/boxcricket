@@ -22,25 +22,26 @@ const FinalScore = () => {
             setTeam1Data(team1ScoreData)
             setTeam2Data(team2ScoreData)
             setCurrentBall(lastBall)
+
         }
 
         loadData()
-        const interval = setInterval(loadData, 500) 
+        const interval = setInterval(loadData, 500)
         return () => clearInterval(interval)
     }, [])
 
 
     const getBallDescription = (ball) => {
         if (!ball) return '';
-        const value = ball.toUpperCase(); 
+        const value = ball.toUpperCase();
         switch (value) {
             case 'W': return <>
-                <div  className='inner-text done-animating'>
+                <div className='inner-text done-animating'>
                     <h6 className='letter animate' > Wide ball (extra runs only)</h6>
                 </div>
             </>;
-            case 'N': return<>
-                <div  className='inner-text done-animating'>
+            case 'N': return <>
+                <div className='inner-text done-animating'>
                     <h6 className='letter animate' >No ball (+2 runs and extra ball)</h6>
                 </div>
             </>;
@@ -49,7 +50,7 @@ const FinalScore = () => {
                     <img src='./images/gravinPRO.jpg' alt="Catch out"></img>
                 </div>
                 {/* <div id="inner-text" className={doneAnimating ? 'done-animating' : ''}><h6 className={`letter ${isAnimating ? 'animate' : ''}`}>Catch Out (-5 runs)</h6></div> */}
-                <div  className='inner-text done-animating'>
+                <div className='inner-text done-animating'>
                     <h6 className='letter animate' > Catch Out (-5 runs)</h6>
                 </div>
             </>;
@@ -57,7 +58,7 @@ const FinalScore = () => {
                 <div className='bc_show_score_b_img'>
                     <img src='./images/Ninth_Cloud.png' alt="4 runs" />
                 </div>
-                <div  className='inner-text done-animating'>
+                <div className='inner-text done-animating'>
                     <h6 className='letter animate'>4 Runs</h6>
                 </div>
             </>;
@@ -65,7 +66,7 @@ const FinalScore = () => {
                 <div className='bc_show_score_b_img'>
                     <img src='./images/khuber.jpg' alt="5 runs" />
                 </div>
-                <div  className='inner-text done-animating'>
+                <div className='inner-text done-animating'>
                     <h6 className='letter animate'>5 Runs</h6>
                 </div>
             </>;
@@ -73,7 +74,7 @@ const FinalScore = () => {
                 <div className='bc_show_score_b_img'>
                     <img src='./images/THINKCLOUD.png' alt="7 runs" />
                 </div>
-                <div  className='inner-text done-animating'>
+                <div className='inner-text done-animating'>
                     <h6 className='letter animate'>7 Runs</h6>
                 </div>
             </>;
@@ -81,7 +82,7 @@ const FinalScore = () => {
                 <div className='bc_show_score_b_img'>
                     <img src='./images/storyWala.png' alt="Bowled" />
                 </div>
-                <div  className='inner-text done-animating'>
+                <div className='inner-text done-animating'>
                     <h6 className='letter animate'>Bowled (-5 runs)</h6>
                 </div>
             </>;
@@ -89,30 +90,34 @@ const FinalScore = () => {
                 <div className='bc_show_score_b_img'>
                     <img src='./images/logo.svg' alt="Run out" />
                 </div>
-                <div  className='inner-text done-animating'>
-                    <h6 className='letter animate'>Run-out -5 Runs</h6>
+                <div className='inner-text done-animating'>
+                    <h6 className='letter animate'>Run-out (-5 Runs)</h6>
                 </div>
             </>;
             case 'S': return <>
                 <div className='bc_show_score_b_img'>
                     <img src='./images/gravin.jpg' alt="Stumped" />
                 </div>
-                <div  className=' inner-text done-animating'>
-                    <h6 className='letter animate'>Stumped -5 Runs</h6>
+                <div className=' inner-text done-animating'>
+                    <h6 className='letter animate'>Stumped (-5 Runs)</h6>
                 </div>
             </>;
             case 'H': return <>
                 <div className='bc_show_score_b_img'>
                     <img src='./images/SevenHeavenFinal.png' alt="Hit wicket" />
                 </div>
-                <div  className='inner-text done-animating'>
-                    <h6 className='letter animate'>Hit Wicket -5 Runs</h6>
+                <div className='inner-text done-animating'>
+                    <h6 className='letter animate'>Hit Wicket (-5 Runs)</h6>
                 </div>
             </>;
             default:
                 const runs = parseInt(value);
                 if (!isNaN(runs) && runs >= 0) {
-                    return `${runs} ${runs === 1 ? 'Run' : 'Runs'}`;
+                    return <div className='className=' inner-text done-animating>
+                        <h6 className='letter animate'>{runs} {runs === 1 ? 'Run' : 'Runs'}</h6>
+                    </div>
+
+                    // `${runs} ${runs === 1 ? 'Run' : 'Runs'}`;
                 }
                 return '';
         }
@@ -254,10 +259,13 @@ const FinalScore = () => {
                                             </>
                                         ) : (
                                             <>
-                                                <div className='bc_show_score_waiting'>
+                                                <div className=''>
                                                     <img src='./images/waiting.gif'></img>
                                                 </div>
-                                                <h6 className='bc_show_score_b_run'>Waiting for ball...</h6>
+                                                <div className='inner-text done-animating'>
+                                                    <h6 className='letter animate'>Waiting for ball...</h6>
+                                                </div>
+                                              
                                             </>
                                         )}
                                     </div>
