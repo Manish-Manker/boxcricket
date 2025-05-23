@@ -428,7 +428,7 @@ const ScoreTable = () => {
                       </td>
                       {batsman.overs.map((over, overIndex) => (
                         <td key={overIndex} className="p-2">
-                          <div className="d-flex justify-content-between gap-1" style={{ minWidth: '160px' }}>
+                          <div className="d-flex justify-content-between gap-1 align-items-start" style={{ minWidth: '160px' }}>
                             {/* 6 balls */}
                             <div className='d-flex justify-content-center gap-1'>
                               {over.balls.map((ball, ballIndex) => (
@@ -445,14 +445,7 @@ const ScoreTable = () => {
                                   {(ball === 'W' || ball === 'n' || ball === 'N' || ball === 'w') && (
                                     <input
                                       type="text"
-                                      className="form-control form-control-sm mt-1"
-                                      style={{
-                                        width: '28px',
-                                        height: '28px',
-                                        padding: '2px',
-                                        textAlign: 'center',
-                                        border: '1px solid #dee2e6'
-                                      }}
+                                      className="form-control box_cric_input_score mt-1"
                                       value={over.extraRuns[ballIndex] || ''}
                                       onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
                                       placeholder=""
@@ -472,14 +465,8 @@ const ScoreTable = () => {
                                   {(extraBall?.toUpperCase() === 'W' || extraBall?.toUpperCase() === 'N') && (
                                     <input
                                       type="text"
-                                      className="form-control form-control-sm mt-1"
-                                      style={{
-                                        width: '28px',
-                                        height: '28px',
-                                        padding: '2px',
-                                        textAlign: 'center',
-                                        border: '1px solid #dee2e6'
-                                      }}
+                                      className="form-control box_cric_input_score mt-1"
+                                      
                                       value={over.extraRuns[extraBallIndex + over.balls.length] || ''}
                                       onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex + over.balls.length, e.target.value)}
                                       placeholder=""

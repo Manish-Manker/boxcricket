@@ -42,7 +42,7 @@ const FinalScore = () => {
             </>;
             case 'N': return <>
                 <div className='inner-text done-animating'>
-                    <h6 className='letter animate' >No ball (+2 runs and extra ball)</h6>
+                    <h6 className='letter animate' >No ball (+2 runs )</h6>
                 </div>
             </>;
             case 'C': return <>
