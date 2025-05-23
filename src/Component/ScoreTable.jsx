@@ -9,6 +9,7 @@ const ScoreTable = () => {
   const [team1Data, setTeam1Data] = useState(null)
   const [team2Data, setTeam2Data] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [showPDF, setShowPDF] = useState(false);
 
   useEffect(() => {
     localStorage.removeItem('currentBall');
@@ -542,20 +543,40 @@ const ScoreTable = () => {
               onClick={() => window.open('/finalscore', '_blank')}
             >
               Open Final Score in New Tab
+
             </button>
-            <PDFDownloadLink
-              document={
-                <FullMatchPDF
-                  matchInfo={matchInfo}
-                  team1Data={team1Data}
-                  team2Data={team2Data}
-                />
-              }
-              fileName="FullMatchScorecard.pdf"
-              className="box_cric_btn"
-            >
-              {({ loading }) => (loading ? 'Preparing PDF...' : 'Download Full Match PDF')}
-            </PDFDownloadLink>
+            
+            
+            {showPDF && (
+              <PDFDownloadLink
+                document={
+                  <FullMatchPDF
+                    matchInfo={matchInfo}
+                    team1Data={team1Data}
+                    team2Data={team2Data}
+                  />
+                }
+                fileName="FinalMatchScorecard.pdf"
+                className="box_cric_btn"
+              >
+                {({ loading, url }) => {
+                  if (!loading && url) {
+                    // Reset showPDF state after download link is ready
+                    setTimeout(() => setShowPDF(false), 3000);
+                  }
+                  return loading ? 'Preparing PDF...' : 'Download Final Match PDF';
+                }}
+              </PDFDownloadLink>
+            )}
+
+            {!showPDF && (
+              <button
+                className="box_cric_btn"
+                onClick={() => setShowPDF(true)}
+              >
+                Create Full Match PDF
+              </button>
+            )}
           </div>
 
         </div>
