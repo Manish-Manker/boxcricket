@@ -1,5 +1,5 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
 
 
 // Helper to render the Final Score Table (Skins Table)
@@ -78,28 +78,32 @@ const FinalScoreTable = ({ matchInfo, team1Data, team2Data }) => {
   const team2 = calculateTeamTotal(team2Data);
   return (
     <View style={{ marginBottom: 20 }}>
+
+       <View style={{ display: 'flex', alignItems: 'flex-end', marginBottom: 8 }}>
+      <Image src='./images/cricket_legends.jpg' style={{ width: 100, height: 100 }} />
+      </View>
       <Text style={{ fontSize: 10, fontWeight: 'bold', marginBottom: 8 }}>Final Score</Text>
-      <View style={{ display: 'table', width: '100%', borderStyle: 'solid', borderWidth:'0.5', borderColor: '#e9ebfa', borderRightWidth:'10px' }}>
+      <View style={{ display: 'table', width: '100%', borderStyle: 'solid', borderWidth: '0.5', borderColor: '#e9ebfa', borderRightWidth: '10px' }}>
         <View style={{ flexDirection: 'row', backgroundColor: '#f1f4fb' }}>
-          <Text style={{ flex: 1, padding: 4 ,fontSize: 5 }}></Text>
+          <Text style={{ flex: 1, padding: 4, fontSize: 5 }}></Text>
           {Array(numberOfSkins).fill(0).map((_, i) => (
-            <Text key={i} style={{ flex: 1, textAlign: 'center', padding: 2 ,fontSize: 6 , fontWeight: 'bold', }}>Skin {i + 1}</Text>
+            <Text key={i} style={{ flex: 1, textAlign: 'center', padding: 2, fontSize: 6, fontWeight: 'bold', }}>Skin {i + 1}</Text>
           ))}
-          <Text style={{ flex: 1,  padding: 2 ,fontSize: 6 , fontWeight: 'bold',}}>TOTAL</Text>
+          <Text style={{ flex: 1, padding: 2, fontSize: 6, fontWeight: 'bold', }}>TOTAL</Text>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={{ flex: 1, padding: 4 ,fontSize: 5 , fontWeight: 'bold', }}>{matchInfo.team1}</Text>
+          <Text style={{ flex: 1, padding: 4, fontSize: 5, fontWeight: 'bold', }}>{matchInfo.team1}</Text>
           {team1.skinScores.map((score, i) => (
             <Text key={i} style={{ flex: 1, fontSize: 5, textAlign: 'center', padding: 4 }}>{score}</Text>
           ))}
-          <Text style={{ flex: 1, padding: 4 ,fontSize: 5 }}>{team1.total} ({team1.skins} skins)</Text>
+          <Text style={{ flex: 1, padding: 4, fontSize: 5 }}>{team1.total} ({team1.skins} skins)</Text>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={{ flex: 1, padding: 4 ,fontSize: 5 , fontWeight: 'bold', }}>{matchInfo.team2}</Text>
+          <Text style={{ flex: 1, padding: 4, fontSize: 5, fontWeight: 'bold', }}>{matchInfo.team2}</Text>
           {team2.skinScores.map((score, i) => (
             <Text key={i} style={{ flex: 1, fontSize: 5, textAlign: 'center', padding: 4 }}>{score}</Text>
           ))}
-          <Text style={{ flex: 1, padding: 4 ,fontSize: 5 }}>{team2.total} ({team2.skins} skins)</Text>
+          <Text style={{ flex: 1, padding: 4, fontSize: 5 }}>{team2.total} ({team2.skins} skins)</Text>
         </View>
       </View>
     </View>
@@ -151,7 +155,7 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
     let showExtra = false;
     if (upperValue === 'W' || upperValue === 'N') showExtra = true;
     return (
-      <View key={key} style={{ borderWidth: 0.5, borderColor: '#e9ebfa', minWidth: 10, minHeight: 10, alignItems: 'center', justifyContent: 'center', margin: 0, padding: 0 }}>
+      <View key={key} style={{ borderWidth: 0.5, borderColor: '#cbcbcb', minWidth: 10, minHeight: 10, alignItems: 'center', justifyContent: 'center', margin: 0, padding: 0 }}>
         <Text style={{ fontSize: 6 }}>{ball}</Text>
         {showExtra && !!extraRun && (
           <Text style={{ fontSize: 5, color: '#555' }}>+{extraRun}</Text>
@@ -179,15 +183,15 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
     return (
       <React.Fragment key={pairIdx}>
         {/* Over numbers header - make more compact */}
-        <View style={{ flexDirection: 'row', backgroundColor: '#f0f0f0', minHeight: 12, borderColor:"#e9ebfa",   overflow:"hidden"}}>
-          <Text style={[styles.tableCell, { flex: 0.3, backgroundColor: '#f1f4fb' , padding:3 }]}></Text>
+        <View style={{ flexDirection: 'row', backgroundColor: '#f0f0f0', minHeight: 12, borderColor: "#e9ebfa", overflow: "hidden" }}>
+          <Text style={[styles.tableCell, { flex: 0.3, backgroundColor: '#f1f4fb', padding: 3 }]}></Text>
           <Text style={[styles.tableCell, { flex: 0.7, backgroundColor: '#f1f4fb' }]}></Text>
           {pair.batsmen[0].overs.map((_, overIdx) => (
-            <Text key={overIdx} style={[styles.tableCell, {  fontWeight: 'bold', fontSize: 5, backgroundColor: '#f1f4fb'  , padding:3 }]}>
+            <Text key={overIdx} style={[styles.tableCell, { fontWeight: 'bold', fontSize: 5, backgroundColor: '#f1f4fb', padding: 3 }]}>
               {pair.pairId * oversPerPair - oversPerPair + overIdx + 1}
             </Text>
           ))}
-          <Text style={[styles.tableCell, {  fontWeight: 'bold', fontSize: 5, backgroundColor: '#f1f4fb', padding:3 }]}>Total</Text>
+          <Text style={[styles.tableCell, { fontWeight: 'bold', fontSize: 5, backgroundColor: '#f1f4fb', padding: 3 }]}>Total</Text>
         </View>
 
         {/* Bowler names row - more compact */}
@@ -205,7 +209,7 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
         {/* Batsmen rows with balls and totals */}
         <View style={{ flexDirection: 'row', alignItems: 'stretch', minHeight: 24, backgroundColor: '#fff' }}>
           {/* Pair number and batsman names */}
-          <View style={{ flexDirection: 'column', flex: 1, borderWidth:'0' }}>
+          <View style={{ flexDirection: 'column', flex: 1, borderWidth: '0' }}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <Text style={[styles.tableCell, { flex: 0.3, borderBottomWidth: 0 }]}>{pair.pairId}</Text>
               <Text style={[styles.tableCell, { flex: 0.7, textAlign: 'left', fontSize: 5 }]}>{pair.batsmen[0].name}</Text>
@@ -218,10 +222,10 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
 
           {/* Overs with balls and totals */}
           {pair.batsmen[0].overs.map((over, overIdx) => (
-            <View key={overIdx} style={{ flex: 1, borderRightWidth: '0.2', borderColor: '#e9ebfa'}}>
+            <View key={overIdx} style={{ flex: 1, borderRightWidth: '0.2', borderColor: '#e9ebfa' }}>
               {/* First batsman's balls and total */}
               <View style={{ flexDirection: 'row', borderWidth: '0', borderColor: '#e9ebfa', padding: 4 }}>
-                <View style={{ flex: 0.8, flexDirection: 'row', flexWrap: 'wrap', gap: 1  }}>
+                <View style={{ flex: 0.8, flexDirection: 'row', flexWrap: 'wrap', gap: 1 }}>
                   {over.balls.map((ball, ballIdx) => renderBallCell(ball, over.extraRuns[ballIdx], `main-${overIdx}-${ballIdx}`))}
                   {over.extraBalls?.map((ball, extraIdx) => renderBallCell(ball, over.extraRuns[over.balls.length + extraIdx], `extra-${overIdx}-${extraIdx}`))}
                 </View>
@@ -247,12 +251,12 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
 
           {/* Individual and pair totals */}          <View style={{ flex: 0.3, borderLeftWidth: 0, borderColor: '#e9ebfa' }}>
             <View style={{ flex: 1, borderBottomWidth: 0.5, borderColor: '#e9ebfa', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 5  , padding:3 }}>
+              <Text style={{ fontSize: 5, padding: 3 }}>
                 {pair.batsmen[0].overs.reduce((sum, o) => sum + (parseInt(o.overTotal) || 0), 0)}
               </Text>
             </View>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 5  , padding:3 }}>
+              <Text style={{ fontSize: 5, padding: 3 }}>
                 {pair.batsmen[1].overs.reduce((sum, o) => sum + (parseInt(o.overTotal) || 0), 0)}
               </Text>
             </View>
@@ -261,13 +265,13 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
 
         {/* Pair totals row */}
         <View style={{ flexDirection: 'row', backgroundColor: '#f5f5f5', minHeight: 12 }}>
-          <Text style={[styles.tableCell, { flex: 1, textAlign: 'right', fontSize: 5  , padding:3 }]}>
+          <Text style={[styles.tableCell, { flex: 1, textAlign: 'right', fontSize: 5, padding: 3 }]}>
             {(pair.pairId - 1) * oversPerPair + 1}/{pair.pairId * oversPerPair}
           </Text>
           {pair?.totals?.map((total, idx) => (
-            <Text key={idx} style={[styles.tableCell, { flex: 1, fontSize: 5  , padding:3 }]}>{total}</Text>
+            <Text key={idx} style={[styles.tableCell, { flex: 1, fontSize: 5, padding: 3 }]}>{total}</Text>
           ))}
-          <Text style={[styles.tableCell, { flex: 0.3, fontWeight: 'bold', fontSize: 5  , padding:3 }]}>
+          <Text style={[styles.tableCell, { flex: 0.3, fontWeight: 'bold', fontSize: 5, padding: 3 }]}>
             {pair.batsmen.reduce((sum, b) => sum + b.overs.reduce((s, o) => s + (parseInt(o.overTotal) || 0), 0), 0)}
           </Text>
         </View>
@@ -394,20 +398,20 @@ const PlayerStatsTable = ({ team1Name, team1Data, team2Name, team2Data }) => {
 
   // Find player of the match (highest C value from both teams)
   const allPlayers = [...team1Stats, ...team2Stats];
-  const playerOfMatch = allPlayers.reduce((max, player) => 
-    player.C > max.C ? player : max, 
+  const playerOfMatch = allPlayers.reduce((max, player) =>
+    player.C > max.C ? player : max,
     allPlayers[0]
   );
 
   const headerStyle = {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#f1f4fb',
     fontWeight: 'bold',
     fontSize: 6,
     padding: 2,
     textAlign: 'center',
     borderBottom: 1,
     borderRight: 1,
-    borderColor: '#000'
+    borderColor: '#e9ebfa'
   };
 
   const cellStyle = {
@@ -416,23 +420,23 @@ const PlayerStatsTable = ({ team1Name, team1Data, team2Name, team2Data }) => {
     textAlign: 'center',
     borderBottom: 1,
     borderRight: 1,
-    borderColor: '#000'
+    borderColor: '#e9ebfa'
   };
 
   const tableStyle = {
     borderLeft: 1,
     borderTop: 1,
-    borderColor: '#000',
+    borderColor: '#e9ebfa',
     marginBottom: 8
   };
 
   const potmStyle = {
     marginBottom: 10,
     padding: 8,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f1f4fb',
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#000'
+    borderColor: '#e9ebfa'
   };
 
   return (
@@ -503,6 +507,7 @@ const PlayerStatsTable = ({ team1Name, team1Data, team2Name, team2Data }) => {
 const FullMatchPDF = ({ matchInfo, team1Data, team2Data }) => (
   <Document>
     <Page size="A4" style={{ padding: 20 }}>
+     
       {/* Final Score Table (Skins) */}
       <FinalScoreTable matchInfo={matchInfo} team1Data={team1Data} team2Data={team2Data} />
       {/* Team 1 Score Table */}
@@ -512,13 +517,13 @@ const FullMatchPDF = ({ matchInfo, team1Data, team2Data }) => (
 
     </Page>
     <Page size="A4" style={{ padding: 20 }}>
-          <PlayerStatsTable
-            team1Name={matchInfo.team1}
-            team1Data={team1Data}
-            team2Name={matchInfo.team2}
-            team2Data={team2Data}
-          />
-        </Page>
+      <PlayerStatsTable
+        team1Name={matchInfo.team1}
+        team1Data={team1Data}
+        team2Name={matchInfo.team2}
+        team2Data={team2Data}
+      />
+    </Page>
   </Document>
 );
 
