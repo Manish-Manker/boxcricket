@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import FinalScore from './FinalScore'
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import FullMatchPDF from './FullMatchPDF';
 
 const ScoreTable = () => {
   const [matchInfo, setMatchInfo] = useState(null)
@@ -100,7 +102,7 @@ const ScoreTable = () => {
     </div>
   }
 
-  const numberOfCols = parseInt(matchInfo.oversPerSkin)  
+  const numberOfCols = parseInt(matchInfo.oversPerSkin)
   const isValidInput = (value) => {
     if (!value) return true;
     const upperValue = value.toUpperCase();
@@ -116,8 +118,9 @@ const ScoreTable = () => {
   const isValidExtraRun = (value) => {
     if (!value) return true;
     const num = parseInt(value);
-    return !isNaN(num) && num >= 0 && num <= 99;  };  
-    // Calculate total for one over (6 balls + extra balls)  
+    return !isNaN(num) && num >= 0 && num <= 99;
+  };
+  // Calculate total for one over (6 balls + extra balls)  
   const calculateOverTotal = (balls, extraRuns, extraBalls = []) => {
     // Function to calculate total for a single ball
     const calculateBallTotal = (ball, extraRun = 0) => {
@@ -125,10 +128,10 @@ const ScoreTable = () => {
       const value = ball.toUpperCase();
 
       // Handle special ball types
-      if (value === 'W') return  parseInt(extraRun || 0);  // Wide ball: 1 run + extra runs
+      if (value === 'W') return parseInt(extraRun || 0);  // Wide ball: 1 run + extra runs
       if (value === 'N') return 2 + parseInt(extraRun || 0);  // No ball: 1 run + extra runs
       if (['R', 'C', 'B', 'S', 'H'].includes(value)) return -5;  // Wickets: -5 runs
-      
+
       // Handle numeric values
       const numValue = parseInt(value);
       return numValue >= 0 ? numValue : 0;
@@ -250,8 +253,8 @@ const ScoreTable = () => {
       return;
     }
 
-    const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data;    setTeamData(prevData => {
-      const newData = [...prevData];      
+    const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data; setTeamData(prevData => {
+      const newData = [...prevData];
       // Get reference to current over
       const currentOver = newData[rowIndex].batsmen[batsmanIndex].overs[overIndex];
       const balls = currentOver.balls;
@@ -466,7 +469,7 @@ const ScoreTable = () => {
                                     <input
                                       type="text"
                                       className="form-control box_cric_input_score mt-1"
-                                      
+
                                       value={over.extraRuns[extraBallIndex + over.balls.length] || ''}
                                       onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex + over.balls.length, e.target.value)}
                                       placeholder=""
@@ -526,14 +529,38 @@ const ScoreTable = () => {
         <FinalScore />
 
         <div className="d-flex justify-content-end my-4">
-          <div><button
+          {/* <div><button
             className="box_cric_btn"
             onClick={() => window.open('/finalscore', '_blank')}
           >
             Open Final Score in New Tab
-          </button></div>
+          </button></div> */}
+
+          <div className="d-flex justify-content-end my-4 gap-2">
+            <button
+              className="box_cric_btn"
+              onClick={() => window.open('/finalscore', '_blank')}
+            >
+              Open Final Score in New Tab
+            </button>
+            <PDFDownloadLink
+              document={
+                <FullMatchPDF
+                  matchInfo={matchInfo}
+                  team1Data={team1Data}
+                  team2Data={team2Data}
+                />
+              }
+              fileName="FullMatchScorecard.pdf"
+              className="box_cric_btn"
+            >
+              {({ loading }) => (loading ? 'Preparing PDF...' : 'Download Full Match PDF')}
+            </PDFDownloadLink>
+          </div>
+
         </div>
       </div>
+
 
 
 

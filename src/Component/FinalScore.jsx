@@ -145,7 +145,7 @@ const FinalScore = () => {
                             const extraRun = parseInt(over.extraRuns[index] || 0);
                             const upperValue = value.toUpperCase();
                             if (upperValue === 'W') {
-                                skinTotal +=  extraRun; // Wide ball: 1 run plus extra runs
+                                skinTotal += extraRun; // Wide ball: 1 run plus extra runs
                             } else if (upperValue === 'N') {
                                 skinTotal += 2 + extraRun; // No ball: 1 run plus extra runs
                             } else if (['R', 'C', 'B', 'S', 'H'].includes(upperValue)) {
@@ -165,7 +165,7 @@ const FinalScore = () => {
                                 const extraRun = parseInt(over.extraRuns[index + over.balls.length] || 0);
                                 const upperValue = value.toUpperCase();
                                 if (upperValue === 'W') {
-                                    skinTotal +=  extraRun;
+                                    skinTotal += extraRun;
                                 } else if (upperValue === 'N') {
                                     skinTotal += 2 + extraRun;
                                 } else if (['R', 'C', 'B', 'S', 'H'].includes(upperValue)) {
@@ -288,7 +288,7 @@ const FinalScore = () => {
                                                 <div className='inner-text done-animating'>
                                                     <h6 className='letter animate'>Waiting for ball...</h6>
                                                 </div>
-                                              
+
                                             </>
                                         )}
                                     </div>
@@ -298,6 +298,9 @@ const FinalScore = () => {
                             <div className='col-md-4'>
                                 <div className='bc_legend_img'> <img src='./images/cricket_legends.jpg'></img></div>
                             </div>
+
+
+
                         </div>
                     </div>
                 </div>
