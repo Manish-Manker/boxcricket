@@ -129,7 +129,7 @@ const ScoreTable = () => {
       const value = ball.toUpperCase();
 
       // Handle special ball types
-      if (value === 'W') return parseInt(extraRun || 0);  // Wide ball: 1 run + extra runs
+      if (value === 'W') return 2 + parseInt(extraRun || 0);  // Wide ball: 1 run + extra runs
       if (value === 'N') return 2 + parseInt(extraRun || 0);  // No ball: 1 run + extra runs
       if (['R', 'C', 'B', 'S', 'H'].includes(value)) return -5;  // Wickets: -5 runs
 
@@ -529,7 +529,7 @@ const ScoreTable = () => {
       <div id='finalScore' className="bc_finalScore">
         <FinalScore />
 
-        <div className="d-flex justify-content-end my-4">
+        
           {/* <div><button
             className="box_cric_btn"
             onClick={() => window.open('/finalscore', '_blank')}
@@ -537,7 +537,7 @@ const ScoreTable = () => {
             Open Final Score in New Tab
           </button></div> */}
 
-          <div className="d-flex justify-content-end my-4 gap-2">
+          <div className="d-flex justify-content-end my-4 gap-2 box_cric_btn_score">
             <button
               className="box_cric_btn"
               onClick={() => window.open('/finalscore', '_blank')}
@@ -579,7 +579,6 @@ const ScoreTable = () => {
             )}
           </div>
 
-        </div>
       </div>
 
 

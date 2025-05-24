@@ -37,7 +37,7 @@ const FinalScore = () => {
         switch (value) {
             case 'W': return <>
                 <div className='inner-text done-animating'>
-                    <h6 className='letter animate' > Wide ball (extra runs only)</h6>
+                    <h6 className='letter animate' > Wide ball (+2 runs)</h6>
                 </div>
             </>;
             case 'N': return <>
@@ -145,7 +145,7 @@ const FinalScore = () => {
                             const extraRun = parseInt(over.extraRuns[index] || 0);
                             const upperValue = value.toUpperCase();
                             if (upperValue === 'W') {
-                                skinTotal += extraRun; // Wide ball: 1 run plus extra runs
+                                skinTotal += 2 + extraRun; // Wide ball: 1 run plus extra runs
                             } else if (upperValue === 'N') {
                                 skinTotal += 2 + extraRun; // No ball: 1 run plus extra runs
                             } else if (['R', 'C', 'B', 'S', 'H'].includes(upperValue)) {
@@ -186,20 +186,42 @@ const FinalScore = () => {
         return skinTotal
     }
 
+    // const calculateTeamTotal = (teamData) => {
+    //     if (!teamData) return { total: 0, skins: 0 }
+
+    //     const skinScores = Array(parseInt(matchInfo?.oversPerSkin || 0)).fill(0)
+    //         .map((_, index) => calculateSkinScore(teamData, index, parseInt(matchInfo?.oversPerSkin || 0)))
+
+    //     const total = skinScores.reduce((sum, score) => sum + score, 0)
+    //     const skins = skinScores.length > 0 ?
+    //         skinScores.filter((score, index) =>
+    //             score > calculateSkinScore(teamData === team1Data ? team2Data : team1Data, index, parseInt(matchInfo?.oversPerSkin || 0))
+    //         ).length : 0
+
+    //     return { total, skins }
+    // }
+
     const calculateTeamTotal = (teamData) => {
-        if (!teamData) return { total: 0, skins: 0 }
+    if (!teamData) return { total: 0, skins: 0 }
 
-        const skinScores = Array(parseInt(matchInfo?.oversPerSkin || 0)).fill(0)
-            .map((_, index) => calculateSkinScore(teamData, index, parseInt(matchInfo?.oversPerSkin || 0)))
+    // Calculate total number of skins based on totalOvers and oversPerSkin
+    const numberOfSkins = Math.ceil(parseInt(matchInfo?.totalOvers || 0) / parseInt(matchInfo?.oversPerSkin || 0))
+    
+    // Calculate scores for all skins including the last one
+    const skinScores = Array(numberOfSkins).fill(0)
+        .map((_, index) => calculateSkinScore(teamData, index, parseInt(matchInfo?.oversPerSkin || 0)))
 
-        const total = skinScores.reduce((sum, score) => sum + score, 0)
-        const skins = skinScores.length > 0 ?
-            skinScores.filter((score, index) =>
-                score > calculateSkinScore(teamData === team1Data ? team2Data : team1Data, index, parseInt(matchInfo?.oversPerSkin || 0))
-            ).length : 0
+    // Sum up all skin scores for total
+    const total = skinScores.reduce((sum, score) => sum + score, 0)
+    
+    // Calculate number of skins won
+    const skins = skinScores.length > 0 ?
+        skinScores.filter((score, index) =>
+            score > calculateSkinScore(teamData === team1Data ? team2Data : team1Data, index, parseInt(matchInfo?.oversPerSkin || 0))
+        ).length : 0
 
-        return { total, skins }
-    }
+    return { total, skins }
+}
 
     if (!matchInfo || !team1Data || !team2Data) {
         return <div className="container mt-5">Loading...</div>

@@ -22,7 +22,7 @@ const FinalScoreTable = ({ matchInfo, team1Data, team2Data }) => {
               const extraRun = parseInt(over.extraRuns[index] || 0);
               const upperValue = value.toUpperCase();
               if (upperValue === 'W') {
-                skinTotal += extraRun;
+                skinTotal += 2 + extraRun;
               } else if (upperValue === 'N') {
                 skinTotal += 2 + extraRun;
               } else if (["R", "C", "B", "S", "H"].includes(upperValue)) {
@@ -42,7 +42,7 @@ const FinalScoreTable = ({ matchInfo, team1Data, team2Data }) => {
                 const extraRun = parseInt(over.extraRuns[index + over.balls.length] || 0);
                 const upperValue = value.toUpperCase();
                 if (upperValue === 'W') {
-                  skinTotal += extraRun;
+                  skinTotal += 2 + extraRun;
                 } else if (upperValue === 'N') {
                   skinTotal += 2 + extraRun;
                 } else if (["R", "C", "B", "S", "H"].includes(upperValue)) {
@@ -346,7 +346,7 @@ const calculatePlayerStats = (teamData, opposingTeamData) => {
               overWickets++;
               overRuns -= 5; // Subtract 5 runs for wickets
             } else if (value === 'W') {
-              overRuns += parseInt(over.extraRuns[idx] || 0);
+              overRuns += 2 + parseInt(over.extraRuns[idx] || 0);
             } else if (value === 'N') {
               overRuns += 2 + parseInt(over.extraRuns[idx] || 0);
             } else {
@@ -365,7 +365,7 @@ const calculatePlayerStats = (teamData, opposingTeamData) => {
                 overWickets++;
                 overRuns -= 5; // Subtract 5 runs for wickets
               } else if (value === 'W') {
-                overRuns += parseInt(over.extraRuns[extraRunIndex] || 0);
+                overRuns += 2 + parseInt(over.extraRuns[extraRunIndex] || 0);
               } else if (value === 'N') {
                 overRuns += 2 + parseInt(over.extraRuns[extraRunIndex] || 0);
               } else {
