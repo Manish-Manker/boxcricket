@@ -165,7 +165,7 @@ const FinalScore = () => {
                                 const extraRun = parseInt(over.extraRuns[index + over.balls.length] || 0);
                                 const upperValue = value.toUpperCase();
                                 if (upperValue === 'W') {
-                                    skinTotal += extraRun;
+                                    skinTotal += 2 + extraRun;
                                 } else if (upperValue === 'N') {
                                     skinTotal += 2 + extraRun;
                                 } else if (['R', 'C', 'B', 'S', 'H'].includes(upperValue)) {
