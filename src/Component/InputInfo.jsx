@@ -1,18 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import axios from 'axios';
 
 const InputInfo = () => {
+
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState({});
+  const navigate = useNavigate();
+
+   useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      navigate('/login');
+    }
+  }, []);
+
   useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('userData')));
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 3000)
+    }, 1500)
   }, [])
 
+  
 
- const navigate = useNavigate();
   const [formData, setFormData] = useState({
     team1: '',
     team2: '',
@@ -50,7 +63,7 @@ const InputInfo = () => {
     if (!newErrors.totalOvers && !newErrors.oversPerSkin) {
       const totalOvers = parseInt(formData.totalOvers);
       const oversPerSkin = parseInt(formData.oversPerSkin);
-      
+
       if (totalOvers % oversPerSkin !== 0) {
         newErrors.oversPerSkin = `Total overs (${totalOvers}) and overs per skin (${oversPerSkin}) must be a multiple of each other`;
       }
@@ -60,25 +73,44 @@ const InputInfo = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
-      // Save to localStorage
-      localStorage.setItem('matchInfo', JSON.stringify(formData));
-      if(localStorage.getItem('team1ScoreData')) localStorage.removeItem('team1ScoreData');
-      if(localStorage.getItem('team2ScoreData')) localStorage.removeItem('team2ScoreData');
-      if(localStorage.getItem('currentBall')) localStorage.removeItem('currentBall');
-      // Navigate to score table
-      navigate('/scoretable');
+      try {
+        const DEV_API = process.env.REACT_APP_DEV_API;
+        const token = localStorage.getItem('authToken');
+        
+        const response = await axios.post(`${DEV_API}/api/match`, formData, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const matchId = response.data.data._id;
+
+        // Save matchId to localStorage
+        localStorage.setItem('matchId', matchId);
+        localStorage.setItem('matchInfo', JSON.stringify(formData));
+
+        // Navigate to score table
+        navigate('/scoretable');
+      } catch (error) {
+        console.error('Error creating match:', error);
+        // Handle unauthorized access
+        if (error.response && error.response.status === 401) {
+          navigate('/login');
+        }
+      }
     }
   };
 
   const handleInputChange = (field, value) => {
-    setFormData({...formData, [field]: value});
+    setFormData({ ...formData, [field]: value });
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors({...errors, [field]: null});
+      setErrors({ ...errors, [field]: null });
     }
   };
 
@@ -96,7 +128,7 @@ const InputInfo = () => {
               </div>
             </div>
           </div>
-          <img src='./images/logo.svg'></img>
+          <img alt='' src='./images/logo.svg'></img>
           <h6>Pixa-Score created by PixelNX-FZCO</h6>
         </div>
 
@@ -110,21 +142,21 @@ const InputInfo = () => {
 
               <div className='w-100'>
                 <div className="bc_login_logo">
-                  <a className="wpa_logo"><img src="./images/logo.svg" alt="logo" /></a>
+                  <a href="/#" className="wpa_logo"><img src="./images/logo.svg" alt="logo" /></a>
                 </div>
 
                 <div className='bc_form_head'>
-                  <h3>Hello, Welcome to Pixa-Score!</h3>
+                  <h3>Hello, {user && user.name}  Welcome to Pixa-Score!</h3>
                 </div>
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
                     <label className="form-label">Team 1 Name</label>
                     <input
                       type="text"
-                       className={`form-control ${errors.team1 ? 'is-invalid' : ''}`}
+                      className={`form-control ${errors.team1 ? 'is-invalid' : ''}`}
                       placeholder='Enter team 1 name '
                       value={formData.team1}
-                       onChange={(e) => handleInputChange('team1', e.target.value)}
+                      onChange={(e) => handleInputChange('team1', e.target.value)}
                     />
                     {errors.team1 && <div className="invalid-feedback">{errors.team1}</div>}
                   </div>
@@ -137,7 +169,7 @@ const InputInfo = () => {
                       value={formData.team2}
                       onChange={(e) => handleInputChange('team2', e.target.value)}
                     />
-                     {errors.team2 && <div className="invalid-feedback">{errors.team2}</div>}
+                    {errors.team2 && <div className="invalid-feedback">{errors.team2}</div>}
                   </div>
                   <div className="mb-3">
                     <label className="form-label">Number of Overs</label>
@@ -147,9 +179,9 @@ const InputInfo = () => {
                       className={`form-control ${errors.totalOvers ? 'is-invalid' : ''}`}
                       value={formData.totalOvers}
                       onChange={(e) => handleInputChange('totalOvers', e.target.value)}
-                       min="1"
+                      min="1"
                     />
-                     {errors.totalOvers && <div className="invalid-feedback">{errors.totalOvers}</div>}
+                    {errors.totalOvers && <div className="invalid-feedback">{errors.totalOvers}</div>}
                   </div>
                   <div className="mb-3">
                     <label className="form-label">Overs per Skin</label>
@@ -158,10 +190,10 @@ const InputInfo = () => {
                       placeholder='Enter overs  per skin'
                       className={`form-control ${errors.oversPerSkin ? 'is-invalid' : ''}`}
                       value={formData.oversPerSkin}
-                     onChange={(e) => handleInputChange('oversPerSkin', e.target.value)}
-                min="1"
+                      onChange={(e) => handleInputChange('oversPerSkin', e.target.value)}
+                      min="1"
                     />
-                     {errors.oversPerSkin && <div className="invalid-feedback">{errors.oversPerSkin}</div>}
+                    {errors.oversPerSkin && <div className="invalid-feedback">{errors.oversPerSkin}</div>}
                   </div>
                   <button type="submit" className="box_cric_btn">Submit</button>
                 </form>

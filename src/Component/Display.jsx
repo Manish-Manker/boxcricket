@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate } from 'react-router-dom'
 
-const FinalScore = () => {
+const Display = () => {
     const [matchInfo, setMatchInfo] = useState(null)
     const [team1Data, setTeam1Data] = useState(null)
     const [team2Data, setTeam2Data] = useState(null)
@@ -387,4 +387,4 @@ const FinalScore = () => {
     )
 }
 
-export default FinalScore
+export default Display

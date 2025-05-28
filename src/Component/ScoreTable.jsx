@@ -1,16 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import FinalScore from './FinalScore'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import FinalScore from './FinalScore';
 import FullMatchPDF from './FullMatchPDF';
+import { useNavigate } from 'react-router-dom'
+
 
 const ScoreTable = () => {
-  const [matchInfo, setMatchInfo] = useState(null)
-  const [team1Data, setTeam1Data] = useState(null)
-  const [team2Data, setTeam2Data] = useState(null)
-  const [loading, setLoading] = useState(true)
+  // State management
+  const [matchInfo, setMatchInfo] = useState(null);
+  const [team1Data, setTeam1Data] = useState(null);
+  const [team2Data, setTeam2Data] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [showPDF, setShowPDF] = useState(false);
+  const [numberOfCols, setNumberOfCols] = useState(0);
+  const navigate = useNavigate();
+  const DEV_API = process.env.REACT_APP_DEV_API;
 
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      navigate('/login');
+    }
+  }, []);
+
+  // Clear current ball on mount
   useEffect(() => {
     localStorage.removeItem('currentBall');
   }, []);
@@ -26,8 +41,8 @@ const ScoreTable = () => {
             bowlerNum: (rowIndex * oversPerSkin + overIndex + 1),
             bowlerName: '',
             balls: Array(6).fill(''),
-            extraBalls: [], // For storing extra balls from capital N
-            extraRuns: Array(6).fill(''), // Store extra runs for W and n
+            extraBalls: [],
+            extraRuns: Array(6).fill(''),
             overTotal: '0'
           }))
         },
@@ -37,73 +52,127 @@ const ScoreTable = () => {
             bowlerNum: (rowIndex * oversPerSkin + overIndex + 1),
             bowlerName: '',
             balls: Array(6).fill(''),
-            extraBalls: [], // For storing extra balls from capital N
-            extraRuns: Array(6).fill(''), // Store extra runs for W and n
+            extraBalls: [],
+            extraRuns: Array(6).fill(''),
             overTotal: '0'
           }))
         }
       ],
       totals: Array(oversPerSkin).fill('0/0')
-    }))
-  }
+    }));
+  };
 
-  // Initialize data from localStorage
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('matchInfo'))
-    setMatchInfo(data)
-    setLoading(false)
-  }, [])
+  // Load match data from API
+  const loadData = async () => {
+    try {
+      const matchId = localStorage.getItem('matchId');
+      const token = localStorage.getItem('authToken');
 
-  // Initialize score data when matchInfo is available
-  useEffect(() => {
-    if (matchInfo && (!team1Data || !team2Data)) {
-      const numberOfRows = Math.ceil(parseInt(matchInfo.totalOvers) / parseInt(matchInfo.oversPerSkin))
-      const numberOfCols = parseInt(matchInfo.oversPerSkin)
-
-      // Initialize both teams' data
-      if (!team1Data) {
-        setTeam1Data(createRows(numberOfRows, numberOfCols))
+      if (!matchId || !token) {
+        console.log('No matchId or token found in localStorage');
+        setLoading(false);
+        return;
       }
-      if (!team2Data) {
-        setTeam2Data(createRows(numberOfRows, numberOfCols))
+
+      const response = await axios.get(`${DEV_API}/api/match/${matchId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const { matchInfo: matchData, team1Data: team1Response, team2Data: team2Response } = response.data.data;
+
+      if (matchData) {
+        setMatchInfo(matchData);
+
+        // Calculate dimensions for the table
+        const rows = Math.ceil(parseInt(matchData.totalOvers) / parseInt(matchData.oversPerSkin));
+        const cols = parseInt(matchData.oversPerSkin);
+        setNumberOfCols(cols);
+
+        console.log('Initializing table with:', { rows, cols });
+
+        // Create or use existing data
+        const newTeam1Data = team1Response?.length > 0
+          ? team1Response
+          : createRows(rows, cols);
+
+        const newTeam2Data = team2Response?.length > 0
+          ? team2Response
+          : createRows(rows, cols);
+
+        setTeam1Data(newTeam1Data);
+        setTeam2Data(newTeam2Data);
       }
+    } catch (error) {
+      console.error('Error loading match data:', error);
+    } finally {
+      setLoading(false);
     }
-  }, [matchInfo, team1Data, team2Data])
+  };
+
+  // Initial data load
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  // Auto-save team data effects
+  useEffect(() => {
+    if (!team1Data) return;
+
+    const saveData = async () => {
+      const matchId = localStorage.getItem('matchId');
+      if (!matchId) return;
+
+      try {
+        await axios.post(`${DEV_API}/api/teamdata/${matchId}`, {
+          teamNumber: 1,
+          data: team1Data
+        }, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        localStorage.setItem('team1ScoreData', JSON.stringify(team1Data));
+      } catch (error) {
+        console.error('Error saving team 1 data:', error);
+      }
+    };
+
+    const timeoutId = setTimeout(saveData, 1000);
+    return () => clearTimeout(timeoutId);
+  }, [team1Data, DEV_API]);
 
   useEffect(() => {
-    // Save team1Data to localStorage whenever it changes
-    if (team1Data) {
-      localStorage.setItem('team1ScoreData', JSON.stringify(team1Data))
-    }
-  }, [team1Data])
+    if (!team2Data) return;
 
-  useEffect(() => {
-    // Save team2Data to localStorage whenever it changes
-    if (team2Data) {
-      localStorage.setItem('team2ScoreData', JSON.stringify(team2Data))
-    }
-  }, [team2Data])
+    const saveData = async () => {
+      const matchId = localStorage.getItem('matchId');
+      if (!matchId) return;
 
-  if (loading || !matchInfo || !team1Data || !team2Data) {
-    return <div className='bc_loader_box'>
-      <div className='bc_loader_box_div'>
-        <div className="card-content">
-          <div className="loader-1">
-            <div className="pulse-container">
-              <div className="pulse-circle"></div>
-              <div className="pulse-circle"></div>
-              <div className="pulse-circle"></div>
-            </div>
-          </div>
-        </div>
-        <img src='./images/logo.svg'></img>
-        <h6>Pixa-Score created by PixelNX-FZCO</h6>
-      </div>
+      try {
+        await axios.post(`${DEV_API}/api/teamdata/${matchId}`, {
+          teamNumber: 2,
+          data: team2Data
+        }, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        localStorage.setItem('team2ScoreData', JSON.stringify(team2Data));
+      } catch (error) {
+        console.error('Error saving team 2 data:', error);
+      }
+    };
 
-    </div>
-  }
+    const timeoutId = setTimeout(saveData, 1000);
+    return () => clearTimeout(timeoutId);
+  }, [team2Data, DEV_API]);
 
-  const numberOfCols = parseInt(matchInfo.oversPerSkin)
+  // Validation functions
   const isValidInput = (value) => {
     if (!value) return true;
     const upperValue = value.toUpperCase();
@@ -121,6 +190,8 @@ const ScoreTable = () => {
     const num = parseInt(value);
     return !isNaN(num) && num >= 0 && num <= 99;
   };
+
+  // Calculation functions
   // Calculate total for one over (6 balls + extra balls)  
   const calculateOverTotal = (balls, extraRuns, extraBalls = []) => {
     // Function to calculate total for a single ball
@@ -168,14 +239,44 @@ const ScoreTable = () => {
     }, 0)
   }
 
+  // Event handlers
   const handleBallChange = (teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, value) => {
     // Only allow valid inputs
     if (!isValidInput(value)) {
       return;
     }
 
-    // Save current ball to localStorage
-    localStorage.setItem('currentBall', value);
+    // Clear consecutive zeros when it's a new over
+    if (ballIndex === 0) {
+      localStorage.removeItem('previousBall');
+      localStorage.removeItem('consecutiveZerosCount');
+    }    // Save current ball to localStorage
+    if (value) {
+      const currentBall = localStorage.getItem('currentBall');
+      
+      // Update previous and current ball first
+      localStorage.setItem('previousBall', currentBall || '');
+      localStorage.setItem('currentBall', value);
+
+      // Track consecutive zeros
+      if (value === '0') {
+        if (currentBall === '0') {
+          const count = parseInt(localStorage.getItem('consecutiveZerosCount') || '0');
+          localStorage.setItem('consecutiveZerosCount', (count + 1).toString());
+        } else {
+          localStorage.setItem('consecutiveZerosCount', '1');
+        }
+      } else {
+        localStorage.removeItem('consecutiveZerosCount');
+      }
+
+      // Handle last ball of over
+      const isLastBallOfOver = ballIndex === 5;
+      if (isLastBallOfOver) {
+        localStorage.removeItem('previousBall');
+        localStorage.removeItem('consecutiveZerosCount');
+      }
+    }
 
     const setTeamData = teamNumber === 1 ? setTeam1Data : setTeam2Data;
 
@@ -322,6 +423,10 @@ const ScoreTable = () => {
 
       // Save the last entered value to indicate current ball
       if (value) {
+        const isLastBallOfOver = ballIndex === 5 && !currentOver.extraBalls?.length;
+        if (!isLastBallOfOver && localStorage.getItem('currentBall')) {
+          localStorage.setItem('previousBall', localStorage.getItem('currentBall'));
+        }
         localStorage.setItem('currentBall', value);
       }
 
@@ -524,60 +629,79 @@ const ScoreTable = () => {
     )
   }
 
+  if (loading || !matchInfo || !team1Data || !team2Data) {
+    return <div className='bc_loader_box'>
+      <div className='bc_loader_box_div'>
+        <div className="card-content">
+          <div className="loader-1">
+            <div className="pulse-container">
+              <div className="pulse-circle"></div>
+              <div className="pulse-circle"></div>
+              <div className="pulse-circle"></div>
+            </div>
+          </div>
+        </div>
+        <img src='./images/logo.svg' alt="logo" />
+        <h6>Pixa-Score created by PixelNX-FZCO</h6>
+      </div>
+
+    </div>
+  }
+
   return (
     <div className=" container-fluid p-0" style={{ height: "100vh" }}>
       <div id='finalScore' className="bc_finalScore">
         <FinalScore />
 
-        
-          {/* <div><button
+
+        {/* <div><button
             className="box_cric_btn"
             onClick={() => window.open('/finalscore', '_blank')}
           >
             Open Final Score in New Tab
           </button></div> */}
 
-          <div className="d-flex justify-content-end my-4 gap-2 box_cric_btn_score">
+        <div className="d-flex justify-content-end my-4 gap-2 box_cric_btn_score">
+          <button
+            className="box_cric_btn"
+            onClick={() => window.open('/display', '_blank')}
+          >
+            Open Final Score in New Tab
+
+          </button>
+
+
+          {showPDF && (
+            <PDFDownloadLink
+              document={
+                <FullMatchPDF
+                  matchInfo={matchInfo}
+                  team1Data={team1Data}
+                  team2Data={team2Data}
+                />
+              }
+              fileName="FinalMatchScorecard.pdf"
+              className="box_cric_btn"
+            >
+              {({ loading, url }) => {
+                if (!loading && url) {
+                  // Reset showPDF state after download link is ready
+                  setTimeout(() => setShowPDF(false), 3000);
+                }
+                return loading ? 'Preparing PDF...' : 'Download Final Match PDF';
+              }}
+            </PDFDownloadLink>
+          )}
+
+          {!showPDF && (
             <button
               className="box_cric_btn"
-              onClick={() => window.open('/finalscore', '_blank')}
+              onClick={() => setShowPDF(true)}
             >
-              Open Final Score in New Tab
-
+              Create Full Match PDF
             </button>
-            
-            
-            {showPDF && (
-              <PDFDownloadLink
-                document={
-                  <FullMatchPDF
-                    matchInfo={matchInfo}
-                    team1Data={team1Data}
-                    team2Data={team2Data}
-                  />
-                }
-                fileName="FinalMatchScorecard.pdf"
-                className="box_cric_btn"
-              >
-                {({ loading, url }) => {
-                  if (!loading && url) {
-                    // Reset showPDF state after download link is ready
-                    setTimeout(() => setShowPDF(false), 3000);
-                  }
-                  return loading ? 'Preparing PDF...' : 'Download Final Match PDF';
-                }}
-              </PDFDownloadLink>
-            )}
-
-            {!showPDF && (
-              <button
-                className="box_cric_btn"
-                onClick={() => setShowPDF(true)}
-              >
-                Create Full Match PDF
-              </button>
-            )}
-          </div>
+          )}
+        </div>
 
       </div>
 
