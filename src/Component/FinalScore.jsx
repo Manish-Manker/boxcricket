@@ -11,8 +11,8 @@ const FinalScore = () => {
     const [currentBall, setCurrentBall] = useState(null)
     const [previousBall, setPreviousBall] = useState(null);
     const navigate = useNavigate();
-
     const [imagecounst, setImagecounst] = useState(0);
+    const [ballCounter, setBallCounter] = useState(0); // Add a counter to track each ball entry
     const imageList = ['./images/gravinPRO.png', './images/Ninth_Cloud.png', './images/khuber.png', './images/THINKCLOUD.png', './images/storyWala.png', './images/pixelnx.png', './images/gravin.png', './images/SevenHeavenFinal.png']
 
     useEffect(() => {
@@ -22,14 +22,46 @@ const FinalScore = () => {
         }
     }, []);
 
+    // Update ball counter whenever currentBall changes or is set
     useEffect(() => {
-        let value = currentBall;
-        if (value === 'C' || 'c' || value === '2' || value === '4' || value === '5' || value === '7' || value === 'B' || value === 'b' || value === 'R' || value === 'r' || value === 'S' || value === 's' || value === 'H' || value === 'h') {
-            setImagecounst(imagecounst + 1)
-            console.log('imagecounst', imagecounst);
-
+        if (currentBall) {
+            setBallCounter(prev => prev + 1);
         }
     }, [currentBall]);
+
+    useEffect(() => {
+        const handleKeyPress = (event) => {
+            const key = event.key.toUpperCase();
+            // Check for specific values
+            if (key === 'C' ||
+                key === '4' ||
+                key === '5' ||
+                key === '7' ||
+                key === 'B' ||
+                key === 'R' ||
+                key === 'S' ||
+                key === 'H') {
+
+
+                setCurrentBall(key);
+                setImagecounst(prevCount => {
+                    const nextCount = prevCount + 1;
+                    const finalCount = nextCount >= imageList.length ? 0 : nextCount;
+                    // Store the new value in localStorage after calculating it
+                    localStorage.setItem('isSet', finalCount.toString());
+                    return finalCount;
+                });
+            }
+        };
+
+        // Add key press event listener
+        window.addEventListener('keydown', handleKeyPress);
+
+        // Cleanup
+        return () => {
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [imageList.length]);
 
     useEffect(() => {
         // Load match info and team data from localStorage
@@ -76,9 +108,6 @@ const FinalScore = () => {
             );
         }
 
-        if (imagecounst > imageList.length - 1) {
-            setImagecounst(0)
-        }
 
         switch (value) {
             case 'W': return <>

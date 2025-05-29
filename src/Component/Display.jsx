@@ -10,10 +10,12 @@ const Display = () => {
     const [currentBall, setCurrentBall] = useState(null)
     const [previousBall, setPreviousBall] = useState(null);
     const navigate = useNavigate();
-
+    const [ballCounter, setBallCounter] = useState(0);
+    const [isSet, setIsSet] = useState(false);
     const [imagecounst, setImagecounst] = useState(0);
-    const imageList = ['./images/gravinPRO.png', './images/Ninth_Cloud.png', './images/khuber.png', './images/THINKCLOUD.png', './images/storyWala.png', './images/pixelnx.png', './images/gravin.png', './images/SevenHeavenFinal.png']
+    const imageList = ['./images/gravinPRO.png', './images/Ninth_Cloud.png', './images/khuber.png', './images/THINKCLOUD.png', './images/storyWala.png', './images/pixelnx.png', './images/gravin.png', './images/SevenHeavenFinal.png'];
 
+    // Initial setup effect
     useEffect(() => {
         const token = localStorage.getItem('authToken');
         if (!token) {
@@ -21,39 +23,38 @@ const Display = () => {
         }
     }, []);
 
-    useEffect(() => {
-        let value = currentBall;
-        if (value === 'C' || 'c' || value === '2' || value === '4' || value === '5' || value === '7' || value === 'B' || value === 'b' || value === 'R' || value === 'r' || value === 'S' || value === 's' || value === 'H' || value === 'h') {
-            setImagecounst(imagecounst + 1)
-            console.log('imagecounst', imagecounst);
 
-        }
-    }, [currentBall]);
 
+    // Data loading effect
     useEffect(() => {
-        // Load match info and team data from localStorage
         const loadData = () => {
-            const matchData = JSON.parse(localStorage.getItem('matchInfo'))
-            const team1ScoreData = JSON.parse(localStorage.getItem('team1ScoreData'))
-            const team2ScoreData = JSON.parse(localStorage.getItem('team2ScoreData'))
-            const lastBall = localStorage.getItem('currentBall')
-            const previousBall = localStorage.getItem('previousBall')
+            const matchData = JSON.parse(localStorage.getItem('matchInfo'));
+            const team1ScoreData = JSON.parse(localStorage.getItem('team1ScoreData'));
+            const team2ScoreData = JSON.parse(localStorage.getItem('team2ScoreData'));
+            const lastBall = localStorage.getItem('currentBall');
+            const previousBall = localStorage.getItem('previousBall');
 
-            setMatchInfo(matchData)
-            setTeam1Data(team1ScoreData)
-            setTeam2Data(team2ScoreData)
-            setCurrentBall(lastBall)
-            setPreviousBall(previousBall)
+            setMatchInfo(matchData);
+            setTeam1Data(team1ScoreData);
+            setTeam2Data(team2ScoreData);
+            setCurrentBall(lastBall);
+            setPreviousBall(previousBall);
+            setIsSet(localStorage.getItem('isSet'));
+        };
 
-        }
+        loadData();
+        const interval = setInterval(loadData, 500);
+        return () => clearInterval(interval);
+    }, []);
 
-        // console.log('curent ball', currentBall,'previous ball', previousBall);
+    // Ball counter effect
+    useEffect(() => {
+
+        setImagecounst(isSet);
+
+    }, [isSet]);
 
 
-        loadData()
-        const interval = setInterval(loadData, 500)
-        return () => clearInterval(interval)
-    }, [])
 
 
     const getBallDescription = (ball) => {
@@ -68,15 +69,11 @@ const Display = () => {
                 <>
                     <div className='inner-text done-animating'>
                         <h6 className='letter animate' style={{ color: '#ff4444', fontWeight: 'bold' }}>
-                            0 Runs - WARNING! Next zero will cost -5 runs!
+                            0 Runs! <br></br> <span style={{ fontSize: "28px", fontWeight: '500' }}>(3rd Ball WARNING)</span>
                         </h6>
                     </div>
                 </>
             );
-        }
-
-        if (imagecounst > imageList.length - 1) {
-            setImagecounst(0)
         }
 
         switch (value) {
