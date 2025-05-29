@@ -69,7 +69,7 @@ const FinalScore = () => {
                 <>
                     <div className='inner-text done-animating'>
                         <h6 className='letter animate' style={{ color: '#ff4444', fontWeight: 'bold' }}>
-                            0 Runs! <br></br> <span style={{ fontSize: "28px", fontWeight: '500' }}>(WARNING! Next zero will cost -5 runs!)</span>
+                            0 Runs! <br></br> <span style={{ fontSize: "28px", fontWeight: '500' }}>(3rd Ball WARNING)</span>
                         </h6>
                     </div>
                 </>

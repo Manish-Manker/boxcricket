@@ -245,13 +245,14 @@ const ScoreTable = () => {
     // Only allow valid inputs
     if (!isValidInput(value)) {
       return;
-    }
-
-    // Clear consecutive zeros when it's a new over
-    if (ballIndex === 0) {
+    }    // Only clear consecutive zeros when it's a new skin/pair
+    if (rowIndex !== parseInt(localStorage.getItem('currentSkinIndex'))) {
       localStorage.removeItem('previousBall');
       localStorage.removeItem('consecutiveZerosCount');
-    }    // Save current ball to localStorage
+      localStorage.setItem('currentSkinIndex', rowIndex.toString());
+    }
+
+    // Save current ball to localStorage
     if (value) {
       const currentBall = localStorage.getItem('currentBall');
       
@@ -259,22 +260,16 @@ const ScoreTable = () => {
       localStorage.setItem('previousBall', currentBall || '');
       localStorage.setItem('currentBall', value);
 
-      // Track consecutive zeros
+      // Track consecutive zeros within the same skin
       if (value === '0') {
-        if (currentBall === '0') {
+        if (currentBall === '0' && 
+            parseInt(localStorage.getItem('currentSkinIndex')) === rowIndex) {
           const count = parseInt(localStorage.getItem('consecutiveZerosCount') || '0');
           localStorage.setItem('consecutiveZerosCount', (count + 1).toString());
         } else {
           localStorage.setItem('consecutiveZerosCount', '1');
         }
       } else {
-        localStorage.removeItem('consecutiveZerosCount');
-      }
-
-      // Handle last ball of over
-      const isLastBallOfOver = ballIndex === 5;
-      if (isLastBallOfOver) {
-        localStorage.removeItem('previousBall');
         localStorage.removeItem('consecutiveZerosCount');
       }
     }
