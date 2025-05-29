@@ -809,6 +809,10 @@ h6 {
         line-height: 50px;
         font-size: 22px;
     }
+
+    .ps_display_box .letter {
+        font-size: 45px;
+    }
 }
 
 @media screen and (max-width: 1500px) {
