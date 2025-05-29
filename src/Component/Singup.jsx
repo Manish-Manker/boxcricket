@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import PageLoader from './common/pageLoader';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -84,21 +85,7 @@ const Signup = () => {
   return (
     <div className='boxc_input_box'>
       {loading ? (
-        <div className='bc_loader_box'>
-          <div className='bc_loader_box_div'>
-            <div className="card-content">
-              <div className="loader-1">
-                <div className="pulse-container">
-                  <div className="pulse-circle"></div>
-                  <div className="pulse-circle"></div>
-                  <div className="pulse-circle"></div>
-                </div>
-              </div>
-            </div>
-            <img alt='' src='./images/logo.svg'></img>
-            <h6>Pixa-Score created by PixelNX-FZCO</h6>
-          </div>
-        </div>
+         <PageLoader/>
       ) : (
         <div className="container mt-5">
           <div className="row justify-content-center">
@@ -157,11 +144,12 @@ const Signup = () => {
                       </div>
                     )}
 
-                    <button type="submit" disabled={true} className="box_cric_btn ">Sign Up</button>
+                    <button type="submit" disabled={true}  className={`box_cric_btn ${true ? 'ps_btn_disabled' : ''}`} >Sign Up</button>
+                    
 
-                    <div className="mt-3 text-center">
-                       <p>Sign up is Comming Soon </p>
-                      <p>Already have an account? <a href="/login" className="text-decoration-none">Login here</a></p>
+                    <div className="mt-4 text-center">
+                       <h5 className='ps_sign_link_fade mb-3'>Sign up is Comming Soon </h5>
+                      <p>Already have an account? <a href="/login" className="ps_sign_link">Login here</a></p>
                     </div>
                   </form>
                 </div>

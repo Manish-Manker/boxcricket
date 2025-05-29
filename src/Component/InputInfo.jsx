@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import axios from 'axios';
+import PageLoader from './common/pageLoader';
 
 const InputInfo = () => {
 
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
   const navigate = useNavigate();
+  const [btnLoading, setBtnLoading] = useState(false);
 
-   useEffect(() => {
+  useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (!token) {
       navigate('/login');
@@ -24,7 +26,10 @@ const InputInfo = () => {
     }, 1500)
   }, [])
 
-  
+    useEffect(() => {
+      setBtnLoading(false); 
+    }, []);
+
 
   const [formData, setFormData] = useState({
     team1: '',
@@ -77,17 +82,18 @@ const InputInfo = () => {
     e.preventDefault();
 
     if (validateForm()) {
+     setBtnLoading(true);
       try {
         const DEV_API = process.env.REACT_APP_DEV_API;
         const token = localStorage.getItem('authToken');
-        
+
         const response = await axios.post(`${DEV_API}/api/match`, formData, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
-        
+
         const matchId = response.data.data._id;
 
         // Save matchId to localStorage
@@ -102,6 +108,8 @@ const InputInfo = () => {
         if (error.response && error.response.status === 401) {
           navigate('/login');
         }
+      } finally {
+        setBtnLoading(false);
       }
     }
   };
@@ -117,22 +125,7 @@ const InputInfo = () => {
   return (
     <div className='boxc_input_box'>
 
-      {loading ? <div className='bc_loader_box'>
-        <div className='bc_loader_box_div'>
-          <div className="card-content">
-            <div className="loader-1">
-              <div className="pulse-container">
-                <div className="pulse-circle"></div>
-                <div className="pulse-circle"></div>
-                <div className="pulse-circle"></div>
-              </div>
-            </div>
-          </div>
-          <img alt='' src='./images/logo.svg'></img>
-          <h6>Pixa-Score created by PixelNX-FZCO</h6>
-        </div>
-
-      </div>
+      {loading ?  <PageLoader/>
         : ''}
       <div className="container mt-5">
         <div className="row justify-content-center">
@@ -195,7 +188,9 @@ const InputInfo = () => {
                     />
                     {errors.oversPerSkin && <div className="invalid-feedback">{errors.oversPerSkin}</div>}
                   </div>
-                  <button type="submit" className="box_cric_btn">Submit</button>
+                  <button type="submit" className="box_cric_btn">   {btnLoading ? (
+                    <span className="spinner-border spinner-border-sm mr-3" />
+                  ) : ("")}  &nbsp; Submit</button>
                 </form>
               </div>
             </div>

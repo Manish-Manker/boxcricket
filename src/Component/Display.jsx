@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate } from 'react-router-dom'
+import PageLoader from './common/pageLoader'
 
 const Display = () => {
     const [matchInfo, setMatchInfo] = useState(null)
@@ -277,7 +278,7 @@ const Display = () => {
     }
 
     if (!matchInfo || !team1Data || !team2Data) {
-        return <div className="container mt-5">Loading...</div>
+        return  <PageLoader/>
     }
 
     const numberOfSkins = Math.ceil(parseInt(matchInfo.totalOvers) / parseInt(matchInfo.oversPerSkin))
@@ -285,10 +286,10 @@ const Display = () => {
         .map((_, index) => index + 1)
 
     return (
-        <div className="">
+        <div className="ps_display_box">
             <div className='row'>
-                <div className='col-xl-6 bc_mb-4'>
-                    <div className='bc_final_head_boxes' style={{ paddingRight: '30px' }}>
+                <div id='display_final' className='col-xl-12 ps_display_mb_5'>
+                    <div className='bc_final_head_boxes' style={{borderRadius: "0px 0px 10px 10px"}} >
 
                         <div className="box_cric_team_heading">
                             <h3 className="m-0">Final Score</h3>
@@ -305,32 +306,32 @@ const Display = () => {
                                     <tr>
                                         <th className='bb-1'></th>
                                         {skinColumns.map(num => (
-                                            <th key={num} className="text-center bb-1 bc-lh-35">{num}</th>
+                                            <th key={num} className="text-center bb-1 ps_display_lh_ft">{num}</th>
                                         ))}
                                         <th className='bb-1'></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td className="fw-bold text-center">{matchInfo.team1}</td>
+                                        <td className="fw-bold text-center ps_display_lh_ft">{matchInfo.team1}</td>
                                         {skinColumns.map((_, index) => (
-                                            <td key={index} className="text-center">
+                                            <td key={index} className="text-center ps_display_lh_ft2">
                                                 {calculateSkinScore(team1Data, index, parseInt(matchInfo.oversPerSkin))}
                                             </td>
                                         ))}
-                                        <td className="fw-bold text-center">
+                                        <td className="fw-bold text-center ps_display_lh_ft">
                                             {calculateTeamTotal(team1Data).total}
                                             ({calculateTeamTotal(team1Data).skins} skins)
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td className="fw-bold text-center">{matchInfo.team2}</td>
+                                        <td className="fw-bold text-center ps_display_lh_ft">{matchInfo.team2}</td>
                                         {skinColumns.map((_, index) => (
-                                            <td key={index} className="text-center">
+                                            <td key={index} className="text-center ps_display_lh_ft2">
                                                 {calculateSkinScore(team2Data, index, parseInt(matchInfo.oversPerSkin))}
                                             </td>
                                         ))}
-                                        <td className="fw-bold text-center">
+                                        <td className="fw-bold text-center ps_display_lh_ft">
                                             {calculateTeamTotal(team2Data).total}
                                             ({calculateTeamTotal(team2Data).skins} skins)
                                         </td>
@@ -340,11 +341,11 @@ const Display = () => {
                         </div>
                     </div>
                 </div>
-                <div className='col-xl-6 '>
+                <div id='display_status' className='col-xl-12 '>
                     <div className='bc_final_head_boxes'>
                         <div className='row'>
-                            <div className='col-md-8'>
-                                <div >
+                            <div className='col-md-9'>
+                               
                                     <div className="box_cric_team_heading">
                                         <h3 className="m-0">Last Ball Status</h3>
                                     </div>
@@ -353,24 +354,24 @@ const Display = () => {
                                         {currentBall ? (
                                             <>
                                                 {/* <h2 className="mb-3 text-center">{currentBall.toUpperCase()}</h2> */}
-                                                <p className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</p>
+                                                <div className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</div>
                                             </>
                                         ) : (
                                             <>
                                                 <div className=''>
                                                     <img src='./images/waiting.gif'></img>
                                                 </div>
-                                                <div className='inner-text done-animating'>
+                                                <div className='inner-text done-animating '>
                                                     <h6 className='letter animate'>Waiting for ball...</h6>
                                                 </div>
 
                                             </>
                                         )}
                                     </div>
-                                </div>
+                               
                             </div>
 
-                            <div className='col-md-4'>
+                            <div className='col-md-3 m-auto'>
                                 <div className='bc_legend_img'> <img src='./images/cricket_legends.jpg'></img></div>
                             </div>
 

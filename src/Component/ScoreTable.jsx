@@ -5,6 +5,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import FinalScore from './FinalScore';
 import FullMatchPDF from './FullMatchPDF';
 import { useNavigate } from 'react-router-dom'
+import PageLoader from './common/pageLoader';
 
 
 const ScoreTable = () => {
@@ -630,22 +631,7 @@ const ScoreTable = () => {
   }
 
   if (loading || !matchInfo || !team1Data || !team2Data) {
-    return <div className='bc_loader_box'>
-      <div className='bc_loader_box_div'>
-        <div className="card-content">
-          <div className="loader-1">
-            <div className="pulse-container">
-              <div className="pulse-circle"></div>
-              <div className="pulse-circle"></div>
-              <div className="pulse-circle"></div>
-            </div>
-          </div>
-        </div>
-        <img src='./images/logo.svg' alt="logo" />
-        <h6>Pixa-Score created by PixelNX-FZCO</h6>
-      </div>
-
-    </div>
+    return <PageLoader/>
   }
 
   return (

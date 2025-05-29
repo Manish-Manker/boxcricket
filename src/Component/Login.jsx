@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import PageLoader from './common/pageLoader';
 
 const Login = () => {
 
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+   const [btnLoading, setBtnLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -15,12 +17,16 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const DEV_API = process.env.REACT_APP_DEV_API;
 
-   useEffect(() => {
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        navigate('/');
-      }
-    }, []);
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      navigate('/');
+    }
+  }, []);
+
+  useEffect(() => {
+    setBtnLoading(false); 
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -52,17 +58,18 @@ const Login = () => {
     e.preventDefault();
 
     if (validateForm()) {
+      setBtnLoading(true);
       try {
         const response = await axios.post(`${DEV_API}/api/login`, formData);
-        
+
         if (response.data.status === 200) {
           // Store the token
           localStorage.setItem('authToken', response.data.token);
           localStorage.setItem('userData', JSON.stringify(response.data.user));
-          
+
           // Set default authorization header for all future requests
           axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-          
+
           // Redirect to main page after successful login
           navigate('/');
         }
@@ -71,6 +78,8 @@ const Login = () => {
         setErrors({
           submit: error.response?.data?.message || 'Invalid email or password'
         });
+      } finally {
+        setBtnLoading(false);
       }
     }
   };
@@ -86,21 +95,7 @@ const Login = () => {
   return (
     <div className='boxc_input_box'>
       {loading ? (
-        <div className='bc_loader_box'>
-          <div className='bc_loader_box_div'>
-            <div className="card-content">
-              <div className="loader-1">
-                <div className="pulse-container">
-                  <div className="pulse-circle"></div>
-                  <div className="pulse-circle"></div>
-                  <div className="pulse-circle"></div>
-                </div>
-              </div>
-            </div>
-            <img alt='' src='./images/logo.svg'></img>
-            <h6>Pixa-Score created by PixelNX-FZCO</h6>
-          </div>
-        </div>
+         <PageLoader/>
       ) : (
         <div className="container mt-5">
           <div className="row justify-content-center">
@@ -147,10 +142,15 @@ const Login = () => {
                       </div>
                     )}
 
-                    <button type="submit" className="box_cric_btn">Login</button>
+                    <button type="submit" className="box_cric_btn" disabled={btnLoading}>
+                      {btnLoading ? (
+                        <span className="spinner-border spinner-border-sm mr-3" />
+                      ) : ( "")}
+                       &nbsp; Login
+                    </button>
 
-                    <div className="mt-3 text-center">
-                      <p>Don't have an account? <a href="/signup" className="text-decoration-none">Sign up here</a></p>
+                    <div className="mt-4 text-center">
+                      <p>Don't have an account? <a href="/signup" className="ps_sign_link">Sign up here</a></p>
                     </div>
                   </form>
                 </div>

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate } from 'react-router-dom'
+import PageLoader from './common/pageLoader'
+
 
 const FinalScore = () => {
     const [matchInfo, setMatchInfo] = useState(null)
@@ -25,7 +27,7 @@ const FinalScore = () => {
         if (value === 'C' || 'c' || value === '2' || value === '4' || value === '5' || value === '7' || value === 'B' || value === 'b' || value === 'R' || value === 'r' || value === 'S' || value === 's' || value === 'H' || value === 'h') {
             setImagecounst(imagecounst + 1)
             console.log('imagecounst', imagecounst);
-            
+
         }
     }, [currentBall]);
 
@@ -67,7 +69,7 @@ const FinalScore = () => {
                 <>
                     <div className='inner-text done-animating'>
                         <h6 className='letter animate' style={{ color: '#ff4444', fontWeight: 'bold' }}>
-                            0 Runs - WARNING! Next zero will cost -5 runs!
+                            0 Runs! <br></br> <span style={{ fontSize: "28px", fontWeight: '500' }}>(WARNING! Next zero will cost -5 runs!)</span>
                         </h6>
                     </div>
                 </>
@@ -277,7 +279,7 @@ const FinalScore = () => {
     }
 
     if (!matchInfo || !team1Data || !team2Data) {
-        return <div className="container mt-5">Loading...</div>
+        return <PageLoader />
     }
 
     const numberOfSkins = Math.ceil(parseInt(matchInfo.totalOvers) / parseInt(matchInfo.oversPerSkin))
@@ -305,32 +307,32 @@ const FinalScore = () => {
                                     <tr>
                                         <th className='bb-1'></th>
                                         {skinColumns.map(num => (
-                                            <th key={num} className="text-center bb-1 bc-lh-35">{num}</th>
+                                            <th key={num} className="text-center bb-1 bc-lh-45 f-16">{num}</th>
                                         ))}
                                         <th className='bb-1'></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td className="fw-bold text-center">{matchInfo.team1}</td>
+                                        <td className="fw-bold text-center f-16 bc-lh-45">{matchInfo.team1}</td>
                                         {skinColumns.map((_, index) => (
-                                            <td key={index} className="text-center">
+                                            <td key={index} className="text-center bc-lh-45">
                                                 {calculateSkinScore(team1Data, index, parseInt(matchInfo.oversPerSkin))}
                                             </td>
                                         ))}
-                                        <td className="fw-bold text-center">
+                                        <td className="fw-bold text-center f-16 bc-lh-45">
                                             {calculateTeamTotal(team1Data).total}
                                             ({calculateTeamTotal(team1Data).skins} skins)
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td className="fw-bold text-center">{matchInfo.team2}</td>
+                                        <td className="fw-bold text-center f-16 bc-lh-45">{matchInfo.team2}</td>
                                         {skinColumns.map((_, index) => (
-                                            <td key={index} className="text-center">
+                                            <td key={index} className="text-center bc-lh-45">
                                                 {calculateSkinScore(team2Data, index, parseInt(matchInfo.oversPerSkin))}
                                             </td>
                                         ))}
-                                        <td className="fw-bold text-center">
+                                        <td className="fw-bold text-center f-16 bc-lh-45">
                                             {calculateTeamTotal(team2Data).total}
                                             ({calculateTeamTotal(team2Data).skins} skins)
                                         </td>
@@ -343,7 +345,7 @@ const FinalScore = () => {
                 <div className='col-xl-6 '>
                     <div className='bc_final_head_boxes'>
                         <div className='row'>
-                            <div className='col-md-8'>
+                            <div className='col-lg-8'>
                                 <div >
                                     <div className="box_cric_team_heading">
                                         <h3 className="m-0">Last Ball Status</h3>
@@ -353,24 +355,25 @@ const FinalScore = () => {
                                         {currentBall ? (
                                             <>
                                                 {/* <h2 className="mb-3 text-center">{currentBall.toUpperCase()}</h2> */}
-                                                <p className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</p>
+                                                <div className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</div>
                                             </>
                                         ) : (
                                             <>
-                                                <div className=''>
-                                                    <img src='./images/waiting.gif'></img>
+                                                <div className='bc_score_box_show_waiting_box'>
+                                                    <div className=''>
+                                                        <img src='./images/waiting.gif'></img>
+                                                    </div>
+                                                    <div className='inner-text done-animating'>
+                                                        <h6 className='letter animate'>Waiting for ball...</h6>
+                                                    </div>
                                                 </div>
-                                                <div className='inner-text done-animating'>
-                                                    <h6 className='letter animate'>Waiting for ball...</h6>
-                                                </div>
-
                                             </>
                                         )}
                                     </div>
                                 </div>
                             </div>
 
-                            <div className='col-md-4'>
+                            <div className='col-lg-4 m-auto'>
                                 <div className='bc_legend_img'> <img src='./images/cricket_legends.jpg'></img></div>
                             </div>
 
