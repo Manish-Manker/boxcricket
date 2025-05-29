@@ -13,7 +13,7 @@ const FinalScore = () => {
     const navigate = useNavigate();
 
     const [imagecounst, setImagecounst] = useState(0);
-    const imageList = ['./images/gravinPRO.jpg', './images/Ninth_Cloud.png', './images/khuber.jpg', './images/THINKCLOUD.png', './images/storyWala.png', './images/logo.svg', './images/gravin.jpg', './images/SevenHeavenFinal.png']
+    const imageList = ['./images/gravinPRO.png', './images/Ninth_Cloud.png', './images/khuber.png', './images/THINKCLOUD.png', './images/storyWala.png', './images/pixelnx.png', './images/gravin.png', './images/SevenHeavenFinal.png']
 
     useEffect(() => {
         const token = localStorage.getItem('authToken');

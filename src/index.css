@@ -454,7 +454,7 @@ h6 {
 
 .bc_show_score_b_img {
     width: 380px;
-    height: 210px;
+    height: 190px;
     margin: auto;
     animation: zoom-in 0.5s ease-in-out forwards;
 }
@@ -709,7 +709,6 @@ h6 {
     justify-content: start;
     align-items: center;
     max-height: 100%;
-    min-height: 100%;
     height: auto;
     background: #f1f4fb;
     border-radius: 10px;
@@ -737,16 +736,36 @@ h6 {
 @media screen and (max-width: 2400px) {
     .ps_display_box .bc_show_score_b_img {
         width: 100%;
-        height: 360px;
+        height: 280px;
         margin: auto;
         animation: zoom-in 0.5s ease-in-out forwards;
+        max-width: 620px;
+        max-height: 300px;
     }
+
     .ps_display_box .bc_legend_img {
-    width: 100%;
-    height: 395px;
-    margin: auto;
-    margin-top: 40px;
-}
+        width: 100%;
+        height: 395px;
+        margin: auto;
+        margin-top: 40px;
+    }
+
+    .ps_display_box .box_cric_team_box .border-head {
+        background-color: #f1f4fb !important;
+        line-height: 50px;
+        text-align: center;
+        font-size: 30px;
+    }
+
+    .ps_display_box .ps_display_lh_ft {
+        line-height: 50px;
+        font-size: 24px;
+    }
+
+    .ps_display_box .ps_display_lh_ft2 {
+        line-height: 50px;
+        font-size: 22px;
+    }
 }
 
 @media screen and (max-width: 1500px) {

@@ -12,7 +12,7 @@ const Display = () => {
     const navigate = useNavigate();
 
     const [imagecounst, setImagecounst] = useState(0);
-    const imageList = ['./images/gravinPRO.jpg', './images/Ninth_Cloud.png', './images/khuber.jpg', './images/THINKCLOUD.png', './images/storyWala.png', './images/logo.svg', './images/gravin.jpg', './images/SevenHeavenFinal.png']
+    const imageList = ['./images/gravinPRO.png', './images/Ninth_Cloud.png', './images/khuber.png', './images/THINKCLOUD.png', './images/storyWala.png', './images/pixelnx.png', './images/gravin.png', './images/SevenHeavenFinal.png']
 
     useEffect(() => {
         const token = localStorage.getItem('authToken');
@@ -26,7 +26,7 @@ const Display = () => {
         if (value === 'C' || 'c' || value === '2' || value === '4' || value === '5' || value === '7' || value === 'B' || value === 'b' || value === 'R' || value === 'r' || value === 'S' || value === 's' || value === 'H' || value === 'h') {
             setImagecounst(imagecounst + 1)
             console.log('imagecounst', imagecounst);
-            
+
         }
     }, [currentBall]);
 
@@ -278,7 +278,7 @@ const Display = () => {
     }
 
     if (!matchInfo || !team1Data || !team2Data) {
-        return  <PageLoader/>
+        return <PageLoader />
     }
 
     const numberOfSkins = Math.ceil(parseInt(matchInfo.totalOvers) / parseInt(matchInfo.oversPerSkin))
@@ -289,7 +289,7 @@ const Display = () => {
         <div className="ps_display_box">
             <div className='row'>
                 <div id='display_final' className='col-xl-12 ps_display_mb_5'>
-                    <div className='bc_final_head_boxes' style={{borderRadius: "0px 0px 10px 10px"}} >
+                    <div className='bc_final_head_boxes' style={{ borderRadius: "0px 0px 10px 10px" }} >
 
                         <div className="box_cric_team_heading">
                             <h3 className="m-0">Final Score</h3>
@@ -345,30 +345,32 @@ const Display = () => {
                     <div className='bc_final_head_boxes'>
                         <div className='row'>
                             <div className='col-md-9'>
-                               
-                                    <div className="box_cric_team_heading">
-                                        <h3 className="m-0">Last Ball Status</h3>
-                                    </div>
 
-                                    <div className="bc_score_box_show_waiting">
-                                        {currentBall ? (
-                                            <>
-                                                {/* <h2 className="mb-3 text-center">{currentBall.toUpperCase()}</h2> */}
-                                                <div className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</div>
-                                            </>
-                                        ) : (
-                                            <>
+                                <div className="box_cric_team_heading">
+                                    <h3 className="m-0">Last Ball Status</h3>
+                                </div>
+
+                                <div className="bc_score_box_show_waiting">
+                                    {currentBall ? (
+                                        <>
+                                            {/* <h2 className="mb-3 text-center">{currentBall.toUpperCase()}</h2> */}
+                                            <div className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className='bc_score_box_show_waiting_box'>
                                                 <div className=''>
                                                     <img src='./images/waiting.gif'></img>
                                                 </div>
                                                 <div className='inner-text done-animating '>
                                                     <h6 className='letter animate'>Waiting for ball...</h6>
                                                 </div>
+                                            </div>
 
-                                            </>
-                                        )}
-                                    </div>
-                               
+                                        </>
+                                    )}
+                                </div>
+
                             </div>
 
                             <div className='col-md-3 m-auto'>
