@@ -155,7 +155,7 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
     let showExtra = false;
     if (upperValue === 'W' || upperValue === 'N') showExtra = true;
     return (
-      <View key={key} style={{ borderWidth: 0.5, borderColor: '#cbcbcb', minWidth: 10, minHeight: 10, alignItems: 'center', justifyContent: 'center', margin: 0, padding: 0 }}>
+      <View key={key} style={{ borderWidth: 0.5, borderColor: '#cbcbcb', minWidth: 9, minHeight: 9, alignItems: 'center', justifyContent: 'center', margin: 0, padding: 0 }}>
         <Text style={{ fontSize: 6 }}>{ball}</Text>
         {showExtra && !!extraRun && (
           <Text style={{ fontSize: 5, color: '#555' }}>+{extraRun}</Text>
@@ -225,7 +225,7 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
             <View key={overIdx} style={{ flex: 1, borderRightWidth: '0.2', borderColor: '#e9ebfa' }}>
               {/* First batsman's balls and total */}
               <View style={{ flexDirection: 'row', borderWidth: '0', borderColor: '#e9ebfa', padding: 4 }}>
-                <View style={{ flex: 0.9, flexDirection: 'row', flexWrap: 'wrap', gap: 1 }}>
+                <View style={{ flex: 0.9, flexDirection: 'row', flexWrap: 'wrap', gap: 0.5 }}>
                   {over.balls.map((ball, ballIdx) => renderBallCell(ball, over.extraRuns[ballIdx], `main-${overIdx}-${ballIdx}`))}
                   {over.extraBalls?.map((ball, extraIdx) => renderBallCell(ball, over.extraRuns[over.balls.length + extraIdx], `extra-${overIdx}-${extraIdx}`))}
                 </View>
@@ -236,7 +236,7 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
 
               {/* Second batsman's balls and total */}
               <View style={{ flexDirection: 'row', padding: 4 }}>
-                <View style={{ flex: 0.9, flexDirection: 'row', flexWrap: 'wrap', gap: 1 }}>
+                <View style={{ flex: 0.9, flexDirection: 'row', flexWrap: 'wrap', gap: 0.5 }}>
                   {pair.batsmen[1].overs[overIdx]?.balls.map((ball, ballIdx) =>
                     renderBallCell(ball, pair.batsmen[1].overs[overIdx].extraRuns[ballIdx], `main-b1-${overIdx}-${ballIdx}`))}
                   {pair.batsmen[1].overs[overIdx]?.extraBalls?.map((ball, extraIdx) =>
