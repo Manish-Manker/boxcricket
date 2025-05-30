@@ -135,6 +135,16 @@ h6 {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    gap: 3px;
+}
+
+.box_cric_btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.box_cric_btn svg path {
+    fill: #fff;
 }
 
 .box_cric_btn_sm {
@@ -152,6 +162,16 @@ h6 {
 .box_cric_btn:hover {
     background-color: #1f2138;
     border: 1px solid #1f2138;
+}
+
+.box_cric_btn_logout {
+    background-color: #1f2138 !important;
+    border: 1px solid #1f2138 !important;
+}
+
+.box_cric_btn_logout:hover {
+    background-color: var(--bc-primary-color) !important;
+    border: 1px solid var(--bc-primary-color) !important;
 }
 
 /* close input form  page*/
@@ -172,6 +192,13 @@ h6 {
 
 .box_cric_btn_score .box_cric_btn {
     max-width: fit-content !important;
+}
+
+.box_cric_score_all_btn {
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+    margin: 15px auto;
 }
 
 .box_cric_team_heading h3 {
@@ -205,7 +232,8 @@ h6 {
 }
 
 .table-bordered>tbody>tr>td {
-    line-height: 35px;
+    line-height: 40px;
+    font-size: 20px;
 }
 
 .table-responsive {
@@ -230,7 +258,7 @@ h6 {
     background-color: #f1f4fb !important;
     line-height: 40px;
     text-align: center;
-    font-size: 18px;
+    font-size: 22px;
 }
 
 
@@ -615,11 +643,11 @@ h6 {
 }
 
 .bc-lh-45 {
-    line-height: 45px !important;
+    line-height: 50px !important;
 }
 
 .f-16 {
-    font-size: 16px !important;
+    font-size: 20px !important;
 }
 
 
@@ -656,6 +684,7 @@ h6 {
     margin-bottom: 10px;
     max-height: 100%;
     min-height: 100%;
+    padding: 15px 25px;
 }
 
 .ps_display_box .ps_display_mb_5 {
@@ -719,23 +748,37 @@ h6 {
     font-size: 39px;
 }
 
+.ps_display_box .box_cric_team_heading {
+    position: relative;
+    padding: 0px 0px 10px;
+}
+
 #display_final {
     max-height: 100%;
-    height: 40vh;
-    margin-bottom: 30px;
+    height: 55vh;
+    margin-bottom: 15px;
 }
 
 #display_status {
     max-height: 100%;
-    height: calc(60vh - 30px);
+    height: calc(45vh - 25px);
+}
+
+
+.ps_form_logut_div {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding: 10px 20px;
 }
 
 
 
 @media screen and (max-width: 3840px) {
     .ps_display_box .ps_display_lh_ft {
-        line-height: 145px;
-        font-size: 50px;
+        line-height: 210px;
+        font-size: 75px;
+        width: 100px;
     }
 
     .ps_display_box .box_cric_team_box .border-head {
@@ -744,30 +787,42 @@ h6 {
     }
 
     .ps_display_box .ps_display_lh_ft2 {
-        line-height: 150px;
-        font-size: 55px;
+        line-height: 210px;
+        font-size: 75px;
+        font-weight: bold;
+    }
+
+    .bb-1 {
+        border-bottom: 5px solid var(--erp-border-color) !important;
+    }
+
+
+    .box_cric_team_box {
+        border: 5px solid #e9ebfa;
     }
 
     .ps_display_box .box_cric_team_heading h3 {
-        font-size: 40px;
+        font-size: 60px;
     }
 
-    .box_cric_team_heading h3:after {
+    .ps_display_box .box_cric_team_heading h3:after {
         display: none;
+        /* height: 40px; */
     }
 
     .ps_display_box .bc_show_score_b_img {
         width: 100%;
-        height: 860px;
+        max-height: 560px;
+        height: 100%;
     }
 
     .ps_display_box .letter {
-        font-size: 72px;
+        font-size: 60px;
     }
 
     .ps_display_box .bc_legend_img {
         width: 100%;
-        height: 700px;
+        height: 500px;
         margin-top: 40px;
     }
 }
@@ -775,11 +830,11 @@ h6 {
 @media screen and (max-width: 2400px) {
     .ps_display_box .bc_show_score_b_img {
         width: 100%;
-        height: 280px;
+        height: 225px;
         margin: auto;
         animation: zoom-in 0.5s ease-in-out forwards;
-        max-width: 620px;
-        max-height: 300px;
+        max-width: 520px;
+        max-height: 225px;
     }
 
     .ps_display_box .box_cric_team_heading h3 {
@@ -788,10 +843,41 @@ h6 {
 
     .ps_display_box .bc_legend_img {
         width: 100%;
-        height: 395px;
+        height: 315px;
         margin: auto;
         margin-top: 40px;
     }
+
+    .inner-text {
+        position: relative;
+        z-index: 1;
+        margin-top: 10px;
+    }
+
+    .ps_display_box .box_cric_team_box .border-head {
+        background-color: #f1f4fb !important;
+        line-height: 60px;
+        text-align: center;
+        font-size: 30px;
+    }
+
+    .ps_display_box .ps_display_lh_ft {
+        line-height: 90px;
+        font-size: 34px;
+    }
+
+    .ps_display_box .ps_display_lh_ft2 {
+        line-height: 90px;
+        font-size: 32px;
+    }
+
+    .ps_display_box .letter {
+        font-size: 40px;
+        margin-bottom: 0px;
+    }
+}
+
+@media screen and (max-width: 1900px) {
 
     .ps_display_box .box_cric_team_box .border-head {
         background-color: #f1f4fb !important;
@@ -801,17 +887,28 @@ h6 {
     }
 
     .ps_display_box .ps_display_lh_ft {
-        line-height: 50px;
-        font-size: 24px;
+        line-height: 80px;
+        font-size: 34px;
     }
 
     .ps_display_box .ps_display_lh_ft2 {
-        line-height: 50px;
-        font-size: 22px;
+        line-height: 80px;
+        font-size: 32px;
     }
 
-    .ps_display_box .letter {
-        font-size: 45px;
+    .ps_display_box .bc_show_score_b_img {
+        width: 100%;
+        height: 200px;
+        margin: auto;
+        animation: zoom-in 0.5s ease-in-out forwards;
+        max-width: 520px;
+        max-height: 200px;
+    }
+    .ps_display_box .bc_legend_img {
+        width: 100%;
+        height: 285px;
+        margin: auto;
+        margin-top: 40px;
     }
 }
 
@@ -820,6 +917,39 @@ h6 {
         width: 180px;
         height: 240px;
         margin: auto;
+    }
+
+    .ps_display_box .ps_display_lh_ft {
+        line-height: 70px;
+        font-size: 35px;
+        width: 100px;
+    }
+
+    .ps_display_box .box_cric_team_box .border-head {
+        line-height: 70px;
+        font-size: 35px;
+    }
+
+    .ps_display_box .ps_display_lh_ft2 {
+        line-height: 70px;
+        font-size: 35px;
+        font-weight: bold;
+    }
+
+    .ps_display_box .bc_show_score_b_img {
+        width: 100%;
+        height: 190px;
+        margin: auto;
+        animation: zoom-in 0.5s ease-in-out forwards;
+        max-width: 520px;
+        max-height: 190px;
+    }
+
+    .ps_display_box .bc_legend_img {
+        width: 100%;
+        height: 280px;
+        margin: auto;
+        margin-top: 30px;
     }
 }
 
@@ -859,12 +989,38 @@ h6 {
         margin: auto;
         animation: zoom-in 0.5s ease-in-out forwards;
     }
+
+    .ps_display_box .ps_display_lh_ft {
+        line-height: 70px;
+        font-size: 25px;
+        width: 250px;
+    }
+
+    .ps_display_box .box_cric_team_box .border-head {
+        line-height: 70px;
+        font-size: 25px;
+    }
+
+    .ps_display_box .ps_display_lh_ft2 {
+        line-height: 70px;
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    .ps_display_box .box_cric_team_heading h3 {
+        font-size: 22px;
+    }
 }
 
 @media screen and (max-width: 972px) {
     .bc_score_box_show_waiting {
         margin-bottom: 20px;
     }
+
+    #display_status {
+    max-height: 100%;
+    height: auto;
+}
 }
 
 @media screen and (max-width: 770px) {
@@ -880,18 +1036,23 @@ h6 {
     }
 
     .ps_display_box .box_cric_team_box .border-head {
-        line-height: 35px !important;
-        font-size: 20px !important;
+        line-height: 45px !important;
+        font-size: 24px !important;
     }
 
     .ps_display_box .ps_display_lh_ft {
-        line-height: 35px;
-        font-size: 18px;
+        line-height: 45px;
+        font-size: 22px;
     }
 
     .ps_display_box .ps_display_lh_ft2 {
-        line-height: 35px;
-        font-size: 18px;
+        line-height: 45px;
+        font-size: 22px;
+    }
+
+    #display_final {
+        max-height: 100%;
+        height: auto;
     }
 
 

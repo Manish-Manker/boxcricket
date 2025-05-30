@@ -341,7 +341,7 @@ const Display = () => {
                 <div id='display_status' className='col-xl-12 '>
                     <div className='bc_final_head_boxes'>
                         <div className='row'>
-                            <div className='col-md-9'>
+                            <div className='col-lg-9'>
 
                                 <div className="box_cric_team_heading">
                                     <h3 className="m-0">Last Ball Status</h3>
@@ -370,7 +370,7 @@ const Display = () => {
 
                             </div>
 
-                            <div className='col-md-3 m-auto'>
+                            <div className='col-lg-3 m-auto'>
                                 <div className='bc_legend_img'> <img src='./images/cricket_legends.jpg'></img></div>
                             </div>
 

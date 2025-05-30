@@ -6,6 +6,7 @@ import FinalScore from './FinalScore';
 import FullMatchPDF from './FullMatchPDF';
 import { useNavigate } from 'react-router-dom'
 import PageLoader from './common/pageLoader';
+import svg from './common/svg';
 
 
 const ScoreTable = () => {
@@ -24,7 +25,7 @@ const ScoreTable = () => {
     if (!token) {
       navigate('/login');
     }
-    if(token) {
+    if (token) {
       navigate('/scoretable')
     }
   }, []);
@@ -34,23 +35,23 @@ const ScoreTable = () => {
     localStorage.removeItem('currentBall');
   }, []);
 
-   const logout = () => {
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('userData');
-      localStorage.removeItem('currentBall');
-      localStorage.removeItem('currentSkinIndex');
-      localStorage.removeItem('isSet');
-      localStorage.removeItem('matchId');
-      localStorage.removeItem('matchInfo');
-      localStorage.removeItem('previousBall');
-      localStorage.removeItem('team1ScoreData');
-      localStorage.removeItem('team2ScoreData');
-      navigate('/login');
-    };
+  const logout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    localStorage.removeItem('currentBall');
+    localStorage.removeItem('currentSkinIndex');
+    localStorage.removeItem('isSet');
+    localStorage.removeItem('matchId');
+    localStorage.removeItem('matchInfo');
+    localStorage.removeItem('previousBall');
+    localStorage.removeItem('team1ScoreData');
+    localStorage.removeItem('team2ScoreData');
+    navigate('/login');
+  };
 
-    const createNewMatch = () => {
-      navigate('/');
-    }
+  const createNewMatch = () => {
+    navigate('/');
+  }
 
   // Helper function to create initial rows
   const createRows = (rowCount, oversPerSkin) => {
@@ -276,15 +277,15 @@ const ScoreTable = () => {
     // Save current ball to localStorage
     if (value) {
       const currentBall = localStorage.getItem('currentBall');
-      
+
       // Update previous and current ball first
       localStorage.setItem('previousBall', currentBall || '');
       localStorage.setItem('currentBall', value);
 
       // Track consecutive zeros within the same skin
       if (value === '0') {
-        if (currentBall === '0' && 
-            parseInt(localStorage.getItem('currentSkinIndex')) === rowIndex) {
+        if (currentBall === '0' &&
+          parseInt(localStorage.getItem('currentSkinIndex')) === rowIndex) {
           const count = parseInt(localStorage.getItem('consecutiveZerosCount') || '0');
           localStorage.setItem('consecutiveZerosCount', (count + 1).toString());
         } else {
@@ -647,23 +648,14 @@ const ScoreTable = () => {
   }
 
   if (loading || !matchInfo || !team1Data || !team2Data) {
-    return <PageLoader/>
+    return <PageLoader />
   }
 
   return (
     <div className=" container-fluid p-0" style={{ height: "100vh" }}>
       <div id='finalScore' className="bc_finalScore">
-        <FinalScore />
 
-
-        {/* <div><button
-            className="box_cric_btn"
-            onClick={() => window.open('/finalscore', '_blank')}
-          >
-            Open Final Score in New Tab
-          </button></div> */}
-
-        <div className="d-flex justify-content-end my-4 gap-2 box_cric_btn_score">
+        <div className=" box_cric_score_all_btn box_cric_btn_score">
           <button
             className="box_cric_btn"
             onClick={() => window.open('/display', '_blank')}
@@ -671,10 +663,6 @@ const ScoreTable = () => {
             Open Final Score in New Tab
 
           </button>
-
-          <button type="submit" className="box_cric_btn" onClick={logout} >   &nbsp; Log Out</button>
-          <button type="submit" className="box_cric_btn" onClick={createNewMatch} >   &nbsp; Create New Match</button>
-
 
           {showPDF && (
             <PDFDownloadLink
@@ -690,7 +678,6 @@ const ScoreTable = () => {
             >
               {({ loading, url }) => {
                 if (!loading && url) {
-                  // Reset showPDF state after download link is ready
                   setTimeout(() => setShowPDF(false), 3000);
                 }
                 return loading ? 'Preparing PDF...' : 'Download Final Match PDF';
@@ -703,10 +690,14 @@ const ScoreTable = () => {
               className="box_cric_btn"
               onClick={() => setShowPDF(true)}
             >
-              Create Full Match PDF
+             {svg.app.pdf_download} Create Full Match PDF
             </button>
           )}
+          <button type="submit" className="box_cric_btn" onClick={createNewMatch} > {svg.app.create} Create New Match</button>
+          <button type="submit" className="box_cric_btn box_cric_btn_logout" onClick={logout} > {svg.app.logout} Log Out</button>
         </div>
+
+        <FinalScore />
 
       </div>
 
