@@ -30,6 +30,20 @@ const InputInfo = () => {
       setBtnLoading(false); 
     }, []);
 
+    const logout = () => {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userData');
+      localStorage.removeItem('currentBall');
+      localStorage.removeItem('currentSkinIndex');
+      localStorage.removeItem('isSet');
+      localStorage.removeItem('matchId');
+      localStorage.removeItem('matchInfo');
+      localStorage.removeItem('previousBall');
+      localStorage.removeItem('team1ScoreData');
+      localStorage.removeItem('team2ScoreData');
+      navigate('/login');
+    };
+
 
   const [formData, setFormData] = useState({
     team1: '',
@@ -93,6 +107,11 @@ const InputInfo = () => {
             'Content-Type': 'application/json'
           }
         });
+
+        if(response.data.status === 401 || response.data.status === 403){
+          navigate('/login');
+          return
+        }
 
         const matchId = response.data.data._id;
 
@@ -191,6 +210,8 @@ const InputInfo = () => {
                   <button type="submit" className="box_cric_btn">   {btnLoading ? (
                     <span className="spinner-border spinner-border-sm mr-3" />
                   ) : ("")}  &nbsp; Submit</button>
+                    <br></br>
+                   <button type="submit" className="box_cric_btn" onClick={logout} >   &nbsp; Log Out</button>
                 </form>
               </div>
             </div>

@@ -24,12 +24,33 @@ const ScoreTable = () => {
     if (!token) {
       navigate('/login');
     }
+    if(token) {
+      navigate('/scoretable')
+    }
   }, []);
 
   // Clear current ball on mount
   useEffect(() => {
     localStorage.removeItem('currentBall');
   }, []);
+
+   const logout = () => {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userData');
+      localStorage.removeItem('currentBall');
+      localStorage.removeItem('currentSkinIndex');
+      localStorage.removeItem('isSet');
+      localStorage.removeItem('matchId');
+      localStorage.removeItem('matchInfo');
+      localStorage.removeItem('previousBall');
+      localStorage.removeItem('team1ScoreData');
+      localStorage.removeItem('team2ScoreData');
+      navigate('/login');
+    };
+
+    const createNewMatch = () => {
+      navigate('/');
+    }
 
   // Helper function to create initial rows
   const createRows = (rowCount, oversPerSkin) => {
@@ -650,6 +671,9 @@ const ScoreTable = () => {
             Open Final Score in New Tab
 
           </button>
+
+          <button type="submit" className="box_cric_btn" onClick={logout} >   &nbsp; Log Out</button>
+          <button type="submit" className="box_cric_btn" onClick={createNewMatch} >   &nbsp; Create New Match</button>
 
 
           {showPDF && (
