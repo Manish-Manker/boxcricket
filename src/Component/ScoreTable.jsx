@@ -95,7 +95,7 @@ const ScoreTable = () => {
       const token = localStorage.getItem('authToken');
 
       if (!matchId || !token) {
-        console.log('No matchId or token found in localStorage');
+        // console.log('No matchId or token found in localStorage');
         setLoading(false);
         return;
       }
@@ -117,7 +117,7 @@ const ScoreTable = () => {
         const cols = parseInt(matchData.oversPerSkin);
         setNumberOfCols(cols);
 
-        console.log('Initializing table with:', { rows, cols });
+        // console.log('Initializing table with:', { rows, cols });
 
         // Create or use existing data
         const newTeam1Data = team1Response?.length > 0

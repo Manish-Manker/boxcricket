@@ -89,7 +89,7 @@ const FinalScoreTable = ({ matchInfo, team1Data, team2Data }) => {
           {Array(numberOfSkins).fill(0).map((_, i) => (
             <Text key={i} style={{ flex: 1, textAlign: 'center', padding: 2, fontSize: 6, fontWeight: 'bold', }}>Skin {i + 1}</Text>
           ))}
-          <Text style={{ flex: 1, padding: 2, fontSize: 6, fontWeight: 'bold', }}>TOTAL</Text>
+          <Text style={{ flex: 1, padding: 2, fontSize: 6, fontWeight: 'bold'}}>TOTAL</Text>
         </View>
         <View style={{ flexDirection: 'row' }}>
           <Text style={{ flex: 1, padding: 4, fontSize: 5, fontWeight: 'bold', }}>{matchInfo.team1}</Text>
@@ -191,7 +191,7 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
               {pair.pairId * oversPerPair - oversPerPair + overIdx + 1}
             </Text>
           ))}
-          <Text style={[styles.tableCell, { fontWeight: 'bold', fontSize: 5, backgroundColor: '#f1f4fb', padding: 3 }]}>Total</Text>
+          <Text style={[styles.tableCell, {flex: 0.3, fontWeight: 'bold', fontSize: 5, backgroundColor: '#f1f4fb', padding: 3  }]}>Total</Text>
         </View>
 
         {/* Bowler names row - more compact */}
