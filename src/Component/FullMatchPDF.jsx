@@ -225,24 +225,24 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
             <View key={overIdx} style={{ flex: 1, borderRightWidth: '0.2', borderColor: '#e9ebfa' }}>
               {/* First batsman's balls and total */}
               <View style={{ flexDirection: 'row', borderWidth: '0', borderColor: '#e9ebfa', padding: 4 }}>
-                <View style={{ flex: 0.8, flexDirection: 'row', flexWrap: 'wrap', gap: 1 }}>
+                <View style={{ flex: 0.9, flexDirection: 'row', flexWrap: 'wrap', gap: 1 }}>
                   {over.balls.map((ball, ballIdx) => renderBallCell(ball, over.extraRuns[ballIdx], `main-${overIdx}-${ballIdx}`))}
                   {over.extraBalls?.map((ball, extraIdx) => renderBallCell(ball, over.extraRuns[over.balls.length + extraIdx], `extra-${overIdx}-${extraIdx}`))}
                 </View>
-                <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'flex-end' }}>
+                <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'flex-end' }}>
                   <Text style={{ fontSize: 5 }}>{over.overTotal || '0'}</Text>
                 </View>
               </View>
 
               {/* Second batsman's balls and total */}
               <View style={{ flexDirection: 'row', padding: 4 }}>
-                <View style={{ flex: 0.8, flexDirection: 'row', flexWrap: 'wrap', gap: 1 }}>
+                <View style={{ flex: 0.9, flexDirection: 'row', flexWrap: 'wrap', gap: 1 }}>
                   {pair.batsmen[1].overs[overIdx]?.balls.map((ball, ballIdx) =>
                     renderBallCell(ball, pair.batsmen[1].overs[overIdx].extraRuns[ballIdx], `main-b1-${overIdx}-${ballIdx}`))}
                   {pair.batsmen[1].overs[overIdx]?.extraBalls?.map((ball, extraIdx) =>
                     renderBallCell(ball, pair.batsmen[1].overs[overIdx].extraRuns[pair.batsmen[1].overs[overIdx].balls.length + extraIdx], `extra-b1-${overIdx}-${extraIdx}`))}
                 </View>
-                <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'flex-end' }}>
+                <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'flex-end' }}>
                   <Text style={{ fontSize: 5 }}>{pair.batsmen[1].overs[overIdx]?.overTotal || '0'}</Text>
                 </View>
               </View>
