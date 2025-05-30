@@ -41,6 +41,7 @@ const InputInfo = () => {
     localStorage.removeItem('previousBall');
     localStorage.removeItem('team1ScoreData');
     localStorage.removeItem('team2ScoreData');
+    localStorage.removeItem('consecutiveZerosCount');
     navigate('/login');
   };
 

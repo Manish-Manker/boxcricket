@@ -25,9 +25,11 @@ const ScoreTable = () => {
     if (!token) {
       navigate('/login');
     }
-    if (token) {
-      navigate('/scoretable')
+    const matchId = localStorage.getItem('matchId');
+    if (!matchId) {
+      navigate('/');
     }
+    
   }, []);
 
   // Clear current ball on mount
@@ -46,6 +48,7 @@ const ScoreTable = () => {
     localStorage.removeItem('previousBall');
     localStorage.removeItem('team1ScoreData');
     localStorage.removeItem('team2ScoreData');
+    localStorage.removeItem('consecutiveZerosCount');
     navigate('/login');
   };
 
