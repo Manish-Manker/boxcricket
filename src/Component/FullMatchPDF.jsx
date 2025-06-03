@@ -319,6 +319,7 @@ const calculatePlayerStats = (teamData, opposingTeamData) => {
       stats.RS += batsman.overs.reduce((sum, over) => sum + (parseInt(over.overTotal) || 0), 0);
     });
   });
+
   // Process bowling stats (OB, RC, Wkts)
   opposingTeamData.forEach(pair => {
     pair.batsmen.forEach(batsman => {
@@ -466,7 +467,7 @@ const PlayerStatsTable = ({ team1Name, team1Data, team2Name, team2Data }) => {
             <View key={idx} style={{ flexDirection: 'row' }}>
               <Text style={[cellStyle, { flex: 2, textAlign: 'left' }]}>{player.name}</Text>
               <Text style={[cellStyle, { flex: 1 }]}>{player.RS}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{player.OB}</Text>
+              <Text style={[cellStyle, { flex: 1 }]}>{ parseInt(player.OB)/2 > 0 ? parseInt(player.OB)/2 : 0}</Text>
               <Text style={[cellStyle, { flex: 1 }]}>{player.RC}</Text>
               <Text style={[cellStyle, { flex: 1 }]}>{player.Wkts}</Text>
               <Text style={[cellStyle, { flex: 1 }]}>{player.Econ}</Text>
@@ -490,7 +491,7 @@ const PlayerStatsTable = ({ team1Name, team1Data, team2Name, team2Data }) => {
             <View key={idx} style={{ flexDirection: 'row' }}>
               <Text style={[cellStyle, { flex: 2, textAlign: 'left' }]}>{player.name}</Text>
               <Text style={[cellStyle, { flex: 1 }]}>{player.RS}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{player.OB}</Text>
+              <Text style={[cellStyle, { flex: 1 }]}>{ parseInt(player.OB)/2 > 0 ? parseInt(player.OB)/2 : 0}</Text>
               <Text style={[cellStyle, { flex: 1 }]}>{player.RC}</Text>
               <Text style={[cellStyle, { flex: 1 }]}>{player.Wkts}</Text>
               <Text style={[cellStyle, { flex: 1 }]}>{player.Econ}</Text>
