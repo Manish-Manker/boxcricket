@@ -198,6 +198,24 @@ const ScoreTable = () => {
     return () => clearTimeout(timeoutId);
   }, [team2Data, DEV_API]);
 
+  useEffect(()=>{
+    const handelKeyPress = (event) => {
+      let key = event.key;
+      let currentBall = localStorage.getItem('currentBall');
+      if (key === 'Backspace' && currentBall === '0' ) {
+        let ZerosCount = parseInt( localStorage.getItem('consecutiveZerosCount'));
+        if (ZerosCount > 0) {
+          localStorage.setItem('consecutiveZerosCount', (ZerosCount - 1).toString());
+        }
+      }
+    }
+    window.addEventListener('keydown', handelKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handelKeyPress);
+    }
+  },[])
+
+
   // Validation functions
   const isValidInput = (value) => {
     if (!value) return true;
@@ -532,6 +550,7 @@ const ScoreTable = () => {
                           type="text"
                           className="form-control  box_cric_input_filed_name"
                           placeholder="Bowler name"
+                          autoComplete='on'
                           value={over.bowlerName}
                           onChange={(e) => handleBowlerNameChange(teamNumber, rowIndex, overIndex, e.target.value)}
                         />
@@ -552,6 +571,7 @@ const ScoreTable = () => {
                           type="text"
                           className="form-control box_cric_input_filed_name"
                           placeholder="Batsman name"
+                          autoComplete='on'
                           value={batsman.name}
                           onChange={(e) => handleBatsmanNameChange(teamNumber, rowIndex, batsmanIndex, e.target.value)}
                         />

@@ -10,6 +10,7 @@ const InputInfo = () => {
   const [user, setUser] = useState({});
   const navigate = useNavigate();
   const [btnLoading, setBtnLoading] = useState(false);
+  const [userMatchList, setUserMatchList] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -18,7 +19,36 @@ const InputInfo = () => {
     }
   }, []);
 
+  const setUserMatchData = async () => {
+
+    const token = localStorage.getItem('authToken');
+    const DEV_API = process.env.REACT_APP_DEV_API;
+
+    try {
+      const response = await axios.get(`${DEV_API}/api/userwisematch`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.data.status === 401 || response.data.status === 403) {
+        navigate('/login');
+        return
+      }
+
+      if (response.data.status === 200) {
+        setUserMatchList(response.data.data);
+        console.log(response.data.data);
+      }
+    }
+    catch (error) {
+      console.log(error);
+      return
+    }
+  }
+
   useEffect(() => {
+    setUserMatchData();
     setUser(JSON.parse(localStorage.getItem('userData')));
     setLoading(true);
     setTimeout(() => {
@@ -142,6 +172,24 @@ const InputInfo = () => {
     }
   };
 
+
+  const handleMatchClick = (match) => {
+    localStorage.removeItem('currentBall');
+    localStorage.removeItem('matchInfo');
+    localStorage.removeItem('team1ScoreData');
+    localStorage.removeItem('team2ScoreData');
+
+    localStorage.setItem('matchId', match._id);
+    let data = {
+      team1: match.team1,
+      team2: match.team2,
+      totalOvers: match.totalOvers,
+      oversPerSkin: match.oversPerSkin
+    }
+    localStorage.setItem('matchInfo', JSON.stringify(data));
+    navigate('/scoretable');
+  }
+
   return (
     <div className='boxc_input_box'>
 
@@ -222,7 +270,23 @@ const InputInfo = () => {
 
                 </form>
               </div>
+
+
             </div>
+
+            <div>
+              Previous Matches
+              <ul>
+                {userMatchList.map((match) => (
+                  <li onClick={() => handleMatchClick(match)} key={match._id}>
+                    {match.team1} vs {match.team2} on {new Date(match.createdAt).toLocaleDateString('en-GB').replace(/\//g, '-')
+                    }
+                  </li>
+                ))}
+              </ul>
+
+            </div>
+
           </div>
         </div>
       </div>
