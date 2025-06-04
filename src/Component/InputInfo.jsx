@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import axios from 'axios';
 import PageLoader from './common/pageLoader';
+import ConfirmationPopup from './common/confirmPopup';
+import svg from './common/svg';
 
 const InputInfo = () => {
 
@@ -11,6 +13,7 @@ const InputInfo = () => {
   const navigate = useNavigate();
   const [btnLoading, setBtnLoading] = useState(false);
   const [userMatchList, setUserMatchList] = useState([]);
+  const [isRemove, setIsRemove] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -73,6 +76,19 @@ const InputInfo = () => {
     localStorage.removeItem('team2ScoreData');
     localStorage.removeItem('consecutiveZerosCount');
     navigate('/login');
+  };
+
+  const handleLogoutClick = () => {
+    setIsRemove(true);
+  };
+
+  const handleConfirmLogout = () => {
+    logout();
+    setIsRemove(false);
+  };
+
+  const handleCancelLogout = () => {
+    setIsRemove(false);
   };
 
 
@@ -190,7 +206,42 @@ const InputInfo = () => {
     navigate('/scoretable');
   }
 
-  return (
+
+    const renderMatchStatus = (status) => {
+    let statusClass;
+    let statustext;
+
+    switch (status) {
+      case "complete":
+        statusClass = 'ps-complete';
+        statustext = 'Completed';
+        break;
+      case "pending":
+        statusClass = 'ps-pending';
+        statustext = 'Pending';
+        break;
+      case "ongoing":
+        statusClass = 'ps-process';
+        statustext = 'Ongoing';
+        break;
+      case 'cancel':
+        statusClass = 'ps-cancel';
+        statustext = 'Canceled';
+        break;
+      default:
+        statusClass = 'status-unknown';
+        statustext = 'Unknown';
+    }
+
+    return (
+      <div className='ps_match_status_box'>
+        <span className={statusClass}>{statustext}</span>
+      </div>
+    );
+  };
+
+
+  return (<>
     <div className='boxc_input_box'>
 
       {loading ? <PageLoader />
@@ -198,99 +249,123 @@ const InputInfo = () => {
 
       <div className='ps_form_logut_div'>
         <div></div>
-        <div> <button type="submit" className="box_cric_btn box_cric_btn_logout" onClick={logout} > <svg width="18px" height="18px" fill='#fff' viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" className="icon">
-          <path d="M868 732h-70.3c-4.8 0-9.3 2.1-12.3 5.8-7 8.5-14.5 16.7-22.4 24.5a353.84 353.84 0 0 1-112.7 75.9A352.8 352.8 0 0 1 512.4 866c-47.9 0-94.3-9.4-137.9-27.8a353.84 353.84 0 0 1-112.7-75.9 353.28 353.28 0 0 1-76-112.5C167.3 606.2 158 559.9 158 512s9.4-94.2 27.8-137.8c17.8-42.1 43.4-80 76-112.5s70.5-58.1 112.7-75.9c43.6-18.4 90-27.8 137.9-27.8 47.9 0 94.3 9.3 137.9 27.8 42.2 17.8 80.1 43.4 112.7 75.9 7.9 7.9 15.3 16.1 22.4 24.5 3 3.7 7.6 5.8 12.3 5.8H868c6.3 0 10.2-7 6.7-12.3C798 160.5 663.8 81.6 511.3 82 271.7 82.6 79.6 277.1 82 516.4 84.4 751.9 276.2 942 512.4 942c152.1 0 285.7-78.8 362.3-197.7 3.4-5.3-.4-12.3-6.7-12.3zm88.9-226.3L815 393.7c-5.3-4.2-13-.4-13 6.3v76H488c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h314v76c0 6.7 7.8 10.5 13 6.3l141.9-112a8 8 0 0 0 0-12.6z" />
-        </svg>  &nbsp; Log Out</button></div>
+        <div> <button type="submit" className="box_cric_btn box_cric_btn_logout" onClick={handleLogoutClick} >
+          {svg.app.logout}
+          &nbsp; Log Out</button></div>
       </div>
       <div className="container mt-5">
         <div className="row justify-content-center">
           <div className="col-md-12">
-            <div className='boxc_input_box_form'>
+            <div className='ps_cricket_box_flex'>
+              <div className='boxc_input_box_form'>
 
 
-              <div className='w-100'>
-                <div className="bc_login_logo">
-                  <a href="/#" className="wpa_logo"><img src="./images/logo.svg" alt="logo" /></a>
+                <div className='w-100'>
+                  <div className="bc_login_logo">
+                    <a href="/#" className="wpa_logo"><img src="./images/logo.svg" alt="logo" /></a>
+                  </div>
+
+                  <div className='bc_form_head'>
+                    <h3>Hello, {user && user.name}  Welcome to Pixa-Score!</h3>
+                  </div>
+                  <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                      <label className="form-label">Team 1 Name</label>
+                      <input
+                        type="text"
+                        className={`form-control ${errors.team1 ? 'is-invalid' : ''}`}
+                        placeholder='Enter team 1 name '
+                        value={formData.team1}
+                        onChange={(e) => handleInputChange('team1', e.target.value)}
+                      />
+                      {errors.team1 && <div className="invalid-feedback">{errors.team1}</div>}
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Team 2 Name</label>
+                      <input
+                        type="text"
+                        placeholder='Enter team 2 name '
+                        className={`form-control ${errors.team2 ? 'is-invalid' : ''}`}
+                        value={formData.team2}
+                        onChange={(e) => handleInputChange('team2', e.target.value)}
+                      />
+                      {errors.team2 && <div className="invalid-feedback">{errors.team2}</div>}
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Number of Overs</label>
+                      <input
+                        type="number"
+                        placeholder='Enter No. of overs '
+                        className={`form-control ${errors.totalOvers ? 'is-invalid' : ''}`}
+                        value={formData.totalOvers}
+                        onChange={(e) => handleInputChange('totalOvers', e.target.value)}
+                        min="1"
+                      />
+                      {errors.totalOvers && <div className="invalid-feedback">{errors.totalOvers}</div>}
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Overs per Skin</label>
+                      <input
+                        type="number"
+                        placeholder='Enter overs  per skin'
+                        className={`form-control ${errors.oversPerSkin ? 'is-invalid' : ''}`}
+                        value={formData.oversPerSkin}
+                        onChange={(e) => handleInputChange('oversPerSkin', e.target.value)}
+                        min="1"
+                      />
+                      {errors.oversPerSkin && <div className="invalid-feedback">{errors.oversPerSkin}</div>}
+                    </div>
+                    <button type="submit" className="box_cric_btn">   {btnLoading ? (
+                      <span className="spinner-border spinner-border-sm mr-3" />
+                    ) : ("")}  &nbsp; Submit</button>
+                    <br></br>
+
+                  </form>
                 </div>
+
+
+              </div>
+              {Array.isArray(userMatchList) && userMatchList.length > 0 && (<div className='boxc_input_box_previous'>
 
                 <div className='bc_form_head'>
-                  <h3>Hello, {user && user.name}  Welcome to Pixa-Score!</h3>
+                  <h3> Previous Matches</h3>
                 </div>
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-3">
-                    <label className="form-label">Team 1 Name</label>
-                    <input
-                      type="text"
-                      className={`form-control ${errors.team1 ? 'is-invalid' : ''}`}
-                      placeholder='Enter team 1 name '
-                      value={formData.team1}
-                      onChange={(e) => handleInputChange('team1', e.target.value)}
-                    />
-                    {errors.team1 && <div className="invalid-feedback">{errors.team1}</div>}
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Team 2 Name</label>
-                    <input
-                      type="text"
-                      placeholder='Enter team 2 name '
-                      className={`form-control ${errors.team2 ? 'is-invalid' : ''}`}
-                      value={formData.team2}
-                      onChange={(e) => handleInputChange('team2', e.target.value)}
-                    />
-                    {errors.team2 && <div className="invalid-feedback">{errors.team2}</div>}
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Number of Overs</label>
-                    <input
-                      type="number"
-                      placeholder='Enter No. of overs '
-                      className={`form-control ${errors.totalOvers ? 'is-invalid' : ''}`}
-                      value={formData.totalOvers}
-                      onChange={(e) => handleInputChange('totalOvers', e.target.value)}
-                      min="1"
-                    />
-                    {errors.totalOvers && <div className="invalid-feedback">{errors.totalOvers}</div>}
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">Overs per Skin</label>
-                    <input
-                      type="number"
-                      placeholder='Enter overs  per skin'
-                      className={`form-control ${errors.oversPerSkin ? 'is-invalid' : ''}`}
-                      value={formData.oversPerSkin}
-                      onChange={(e) => handleInputChange('oversPerSkin', e.target.value)}
-                      min="1"
-                    />
-                    {errors.oversPerSkin && <div className="invalid-feedback">{errors.oversPerSkin}</div>}
-                  </div>
-                  <button type="submit" className="box_cric_btn">   {btnLoading ? (
-                    <span className="spinner-border spinner-border-sm mr-3" />
-                  ) : ("")}  &nbsp; Submit</button>
-                  <br></br>
 
-                </form>
+                <div className='boxc_input_box_previous_matches'>
+                  <ul>
+                    {userMatchList.map((match) => (
+                      <li className='match-item' onClick={() => handleMatchClick(match)} key={match._id} >
+                        <div className="match-details">
+                          <div className="team-name"><h5><span>T1</span> {match.team1}</h5></div>
+                          <div className="team-name"><h5><span>T2</span>{match.team2}</h5></div>
+                        </div>
+                        <div className="ps_match_status">
+                          <h5> {new Date(match.createdAt).toLocaleDateString('en-GB').replace(/\//g, '-')}</h5>
+                           {renderMatchStatus(match.status)}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-
-
-            </div>
-
-            <div>
-              Previous Matches
-              <ul>
-                {userMatchList.map((match) => (
-                  <li onClick={() => handleMatchClick(match)} key={match._id}>
-                    {match.team1} vs {match.team2} on {new Date(match.createdAt).toLocaleDateString('en-GB').replace(/\//g, '-')
-                    }
-                  </li>
-                ))}
-              </ul>
-
+              )}
             </div>
 
           </div>
         </div>
       </div>
     </div>
+
+    <ConfirmationPopup
+      shownPopup={isRemove}
+      closePopup={handleCancelLogout}
+      title="Confirm Logout"
+      subTitle="Are you sure you want to log out?"
+      type="User"
+      removeAction={handleConfirmLogout}
+    />
+  </>
+
   )
 }
 

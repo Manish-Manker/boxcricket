@@ -7,7 +7,7 @@ import FullMatchPDF from './FullMatchPDF';
 import { useNavigate } from 'react-router-dom'
 import PageLoader from './common/pageLoader';
 import svg from './common/svg';
-
+import ConfirmationPopup from './common/confirmPopup';
 
 const ScoreTable = () => {
   // State management
@@ -17,6 +17,8 @@ const ScoreTable = () => {
   const [loading, setLoading] = useState(true);
   const [showPDF, setShowPDF] = useState(false);
   const [numberOfCols, setNumberOfCols] = useState(0);
+  const [isRemove, setIsRemove] = useState(false);
+  const [isCreateNew, setIsCreateNew] = useState(false);
   const navigate = useNavigate();
   const DEV_API = process.env.REACT_APP_DEV_API;
 
@@ -26,11 +28,13 @@ const ScoreTable = () => {
       navigate('/login');
     }
     const matchId = localStorage.getItem('matchId');
+    
     if (!matchId) {
       navigate('/');
     }
-    
+
   }, []);
+
 
   // Clear current ball on mount
   useEffect(() => {
@@ -52,8 +56,23 @@ const ScoreTable = () => {
     navigate('/login');
   };
 
+  const handleLogoutClick = () => {
+    setIsRemove(true);
+  };
+
+  const handleConfirmLogout = () => {
+    logout();
+    setIsRemove(false);
+  };
+
+  const handleCancelPopup = () => {
+    setIsRemove(false);
+    setIsCreateNew(false);
+  };
+
   const createNewMatch = () => {
     navigate('/');
+    setIsCreateNew(false);
   }
 
   // Helper function to create initial rows
@@ -198,12 +217,12 @@ const ScoreTable = () => {
     return () => clearTimeout(timeoutId);
   }, [team2Data, DEV_API]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const handelKeyPress = (event) => {
       let key = event.key;
       let currentBall = localStorage.getItem('currentBall');
-      if (key === 'Backspace' && currentBall === '0' ) {
-        let ZerosCount = parseInt( localStorage.getItem('consecutiveZerosCount'));
+      if (key === 'Backspace' && currentBall === '0') {
+        let ZerosCount = parseInt(localStorage.getItem('consecutiveZerosCount'));
         if (ZerosCount > 0) {
           localStorage.setItem('consecutiveZerosCount', (ZerosCount - 1).toString());
         }
@@ -213,7 +232,7 @@ const ScoreTable = () => {
     return () => {
       window.removeEventListener('keydown', handelKeyPress);
     }
-  },[])
+  }, [])
 
 
   // Validation functions
@@ -675,65 +694,90 @@ const ScoreTable = () => {
   }
 
   return (
-    <div className=" container-fluid p-0" style={{ height: "100vh" }}>
-      <div id='finalScore' className="bc_finalScore">
+    <>
+      <div className=" container-fluid p-0" style={{ height: "100vh" }}>
+        <div id='finalScore' className="bc_finalScore">
 
-        <div className=" box_cric_score_all_btn box_cric_btn_score">
-          <button
-            className="box_cric_btn"
-            onClick={() => window.open('/display', '_blank')}
-          >
-            Open Final Score in New Tab
+          <div className=" box_cric_score_all_btn box_cric_btn_score justify-content-between">
 
-          </button>
+            <div>
+              <div className='box_cric_back_btn' onClick={() => navigate('/')}>
+                {svg.app.back_icon} Back
+              </div>
+             </div>
+            <div className='box_cric_score_all_btn m-0'>
+              <button
+                className="box_cric_btn"
+                onClick={() => window.open('/display', '_blank')}
+              >
+                Open Final Score in New Tab
 
-          {showPDF && (
-            <PDFDownloadLink
-              document={
-                <FullMatchPDF
-                  matchInfo={matchInfo}
-                  team1Data={team1Data}
-                  team2Data={team2Data}
-                />
-              }
-              fileName="FinalMatchScorecard.pdf"
-              className="box_cric_btn"
-            >
-              {({ loading, url }) => {
-                if (!loading && url) {
-                  setTimeout(() => setShowPDF(false), 3000);
-                }
-                return loading ? 'Preparing PDF...' : 'Download Final Match PDF';
-              }}
-            </PDFDownloadLink>
-          )}
+              </button>
 
-          {!showPDF && (
-            <button
-              className="box_cric_btn"
-              onClick={() => setShowPDF(true)}
-            >
-             {svg.app.pdf_download} Create Full Match PDF
-            </button>
-          )}
-          <button type="submit" className="box_cric_btn" onClick={createNewMatch} > {svg.app.create} Create New Match</button>
-          <button type="submit" className="box_cric_btn box_cric_btn_logout" onClick={logout} > {svg.app.logout} Log Out</button>
+              {showPDF && (
+                <PDFDownloadLink
+                  document={
+                    <FullMatchPDF
+                      matchInfo={matchInfo}
+                      team1Data={team1Data}
+                      team2Data={team2Data}
+                    />
+                  }
+                  fileName="FinalMatchScorecard.pdf"
+                  className="box_cric_btn"
+                >
+                  {({ loading, url }) => {
+                    if (!loading && url) {
+                      setTimeout(() => setShowPDF(false), 3000);
+                    }
+                    return loading ? <div className='ps_loader_pdf_dl'>  <span className=" spinner-border spinner-border-sm mr-3" /> Preparing PDF...</div> : 'Download Final Match PDF';
+                  }}
+                </PDFDownloadLink>
+              )}
+
+              {!showPDF && (
+                <button
+                  className="box_cric_btn"
+                  onClick={() => setShowPDF(true)}
+                >
+                  {svg.app.pdf_download} Create Full Match PDF
+                </button>
+              )}
+              <button type="submit" className="box_cric_btn" onClick={() => setIsCreateNew(true)} > {svg.app.create} Create New Match</button>
+              <button type="submit" className="box_cric_btn box_cric_btn_logout" onClick={handleLogoutClick} > {svg.app.logout} Log Out</button>
+            </div>
+          </div>
+
+          <FinalScore />
         </div>
 
-        <FinalScore />
 
+        <div id='scoreTable' className='bc_score_table' >
+          {renderTable(matchInfo.team1, 1, team1Data)}
+          {renderTable(matchInfo.team2, 2, team2Data)}
+        </div>
       </div>
 
 
+      <ConfirmationPopup
+        shownPopup={isRemove}
+        closePopup={handleCancelPopup}
+        title="Confirm Logout"
+        subTitle="Are you sure you want to log out?"
+        type="User"
+        removeAction={handleConfirmLogout}
+      />
 
+      <ConfirmationPopup
+        shownPopup={isCreateNew}
+        closePopup={handleCancelPopup}
+        title="Create New Match"
+        subTitle="Are you sure you want to create new match?"
+        type="User"
+        removeAction={createNewMatch}
+      />
 
-      <div id='scoreTable' className='bc_score_table' >
-        {renderTable(matchInfo.team1, 1, team1Data)}
-
-
-        {renderTable(matchInfo.team2, 2, team2Data)}
-      </div>
-    </div>
+    </>
   )
 }
 

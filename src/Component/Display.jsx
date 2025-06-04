@@ -297,38 +297,38 @@ const Display = () => {
                                 <thead>
                                     <tr>
                                         <th className='bb-1 border-head'></th>
-                                        <th className='bb-1 text-center border-head' colSpan={skinColumns.length} >Skins</th>
-                                        <th className='bb-1 border-head'>TOTAL</th>
+                                        <th className='bb-1 text-center border-head ps_display_team_head' colSpan={skinColumns.length} >Skins</th>
+                                        <th className='bb-1 border-head ps_display_team_head'>TOTAL</th>
                                     </tr>
                                     <tr>
                                         <th className='bb-1'></th>
                                         {skinColumns.map(num => (
-                                            <th key={num} className="text-center bb-1 ps_display_lh_ft">{num}</th>
+                                            <th key={num} className="text-center bb-1 ps_display_lh_ft ps_display_team_skin">{num}</th>
                                         ))}
                                         <th className='bb-1'></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td className="fw-bold text-center ps_display_lh_ft">{matchInfo.team1}</td>
+                                        <td className="fw-bold text-center ps_display_lh_ft ps_display_team_name">{matchInfo.team1}</td>
                                         {skinColumns.map((_, index) => (
-                                            <td key={index} className="text-center ps_display_lh_ft2">
+                                            <td key={index} className="text-center ps_display_lh_ft2 ps_display_team_score">
                                                 {calculateSkinScore(team1Data, index, parseInt(matchInfo.oversPerSkin))}
                                             </td>
                                         ))}
-                                        <td className="fw-bold text-center ps_display_lh_ft">
+                                        <td className="fw-bold text-center ps_display_lh_ft ps_display_team_total">
                                             {calculateTeamTotal(team1Data).total}
                                             ({calculateTeamTotal(team1Data).skins} skins)
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td className="fw-bold text-center ps_display_lh_ft">{matchInfo.team2}</td>
+                                        <td className="fw-bold text-center ps_display_lh_ft ps_display_team_name">{matchInfo.team2}</td>
                                         {skinColumns.map((_, index) => (
-                                            <td key={index} className="text-center ps_display_lh_ft2">
+                                            <td key={index} className="text-center ps_display_lh_ft2 ps_display_team_score">
                                                 {calculateSkinScore(team2Data, index, parseInt(matchInfo.oversPerSkin))}
                                             </td>
                                         ))}
-                                        <td className="fw-bold text-center ps_display_lh_ft">
+                                        <td className="fw-bold text-center ps_display_lh_ft ps_display_team_total">
                                             {calculateTeamTotal(team2Data).total}
                                             ({calculateTeamTotal(team2Data).skins} skins)
                                         </td>
@@ -339,43 +339,42 @@ const Display = () => {
                     </div>
                 </div>
                 <div id='display_status' className='col-xl-12 '>
-                    <div className='bc_final_head_boxes'>
+                    <div className='bc_fullWidth_box'>
                         <div className='row'>
                             <div className='col-lg-9'>
+                                <div className='bc_final_head_boxes'>
+                                    <div className="box_cric_team_heading">
+                                        <h3 className="m-0">Last Ball Status</h3>
+                                    </div>
 
-                                <div className="box_cric_team_heading">
-                                    <h3 className="m-0">Last Ball Status</h3>
-                                </div>
-
-                                <div className="bc_score_box_show_waiting">
-                                    {currentBall ? (
-                                        <>
-                                            {/* <h2 className="mb-3 text-center">{currentBall.toUpperCase()}</h2> */}
-                                            <div className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className='bc_score_box_show_waiting_box'>
-                                                <div className=''>
-                                                    <img src='./images/waiting.gif'></img>
+                                    <div className="bc_score_box_show_waiting">
+                                        {currentBall ? (
+                                            <>
+                                                {/* <h2 className="mb-3 text-center">{currentBall.toUpperCase()}</h2> */}
+                                                <div className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className='bc_score_box_show_waiting_box '>
+                                                    <div className=''>
+                                                        <img src='./images/waiting.gif'></img>
+                                                    </div>
+                                                    <div className='inner-text done-animating '>
+                                                        <h6 className='letter animate'>Waiting for ball...</h6>
+                                                    </div>
                                                 </div>
-                                                <div className='inner-text done-animating '>
-                                                    <h6 className='letter animate'>Waiting for ball...</h6>
-                                                </div>
-                                            </div>
 
-                                        </>
-                                    )}
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
 
                             </div>
-
-                            <div className='col-lg-3 m-auto'>
-                                <div className='bc_legend_img'> <img src='./images/cricket_legends.jpg'></img></div>
+                            <div className='col-lg-3'>
+                                <div className='bc_final_head_boxes_logo'>
+                                    <div className='bc_legend_img'> <img src='./images/cricket_legends.jpg'></img></div>
+                                </div>
                             </div>
-
-
-
                         </div>
                     </div>
                 </div>

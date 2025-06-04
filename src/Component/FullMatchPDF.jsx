@@ -82,28 +82,28 @@ const FinalScoreTable = ({ matchInfo, team1Data, team2Data }) => {
        <View style={{ display: 'flex', alignItems: 'flex-end', marginBottom: 8 }}>
       <Image src='./images/cricket_legends.jpg' style={{ width: 100, height: 100 }} />
       </View>
-      <Text style={{ fontSize: 10, fontWeight: 'bold', marginBottom: 8 }}>Final Score</Text>
-      <View style={{ display: 'table', width: '100%', borderStyle: 'solid', borderWidth: '0.5', borderColor: '#e9ebfa', borderRightWidth: '10px' }}>
+      <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 8 }}>Final Score</Text>
+      <View style={{ display: 'table', width: '100%', borderStyle: 'solid', borderWidth: '0.5', borderColor: '#e9ebfa', borderRightWidth: '1px' }}>
         <View style={{ flexDirection: 'row', backgroundColor: '#f1f4fb' }}>
-          <Text style={{ flex: 1, padding: 4, fontSize: 5 }}></Text>
+          <Text style={{ flex: 1.8, padding: 4, fontSize: 8 }}></Text>
           {Array(numberOfSkins).fill(0).map((_, i) => (
-            <Text key={i} style={{ flex: 1, textAlign: 'center', padding: 2, fontSize: 6, fontWeight: 'bold', }}>Skin {i + 1}</Text>
+            <Text key={i} style={{ flex: 1, textAlign: 'center', padding: 6, fontSize: 12, fontWeight: 'bold', }}> {i + 1}</Text>
           ))}
-          <Text style={{ flex: 1, padding: 2, fontSize: 6, fontWeight: 'bold'}}>TOTAL</Text>
+          <Text style={{ flex: 1.6, padding: 6, fontSize: 13,  fontWeight: 'bold'}}>TOTAL</Text>
         </View>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={{ flex: 1, padding: 4, fontSize: 5, fontWeight: 'bold', }}>{matchInfo.team1}</Text>
+        <View style={{ flexDirection: 'row' ,borderWidth: '0.5', borderColor: '#e9ebfa', borderBottomWidth: '1px' }}>
+          <Text style={{ flex: 1.8, padding: 6, fontSize: 14, fontWeight: 'bold',  }}>{matchInfo.team1}</Text>
           {team1.skinScores.map((score, i) => (
-            <Text key={i} style={{ flex: 1, fontSize: 5, textAlign: 'center', padding: 4 }}>{score}</Text>
+            <Text key={i} style={{ flex: 1, fontSize: 14, textAlign: 'center', fontWeight: 'bold', padding: 6,  }}>{score}</Text>
           ))}
-          <Text style={{ flex: 1, padding: 4, fontSize: 5 }}>{team1.total} ({team1.skins} skins)</Text>
+          <Text style={{ flex: 1.6, padding: 6, fontSize: 14 , padding: 6, fontWeight: 'bold'  }}>{team1.total} ({team1.skins} skins)</Text>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={{ flex: 1, padding: 4, fontSize: 5, fontWeight: 'bold', }}>{matchInfo.team2}</Text>
+          <Text style={{ flex: 1.8, padding: 6, fontSize: 14, fontWeight: 'bold', }}>{matchInfo.team2}</Text>
           {team2.skinScores.map((score, i) => (
-            <Text key={i} style={{ flex: 1, fontSize: 5, textAlign: 'center', padding: 4 }}>{score}</Text>
+            <Text key={i} style={{ flex: 1, fontSize: 14, textAlign: 'center', fontWeight: 'bold', padding: 6 }}>{score}</Text>
           ))}
-          <Text style={{ flex: 1, padding: 4, fontSize: 5 }}>{team2.total} ({team2.skins} skins)</Text>
+          <Text style={{ flex: 1.6, padding: 6, fontSize: 14 , fontWeight: 'bold' }}>{team2.total} ({team2.skins} skins)</Text>
         </View>
       </View>
     </View>
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: '#e9ebfa',
-    fontSize: 6, // Small font for compactness
+    fontSize: 10, // Small font for compactness
     marginBottom: 8,
   },
   tableRow: {
@@ -155,10 +155,10 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
     let showExtra = false;
     if (upperValue === 'W' || upperValue === 'N') showExtra = true;
     return (
-      <View key={key} style={{ borderWidth: 0.5, borderColor: '#cbcbcb', minWidth: 9, minHeight: 9, alignItems: 'center', justifyContent: 'center', margin: 0, padding: 0 }}>
-        <Text style={{ fontSize: 6 }}>{ball}</Text>
+      <View key={key} style={{ borderWidth: 0.5, borderColor: '#cbcbcb', minWidth: 11, minHeight: 11, alignItems: 'center', justifyContent: 'center', margin: 0, padding: 0 }}>
+        <Text style={{ fontSize: 9 }}>{ball}</Text>
         {showExtra && !!extraRun && (
-          <Text style={{ fontSize: 5, color: '#555' }}>+{extraRun}</Text>
+          <Text style={{ fontSize: 9, color: '#555' }}>+{extraRun}</Text>
         )}
       </View>
     );
@@ -171,7 +171,7 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
       <Text style={[styles.tableCell, { flex: 0.8, borderTopWidth: 0 }]}></Text>
       {pair?.batsmen?.[0]?.overs.map((over, overIdx) => (
         <View key={overIdx} style={{ flex: 1, borderWidth: 0.5, borderColor: '#e9ebfa', alignItems: 'center', justifyContent: 'center', minHeight: 10 }}>
-          <Text style={{ fontSize: 5 }}>{over.bowlerName || ''}</Text>
+          <Text style={{ fontSize: 7 }}>{over.bowlerName || ''}</Text>
         </View>
       ))}
       <Text style={[styles.tableCell, { borderTopWidth: 0 }]}></Text>
@@ -184,14 +184,14 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
       <React.Fragment key={pairIdx}>
         {/* Over numbers header - make more compact */}
         <View style={{ flexDirection: 'row', backgroundColor: '#f0f0f0', minHeight: 12, borderColor: "#e9ebfa", overflow: "hidden" }}>
-          <Text style={[styles.tableCell, { flex: 0.3, backgroundColor: '#f1f4fb', padding: 3 }]}></Text>
+          <Text style={[styles.tableCell, { flex: 0.3, backgroundColor: '#f1f4fb', padding: 4 }]}></Text>
           <Text style={[styles.tableCell, { flex: 0.7, backgroundColor: '#f1f4fb' }]}></Text>
           {pair.batsmen[0].overs.map((_, overIdx) => (
-            <Text key={overIdx} style={[styles.tableCell, { fontWeight: 'bold', fontSize: 5, backgroundColor: '#f1f4fb', padding: 3 }]}>
+            <Text key={overIdx} style={[styles.tableCell, { fontWeight: 'bold', fontSize: 9, backgroundColor: '#f1f4fb', padding: 4 }]}>
               {pair.pairId * oversPerPair - oversPerPair + overIdx + 1}
             </Text>
           ))}
-          <Text style={[styles.tableCell, {flex: 0.3, fontWeight: 'bold', fontSize: 5, backgroundColor: '#f1f4fb', padding: 3  }]}>Total</Text>
+          <Text style={[styles.tableCell, {flex: 0.3, fontWeight: 'bold', fontSize: 9, backgroundColor: '#f1f4fb', padding: 4  }]}>Total</Text>
         </View>
 
         {/* Bowler names row - more compact */}
@@ -199,8 +199,8 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
           <Text style={[styles.tableCell, { flex: 0.3, borderTopWidth: 0 }]}></Text>
           <Text style={[styles.tableCell, { flex: 0.7, borderTopWidth: 0 }]}></Text>
           {pair?.batsmen?.[0]?.overs.map((over, overIdx) => (
-            <View key={overIdx} style={[styles.tableCell, { flex: 1, alignItems: 'center', justifyContent: 'center', minHeight: 10, backgroundColor: '#fff' }]}>
-              <Text style={{ fontSize: 5 }}>{over.bowlerName || ''}</Text>
+            <View key={overIdx} style={[styles.tableCell, { flex: 1, alignItems: 'center', fontSize: 9, justifyContent: 'center', minHeight: 16, backgroundColor: '#fff' }]}>
+              <Text style={{ fontSize: 10,padding: 4 }}>{over.bowlerName || ''}</Text>
             </View>
           ))}
           <Text style={[styles.tableCell, { flex: 0.3, borderTopWidth: 0, backgroundColor: '#fff' }]}></Text>
@@ -211,12 +211,12 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
           {/* Pair number and batsman names */}
           <View style={{ flexDirection: 'column', flex: 1, borderWidth: '0' }}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
-              <Text style={[styles.tableCell, { flex: 0.3, borderBottomWidth: 0 }]}>{pair.pairId}</Text>
-              <Text style={[styles.tableCell, { flex: 0.7, textAlign: 'left', fontSize: 5 }]}>{pair.batsmen[0].name}</Text>
+              <Text style={[styles.tableCell, { flex: 0.3, fontSize: 8, textAlign:'center' ,borderBottomWidth: 0 }]}>{pair.pairId}</Text>
+              <Text style={[styles.tableCell, { flex: 0.7, textAlign: 'center', fontSize: 10 ,padding: 4 }]}>{pair.batsmen[0].name}</Text>
             </View>
             <View style={{ flex: 1, flexDirection: 'row' }}>
-              <Text style={[styles.tableCell, { flex: 0.3, borderTopWidth: 0 }]}></Text>
-              <Text style={[styles.tableCell, { flex: 0.7, textAlign: 'left', fontSize: 5 }]}>{pair.batsmen[1].name}</Text>
+              <Text style={[styles.tableCell, { flex: 0.3,fontSize: 8,  textAlign:'center', borderTopWidth: 0 }]}></Text>
+              <Text style={[styles.tableCell, { flex: 0.7, textAlign: 'center',  fontSize: 10 ,padding: 4 }]}>{pair.batsmen[1].name}</Text>
             </View>
           </View>
 
@@ -225,12 +225,12 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
             <View key={overIdx} style={{ flex: 1, borderRightWidth: '0.2', borderColor: '#e9ebfa' }}>
               {/* First batsman's balls and total */}
               <View style={{ flexDirection: 'row', borderWidth: '0', borderColor: '#e9ebfa', padding: 4 }}>
-                <View style={{ flex: 0.9, flexDirection: 'row', flexWrap: 'wrap', gap: 0.5 }}>
+                <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 0.5 }}>
                   {over.balls.map((ball, ballIdx) => renderBallCell(ball, over.extraRuns[ballIdx], `main-${overIdx}-${ballIdx}`))}
                   {over.extraBalls?.map((ball, extraIdx) => renderBallCell(ball, over.extraRuns[over.balls.length + extraIdx], `extra-${overIdx}-${extraIdx}`))}
                 </View>
                 <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'flex-end' }}>
-                  <Text style={{ fontSize: 5 }}>{over.overTotal || '0'}</Text>
+                  <Text style={{ fontSize: 9 ,fontWeight: 'bold', }}>{over.overTotal || '0'}</Text>
                 </View>
               </View>
 
@@ -243,7 +243,7 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
                     renderBallCell(ball, pair.batsmen[1].overs[overIdx].extraRuns[pair.batsmen[1].overs[overIdx].balls.length + extraIdx], `extra-b1-${overIdx}-${extraIdx}`))}
                 </View>
                 <View style={{ flex: 0.1, justifyContent: 'center', alignItems: 'flex-end' }}>
-                  <Text style={{ fontSize: 5 }}>{pair.batsmen[1].overs[overIdx]?.overTotal || '0'}</Text>
+                  <Text style={{ fontSize: 8 ,fontWeight: 'bold', }}>{pair.batsmen[1].overs[overIdx]?.overTotal || '0'}</Text>
                 </View>
               </View>
             </View>
@@ -251,12 +251,12 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
 
           {/* Individual and pair totals */}          <View style={{ flex: 0.3, borderLeftWidth: 0, borderColor: '#e9ebfa' }}>
             <View style={{ flex: 1, borderBottomWidth: 0.5, borderColor: '#e9ebfa', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 5, padding: 3 }}>
+              <Text style={{ fontWeight: 'bold', fontSize: 11, padding: 4 }}>
                 {pair.batsmen[0].overs.reduce((sum, o) => sum + (parseInt(o.overTotal) || 0), 0)}
               </Text>
             </View>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 5, padding: 3 }}>
+              <Text style={{ fontWeight: 'bold', fontSize: 11, padding: 4 }}>
                 {pair.batsmen[1].overs.reduce((sum, o) => sum + (parseInt(o.overTotal) || 0), 0)}
               </Text>
             </View>
@@ -265,13 +265,13 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
 
         {/* Pair totals row */}
         <View style={{ flexDirection: 'row', backgroundColor: '#f5f5f5', minHeight: 12 }}>
-          <Text style={[styles.tableCell, { flex: 1, textAlign: 'right', fontSize: 5, padding: 3 }]}>
+          <Text style={[styles.tableCell, { flex: 1, textAlign: 'right', fontSize: 10, padding: 4 }]}>
             {(pair.pairId - 1) * oversPerPair + 1}/{pair.pairId * oversPerPair}
           </Text>
           {pair?.totals?.map((total, idx) => (
-            <Text key={idx} style={[styles.tableCell, { flex: 1, fontSize: 5, padding: 3 }]}>{total}</Text>
+            <Text key={idx} style={[styles.tableCell, { flex: 1, fontSize: 10, padding: 4 }]}>{total}</Text>
           ))}
-          <Text style={[styles.tableCell, { flex: 0.3, fontWeight: 'bold', fontSize: 5, padding: 3 }]}>
+          <Text style={[styles.tableCell, { flex: 0.3, fontWeight: 'bold', fontSize: 10, padding: 4 }]}>
             {pair.batsmen.reduce((sum, b) => sum + b.overs.reduce((s, o) => s + (parseInt(o.overTotal) || 0), 0), 0)}
           </Text>
         </View>
@@ -281,8 +281,8 @@ const TeamScoreTable = ({ teamName, teamData, oversPerSkin }) => {
 
   return (
     <View style={{ marginBottom: 6 }}>
-      <Text style={{ fontSize: 7, fontWeight: 'bold', marginBottom: 2 }}>Batting Team: {teamName}</Text>
-      <View style={[styles.table, { fontSize: 5 }]}>
+      <Text style={{ fontSize: 10, fontWeight: 'bold', marginBottom: 8 }}>Batting Team: {teamName}</Text>
+      <View style={[styles.table, { fontSize: 7 }]}>
         {teamData.map((pair, pairIdx) => renderPair(pair, pairIdx))}
       </View>
     </View>
@@ -399,16 +399,16 @@ const PlayerStatsTable = ({ team1Name, team1Data, team2Name, team2Data }) => {
 
   // Find player of the match (highest C value from both teams)
   const allPlayers = [...team1Stats, ...team2Stats];
-  const playerOfMatch = allPlayers.reduce((max, player) =>
-    player.C > max.C ? player : max,
-    allPlayers[0]
-  );
+  const playerOfMatch = allPlayers.reduce((max, player) => {
+    const playerTeam = team1Stats.find(p => p.name === player.name) ? team1Name : team2Name;
+    return player.C > max.C ? { ...player, team: playerTeam } : max;
+  }, { ...allPlayers[0], team: team1Stats.find(p => p.name === allPlayers[0].name) ? team1Name : team2Name });
 
   const headerStyle = {
     backgroundColor: '#f1f4fb',
     fontWeight: 'bold',
-    fontSize: 6,
-    padding: 2,
+    fontSize: 8,
+    padding: 4,
     textAlign: 'center',
     borderBottom: 1,
     borderRight: 1,
@@ -416,8 +416,8 @@ const PlayerStatsTable = ({ team1Name, team1Data, team2Name, team2Data }) => {
   };
 
   const cellStyle = {
-    fontSize: 6,
-    padding: 2,
+    fontSize: 8,
+    padding: 4,
     textAlign: 'center',
     borderBottom: 1,
     borderRight: 1,
@@ -437,17 +437,25 @@ const PlayerStatsTable = ({ team1Name, team1Data, team2Name, team2Data }) => {
     backgroundColor: '#f1f4fb',
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: '#e9ebfa'
+    borderColor: '#e9ebfa',
+    textAlign:'center',
   };
 
   return (
     <View>
       {/* Player of the Match Section */}
       <View style={potmStyle}>
-        <Text style={{ fontSize: 8, fontWeight: 'bold', marginBottom: 4 }}>Player of the Match</Text>
-        <Text style={{ fontSize: 7 }}>
-          {playerOfMatch.name} (C: {playerOfMatch.C}) - {playerOfMatch.RS} runs, {playerOfMatch.Wkts} wickets
+        <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 4 }}>Player of the Match</Text>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4 }}>
+          {playerOfMatch.name}
         </Text>
+         <Text style={{ fontSize: 9, marginBottom: 4 }}>
+         ({playerOfMatch.team}) 
+        </Text>
+         <Text style={{ fontSize: 7 }}>
+          ( C: {playerOfMatch.C}, {playerOfMatch.RS} runs, {playerOfMatch.Wkts} wickets)
+        </Text>
+
       </View>
 
       {/* Player Statistics Tables */}
@@ -455,23 +463,23 @@ const PlayerStatsTable = ({ team1Name, team1Data, team2Name, team2Data }) => {
         {/* Team 1 Stats */}
         <View style={[{ flex: 1 }, tableStyle]}>
           <View style={{ flexDirection: 'row', backgroundColor: '#f0f0f0' }}>
-            <Text style={[headerStyle, { flex: 2 }]}>{team1Name}</Text>
-            <Text style={[headerStyle, { flex: 1 }]}>RS</Text>
-            <Text style={[headerStyle, { flex: 1 }]}>OB</Text>
-            <Text style={[headerStyle, { flex: 1 }]}>RC</Text>
-            <Text style={[headerStyle, { flex: 1 }]}>Wkts</Text>
-            <Text style={[headerStyle, { flex: 1 }]}>Econ</Text>
-            <Text style={[headerStyle, { flex: 1 }]}>C</Text>
+            <Text style={[headerStyle, { flex: 2 ,fontSize: 10,}]}>{team1Name}</Text>
+            <Text style={[headerStyle, { flex: 1 ,fontSize: 10,}]}>RS</Text>
+            <Text style={[headerStyle, { flex: 1 ,fontSize: 10,}]}>OB</Text>
+            <Text style={[headerStyle, { flex: 1 ,fontSize: 10,}]}>RC</Text>
+            <Text style={[headerStyle, { flex: 1 ,fontSize: 10,}]}>Wkts</Text>
+            <Text style={[headerStyle, { flex: 1 ,fontSize: 10,}]}>Econ</Text>
+            <Text style={[headerStyle, { flex: 1 ,fontSize: 10,}]}>C</Text>
           </View>
           {team1Stats.map((player, idx) => (
             <View key={idx} style={{ flexDirection: 'row' }}>
-              <Text style={[cellStyle, { flex: 2, textAlign: 'left' }]}>{player.name}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{player.RS}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{ parseInt(player.OB)/2 > 0 ? parseInt(player.OB)/2 : 0}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{player.RC}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{player.Wkts}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{player.Econ}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{player.C}</Text>
+              <Text style={[cellStyle, { flex: 2, textAlign: 'left' ,fontSize: 10,}]}>{player.name}</Text>
+              <Text style={[cellStyle, { flex: 1 ,fontSize: 10,}]}>{player.RS}</Text>
+              <Text style={[cellStyle, { flex: 1 ,fontSize: 10,}]}>{ parseInt(player.OB)/2 > 0 ? parseInt(player.OB)/2 : 0}</Text>
+              <Text style={[cellStyle, { flex: 1 ,fontSize: 10,}]}>{player.RC}</Text>
+              <Text style={[cellStyle, { flex: 1 ,fontSize: 10,}]}>{player.Wkts}</Text>
+              <Text style={[cellStyle, { flex: 1 ,fontSize: 10,}]}>{player.Econ}</Text>
+              <Text style={[cellStyle, { flex: 1 ,fontSize: 10,}]}>{player.C}</Text>
             </View>
           ))}
         </View>
@@ -479,23 +487,23 @@ const PlayerStatsTable = ({ team1Name, team1Data, team2Name, team2Data }) => {
         {/* Team 2 Stats */}
         <View style={[{ flex: 1 }, tableStyle]}>
           <View style={{ flexDirection: 'row', backgroundColor: '#f0f0f0' }}>
-            <Text style={[headerStyle, { flex: 2 }]}>{team2Name}</Text>
-            <Text style={[headerStyle, { flex: 1 }]}>RS</Text>
-            <Text style={[headerStyle, { flex: 1 }]}>OB</Text>
-            <Text style={[headerStyle, { flex: 1 }]}>RC</Text>
-            <Text style={[headerStyle, { flex: 1 }]}>Wkts</Text>
-            <Text style={[headerStyle, { flex: 1 }]}>Econ</Text>
-            <Text style={[headerStyle, { flex: 1 }]}>C</Text>
+            <Text style={[headerStyle, { flex: 2 ,fontSize: 10, }]}>{team2Name}</Text>
+            <Text style={[headerStyle, { flex: 1,fontSize: 10, }]}>RS</Text>
+            <Text style={[headerStyle, { flex: 1 ,fontSize: 10,}]}>OB</Text>
+            <Text style={[headerStyle, { flex: 1 ,fontSize: 10,}]}>RC</Text>
+            <Text style={[headerStyle, { flex: 1 ,fontSize: 10,}]}>Wkts</Text>
+            <Text style={[headerStyle, { flex: 1 ,fontSize: 10,}]}>Econ</Text>
+            <Text style={[headerStyle, { flex: 1 ,fontSize: 10,}]}>C</Text>
           </View>
           {team2Stats.map((player, idx) => (
             <View key={idx} style={{ flexDirection: 'row' }}>
-              <Text style={[cellStyle, { flex: 2, textAlign: 'left' }]}>{player.name}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{player.RS}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{ parseInt(player.OB)/2 > 0 ? parseInt(player.OB)/2 : 0}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{player.RC}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{player.Wkts}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{player.Econ}</Text>
-              <Text style={[cellStyle, { flex: 1 }]}>{player.C}</Text>
+              <Text style={[cellStyle, { flex: 2, textAlign: 'left' ,fontSize: 10,}]}>{player.name}</Text>
+              <Text style={[cellStyle, { flex: 1 ,fontSize: 10,}]}>{player.RS}</Text>
+              <Text style={[cellStyle, { flex: 1,fontSize: 10, }]}>{ parseInt(player.OB)/2 > 0 ? parseInt(player.OB)/2 : 0}</Text>
+              <Text style={[cellStyle, { flex: 1 ,fontSize: 10,}]}>{player.RC}</Text>
+              <Text style={[cellStyle, { flex: 1 ,fontSize: 10,}]}>{player.Wkts}</Text>
+              <Text style={[cellStyle, { flex: 1 ,fontSize: 10,}]}>{player.Econ}</Text>
+              <Text style={[cellStyle, { flex: 1 ,fontSize: 10, }]}>{player.C}</Text>
             </View>
           ))}
         </View>
@@ -516,8 +524,8 @@ const FullMatchPDF = ({ matchInfo, team1Data, team2Data }) => (
       {/* Team 2 Score Table */}
       <TeamScoreTable teamName={matchInfo.team2} teamData={team2Data} oversPerSkin={matchInfo.oversPerSkin} />
 
-    </Page>
-    <Page size="A4" style={{ padding: 20 }}>
+    {/* </Page>
+    <Page size="A4" style={{ padding: 20 }}> */}
       <PlayerStatsTable
         team1Name={matchInfo.team1}
         team1Data={team1Data}
