@@ -217,7 +217,7 @@ const ScoreTable = () => {
      const token = localStorage.getItem('authToken');
     try {
       const response = await axios.post(`${DEV_API}/api/playername`,{
-        name
+        playerNames: name
       }, {
         headers: {
           'Authorization': `Bearer ${token}`,
