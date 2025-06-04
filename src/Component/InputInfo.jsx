@@ -208,7 +208,7 @@ const InputInfo = () => {
   }
 
 
-    const renderMatchStatus = (status) => {
+  const renderMatchStatus = (status) => {
     let statusClass;
     let statustext;
 
@@ -236,7 +236,7 @@ const InputInfo = () => {
 
     return (
       <div className='ps_match_status_box'>
-        <span className={statusClass}>{statustext}</span>
+        <span className={` ${statusClass}`}>{statustext}</span>
       </div>
     );
   };
@@ -268,6 +268,7 @@ const InputInfo = () => {
 
                   <div className='bc_form_head'>
                     <h3>Hello, {user && user.name}  Welcome to Pixa-Score!</h3>
+                    <h4>Create New Match</h4>
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="mb-3">
@@ -342,7 +343,7 @@ const InputInfo = () => {
                         </div>
                         <div className="ps_match_status">
                           <h5> {new Date(match.createdAt).toLocaleDateString('en-GB').replace(/\//g, '-')}</h5>
-                           {renderMatchStatus(match.status)}
+                          {renderMatchStatus(match.status)}
                         </div>
                       </li>
                     ))}
