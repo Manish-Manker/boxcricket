@@ -38,7 +38,7 @@ function ConfirmationPopup({
                                         No
                                     </button>
                                     <button className="box_cric_btn " style={{minWidth: "160px"}} onClick={removeAction}>
-                                        Yes, Delete
+                                        Yes
                                     </button>
                                     
                                 </div>

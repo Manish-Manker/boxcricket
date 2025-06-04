@@ -200,7 +200,8 @@ const InputInfo = () => {
       team1: match.team1,
       team2: match.team2,
       totalOvers: match.totalOvers,
-      oversPerSkin: match.oversPerSkin
+      oversPerSkin: match.oversPerSkin,
+      status: match.status
     }
     localStorage.setItem('matchInfo', JSON.stringify(data));
     navigate('/scoretable');
