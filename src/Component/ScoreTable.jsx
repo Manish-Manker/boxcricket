@@ -22,6 +22,12 @@ const ScoreTable = () => {
   const navigate = useNavigate();
   const DEV_API = process.env.REACT_APP_DEV_API;
 
+  const [allNames, setAllNames] = useState(['manish', 'manker', 'nam', 'rohit', 'rahul']);
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [focusedFieldKey, setFocusedFieldKey] = useState(null);
+
+ 
+
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (!token) {
@@ -63,6 +69,31 @@ const ScoreTable = () => {
   const handleConfirmLogout = () => {
     logout();
     setIsRemove(false);
+  };
+
+   const handleInputFocus = (value, fieldKey) => {
+    setFocusedFieldKey(fieldKey);
+    const filtered = allNames.filter(name =>
+      name?.toLowerCase()?.includes((fieldKey.value || '')?.toLowerCase())
+    );
+    setFilteredSuggestions(filtered);
+  };
+
+  const handleInputBlur = (value) => {
+    const name = value.trim();
+    if (name && !allNames.includes(name)) {
+      setAllNames(prev => [...prev, name]);
+      saveplayerName(name);
+    }
+    setTimeout(() => {
+      setFocusedFieldKey(null);
+      setFilteredSuggestions([]);
+    }, 100);
+  };
+
+  const handleSuggestionClick = (key, name) => {
+    key.onChange(name); 
+    setFocusedFieldKey(null);
   };
 
   const handleCancelPopup = () => {
@@ -157,9 +188,61 @@ const ScoreTable = () => {
     }
   };
 
+  const loadplayerName = async ()=>{
+     const token = localStorage.getItem('authToken');
+    try {
+      const response = await axios.get(`${DEV_API}/api/playername`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.data.status === 401 || response.data.status === 403) {
+        navigate('/login');
+        return
+      }
+
+      if (response.data.status === 200) {
+        setAllNames(response.data.data);
+        console.log(response.data.data);
+      }
+    }
+    catch (error) {
+      console.log(error);
+      return
+    }
+  }
+
+  const saveplayerName = async (name)=>{
+     const token = localStorage.getItem('authToken');
+    try {
+      const response = await axios.post(`${DEV_API}/api/playername`,{
+        name
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.data.status === 401 || response.data.status === 403) {
+        navigate('/login');
+        return
+      }
+
+      if (response.data.status === 200) {
+        console.log(response.data);
+      }
+    }
+    catch (error) {
+      console.log(error);
+      return
+    }
+  }
+
   // Initial data load
   useEffect(() => {
     loadData();
+    loadplayerName();
   }, []);
 
   // Auto-save team data effects
@@ -567,12 +650,41 @@ const ScoreTable = () => {
                       <td key={overIndex} className="bb-1">
                         <input
                           type="text"
-                          className="form-control  box_cric_input_filed_name"
+                          className="form-control box_cric_input_filed_name"
                           placeholder="Bowler name"
-                          autoComplete='on'
+                          autoComplete="off"
                           value={over.bowlerName}
-                          onChange={(e) => handleBowlerNameChange(teamNumber, rowIndex, overIndex, e.target.value)}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            handleBowlerNameChange(teamNumber, rowIndex, overIndex, value);
+                            handleInputFocus(value, { type: 'bowler', teamNumber, rowIndex, overIndex, value });
+                          }}
+                          onBlur={() => handleInputBlur(over.bowlerName)}
                         />
+                        {focusedFieldKey?.type === 'bowler' &&
+                          focusedFieldKey.teamNumber === teamNumber &&
+                          focusedFieldKey.rowIndex === rowIndex &&
+                          focusedFieldKey.overIndex === overIndex &&
+                          filteredSuggestions.length > 0 && (
+                            <ul className="suggestion-dropdown">
+                              {filteredSuggestions.map((name, idx) => (
+                                <li
+                                  key={idx}
+                                  onMouseDown={() =>
+                                    handleSuggestionClick(
+                                      {
+                                        onChange: (val) => handleBowlerNameChange(teamNumber, rowIndex, overIndex, val)
+                                      },
+                                      name
+                                    )
+                                  }
+                                  style={{ padding: '6px 10px', cursor: 'pointer' }}
+                                >
+                                  {name}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                       </td>
                     ))}
                     <td className="bb-1"></td>
@@ -590,10 +702,39 @@ const ScoreTable = () => {
                           type="text"
                           className="form-control box_cric_input_filed_name"
                           placeholder="Batsman name"
-                          autoComplete='on'
+                          autoComplete="off"
                           value={batsman.name}
-                          onChange={(e) => handleBatsmanNameChange(teamNumber, rowIndex, batsmanIndex, e.target.value)}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            handleBatsmanNameChange(teamNumber, rowIndex, batsmanIndex, value);
+                            handleInputFocus(value, { type: 'batsman', teamNumber, rowIndex, batsmanIndex, value });
+                          }}
+                          onBlur={() => handleInputBlur(batsman.name)}
                         />
+                        {focusedFieldKey?.type === 'batsman' &&
+                          focusedFieldKey.teamNumber === teamNumber &&
+                          focusedFieldKey.rowIndex === rowIndex &&
+                          focusedFieldKey.batsmanIndex === batsmanIndex &&
+                          filteredSuggestions.length > 0 && (
+                            <ul className="suggestion-dropdown">
+                              {filteredSuggestions.map((name, idx) => (
+                                <li
+                                  key={idx}
+                                  onMouseDown={() =>
+                                    handleSuggestionClick(
+                                      {
+                                        onChange: (val) => handleBatsmanNameChange(teamNumber, rowIndex, batsmanIndex, val)
+                                      },
+                                      name
+                                    )
+                                  }
+                                  style={{ padding: '6px 10px', cursor: 'pointer' }}
+                                >
+                                  {name}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                       </td>
                       {batsman.overs.map((over, overIndex) => (
                         <td key={overIndex} className="p-2">
@@ -693,6 +834,8 @@ const ScoreTable = () => {
     return <PageLoader />
   }
 
+  
+
   return (
     <>
       <div className=" container-fluid p-0" style={{ height: "100vh" }}>
@@ -704,7 +847,7 @@ const ScoreTable = () => {
               <div className='box_cric_back_btn' onClick={() => navigate('/')}>
                 {svg.app.back_icon} Back
               </div>
-             </div>
+            </div>
             <div className='box_cric_score_all_btn m-0'>
               <button
                 className="box_cric_btn"
@@ -777,6 +920,35 @@ const ScoreTable = () => {
         removeAction={createNewMatch}
       />
 
+      <style jsx>{`
+  .suggestion-dropdown {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+    z-index: 1000;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .suggestion-dropdown li {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  .suggestion-dropdown li:hover {
+    background-color: #f0f0f0;
+  }
+
+  .form-control.box_cric_input_filed_name {
+    position: relative;
+  }
+`}</style>
     </>
   )
 }
