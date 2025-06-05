@@ -19,6 +19,8 @@ const ScoreTable = () => {
   const [numberOfCols, setNumberOfCols] = useState(0);
   const [isRemove, setIsRemove] = useState(false);
   const [isCreateNew, setIsCreateNew] = useState(false);
+  const [loadingClass, setLoadingClass] = useState('');
+  const [status, setStatus] = useState("complete");
   const navigate = useNavigate();
   const DEV_API = process.env.REACT_APP_DEV_API;
 
@@ -26,15 +28,12 @@ const ScoreTable = () => {
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [focusedFieldKey, setFocusedFieldKey] = useState(null);
 
- 
-
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (!token) {
       navigate('/login');
     }
     const matchId = localStorage.getItem('matchId');
-    
     if (!matchId) {
       navigate('/');
     }
@@ -71,7 +70,7 @@ const ScoreTable = () => {
     setIsRemove(false);
   };
 
-   const handleInputFocus = (value, fieldKey) => {
+  const handleInputFocus = (value, fieldKey) => {
     setFocusedFieldKey(fieldKey);
     const filtered = allNames.filter(name =>
       name?.toLowerCase()?.includes((fieldKey.value || '')?.toLowerCase())
@@ -92,7 +91,7 @@ const ScoreTable = () => {
   };
 
   const handleSuggestionClick = (key, name) => {
-    key.onChange(name); 
+    key.onChange(name);
     setFocusedFieldKey(null);
   };
 
@@ -188,8 +187,8 @@ const ScoreTable = () => {
     }
   };
 
-  const loadplayerName = async ()=>{
-     const token = localStorage.getItem('authToken');
+  const loadplayerName = async () => {
+    const token = localStorage.getItem('authToken');
     try {
       const response = await axios.get(`${DEV_API}/api/playername`, {
         headers: {
@@ -213,10 +212,10 @@ const ScoreTable = () => {
     }
   }
 
-  const saveplayerName = async (name)=>{
-     const token = localStorage.getItem('authToken');
+  const saveplayerName = async (name) => {
+    const token = localStorage.getItem('authToken');
     try {
-      const response = await axios.post(`${DEV_API}/api/playername`,{
+      const response = await axios.post(`${DEV_API}/api/playername`, {
         playerNames: name
       }, {
         headers: {
@@ -647,7 +646,7 @@ const ScoreTable = () => {
                   <tr>
                     <td className="bb-1" colSpan="2"></td>
                     {pair.batsmen[0].overs.map((over, overIndex) => (
-                      <td key={overIndex} className="bb-1">
+                      <td key={overIndex} className="bb-1 ps_relative">
                         <input
                           type="text"
                           className="form-control box_cric_input_filed_name"
@@ -666,7 +665,7 @@ const ScoreTable = () => {
                           focusedFieldKey.rowIndex === rowIndex &&
                           focusedFieldKey.overIndex === overIndex &&
                           filteredSuggestions.length > 0 && (
-                            <ul className="suggestion-dropdown">
+                            <ul className="suggestion-dropdown ">
                               {filteredSuggestions.map((name, idx) => (
                                 <li
                                   key={idx}
@@ -678,7 +677,7 @@ const ScoreTable = () => {
                                       name
                                     )
                                   }
-                                  style={{ padding: '6px 10px', cursor: 'pointer' }}
+                                  style={{ padding: '2px 10px', cursor: 'pointer' }}
                                 >
                                   {name}
                                 </li>
@@ -697,7 +696,7 @@ const ScoreTable = () => {
                           {pair.pairId}
                         </td>
                       )}
-                      <td style={{ width: '150px' }}>
+                      <td className='ps_relative' style={{ width: '150px' }}>
                         <input
                           type="text"
                           className="form-control box_cric_input_filed_name"
@@ -728,7 +727,7 @@ const ScoreTable = () => {
                                       name
                                     )
                                   }
-                                  style={{ padding: '6px 10px', cursor: 'pointer' }}
+                                  style={{ padding: '4px 10px', cursor: 'pointer' }}
                                 >
                                   {name}
                                 </li>
@@ -834,7 +833,59 @@ const ScoreTable = () => {
     return <PageLoader />
   }
 
-  
+  const renderMatchStatus = (status) => {
+    let statusClass;
+    let statustext;
+
+    switch (status) {
+      case "complete":
+        statusClass = 'ps-complete-bg';
+        statustext = 'Completed';
+        break;
+      case "pending":
+        statusClass = 'ps-pending-bg';
+        statustext = 'Pending';
+        break;
+      case "ongoing":
+        statusClass = 'ps-process-bg';
+        statustext = 'Ongoing';
+        break;
+      case 'cancel':
+        statusClass = 'ps-cancel-bg';
+        statustext = 'Canceled';
+        break;
+      default:
+        statusClass = 'status-unknown';
+        statustext = 'Unknown';
+    }
+
+   
+
+    return (<>
+      {/* <div className='ps_match_status_box'>
+        <span className={`ps_match_status_bg ${statusClass}`}>{statustext}</span>
+      </div> */}
+
+      <div className=''>
+        <select className={`ps_match_status_box ${statusClass}`} value={status} onChange={handleChange} >
+          <option className='ps_match_status_box_select' value="complete">Complete</option>
+          <option className='ps_match_status_box_select' value="pending">Pending</option>
+          <option className='ps_match_status_box_select' value="ongoing">Ongoing</option>
+          <option className='ps_match_status_box_select' value="cancel">Cancel</option>
+        </select>
+      </div>
+
+
+     
+    </>
+
+
+    );
+  };
+
+  const handleChange = (event) => {
+    setStatus(event.target.value);
+  };
 
   return (
     <>
@@ -849,6 +900,13 @@ const ScoreTable = () => {
               </div>
             </div>
             <div className='box_cric_score_all_btn m-0'>
+
+              <div>
+
+                <div>
+                  {renderMatchStatus(status)}
+                </div>
+              </div>
               <button
                 className="box_cric_btn"
                 onClick={() => window.open('/display', '_blank')}
@@ -867,16 +925,24 @@ const ScoreTable = () => {
                     />
                   }
                   fileName="FinalMatchScorecard.pdf"
-                  className="box_cric_btn"
+                  className="box_cric_btn ps_z99"
                 >
                   {({ loading, url }) => {
                     if (!loading && url) {
-                      setTimeout(() => setShowPDF(false), 3000);
+                      setLoadingClass('ps_loader_pdf_dl');
+                      setTimeout(() => {
+                        setShowPDF(false);
+                        setLoadingClass('');
+                      }, 100000);
+
+
                     }
-                    return loading ? <div className='ps_loader_pdf_dl'>  <span className=" spinner-border spinner-border-sm mr-3" /> Preparing PDF...</div> : 'Download Final Match PDF';
+                    return loading ? <div >  <span className=" spinner-border spinner-border-sm mr-3" /> Preparing PDF...</div> : <>  <span>Download Final Match PDF</span></>;
                   }}
                 </PDFDownloadLink>
               )}
+              <div className={loadingClass}></div>
+
 
               {!showPDF && (
                 <button
@@ -927,22 +993,27 @@ const ScoreTable = () => {
     border: 1px solid #ccc;
     border-radius: 4px;
     max-height: 200px;
+    left:8px;
+    right:20px;
+    max-width:calc(100% - 15px);
     overflow-y: auto;
     width: 100%;
     z-index: 1000;
     margin: 0;
-    padding: 0;
+    padding: 8px;
     list-style: none;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 
   .suggestion-dropdown li {
-    padding: 8px 12px;
+    padding: 4px 10px;
     cursor: pointer;
+    font-size: 16px;
   }
 
   .suggestion-dropdown li:hover {
-    background-color: #f0f0f0;
+    background-color: #e9ebfa;
+    border-radius: 3px;
   }
 
   .form-control.box_cric_input_filed_name {
