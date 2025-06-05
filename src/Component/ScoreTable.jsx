@@ -44,6 +44,7 @@ const ScoreTable = () => {
   // Clear current ball on mount
   useEffect(() => {
     localStorage.removeItem('currentBall');
+
   }, []);
 
   const logout = () => {
@@ -160,6 +161,7 @@ const ScoreTable = () => {
 
       if (matchData) {
         setMatchInfo(matchData);
+        setStatus(matchData.status);
 
         // Calculate dimensions for the table
         const rows = Math.ceil(parseInt(matchData.totalOvers) / parseInt(matchData.oversPerSkin));
@@ -652,6 +654,7 @@ const ScoreTable = () => {
                           className="form-control box_cric_input_filed_name"
                           placeholder="Bowler name"
                           autoComplete="off"
+                          disabled={status === 'ongoing' ? false : true}
                           value={over.bowlerName}
                           onChange={(e) => {
                             const value = e.target.value;
@@ -702,6 +705,7 @@ const ScoreTable = () => {
                           className="form-control box_cric_input_filed_name"
                           placeholder="Batsman name"
                           autoComplete="off"
+                          disabled={status === 'ongoing' ? false : true}
                           value={batsman.name}
                           onChange={(e) => {
                             const value = e.target.value;
@@ -745,6 +749,7 @@ const ScoreTable = () => {
                                   <div className="d-flex">
                                     <input
                                       type="text"
+                                      disabled={status === 'ongoing' ? false : true}
                                       className="form-control box_cric_input_score"
                                       value={ball}
                                       onChange={(e) => handleBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
@@ -754,6 +759,7 @@ const ScoreTable = () => {
                                   {(ball === 'W' || ball === 'n' || ball === 'N' || ball === 'w') && (
                                     <input
                                       type="text"
+                                      disabled={status === 'ongoing' ? false : true}
                                       className="form-control box_cric_input_score mt-1"
                                       value={over.extraRuns[ballIndex] || ''}
                                       onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
@@ -766,6 +772,7 @@ const ScoreTable = () => {
                                 <div key={`extra-${extraBallIndex}`} className="d-flex flex-column align-items-center">
                                   <input
                                     type="text"
+                                    disabled={status === 'ongoing' ? false : true}
                                     className="form-control box_cric_input_score"
                                     value={extraBall}
                                     onChange={(e) => handleExtraBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex, e.target.value)}
@@ -775,7 +782,7 @@ const ScoreTable = () => {
                                     <input
                                       type="text"
                                       className="form-control box_cric_input_score mt-1"
-
+                                      disabled={status === 'ongoing' ? false : true}
                                       value={over.extraRuns[extraBallIndex + over.balls.length] || ''}
                                       onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex + over.balls.length, e.target.value)}
                                       placeholder=""
@@ -788,6 +795,7 @@ const ScoreTable = () => {
                             {/* Score total and Add Extra Ball button side by side */}
                             <div className="d-flex align-items-center gap-2">
                               <button
+                                disabled={status === 'ongoing' ? false : true}
                                 className="box_cric_btn  box_cric_btn_sm"
                                 onClick={(e) => handleAddExtraBall(teamNumber, rowIndex, batsmanIndex, overIndex, e)}
                               >
@@ -838,13 +846,9 @@ const ScoreTable = () => {
     let statustext;
 
     switch (status) {
-      case "complete":
+      case "completed":
         statusClass = 'ps-complete-bg';
         statustext = 'Completed';
-        break;
-      case "pending":
-        statusClass = 'ps-pending-bg';
-        statustext = 'Pending';
         break;
       case "ongoing":
         statusClass = 'ps-process-bg';
@@ -859,8 +863,6 @@ const ScoreTable = () => {
         statustext = 'Unknown';
     }
 
-   
-
     return (<>
       {/* <div className='ps_match_status_box'>
         <span className={`ps_match_status_bg ${statusClass}`}>{statustext}</span>
@@ -868,104 +870,125 @@ const ScoreTable = () => {
 
       <div className=''>
         <select className={`ps_match_status_box ${statusClass}`} value={status} onChange={handleChange} >
-          <option className='ps_match_status_box_select' value="complete">Complete</option>
-          <option className='ps_match_status_box_select' value="pending">Pending</option>
+          <option className='ps_match_status_box_select' value="completed">Complete</option>
           <option className='ps_match_status_box_select' value="ongoing">Ongoing</option>
           <option className='ps_match_status_box_select' value="cancel">Cancel</option>
         </select>
       </div>
 
-
-     
     </>
 
 
     );
   };
 
-  const handleChange = (event) => {
-    setStatus(event.target.value);
+  const handleChange = async (event) => {
+    let value = event.target.value;
+
+    try {
+setLoading(true);
+      let token = localStorage.getItem('authToken');
+      let matchId = localStorage.getItem('matchId');
+
+      let responce = await axios.put(`${DEV_API}/api/chnageStatus`, { matchId, status: value },
+        { headers: { 'Authorization': `Bearer ${token}` } });
+
+      if (responce.status === 200) {
+        console.log(responce.data);
+        setStatus(value);
+        setLoading(false);
+        // navigate('/');
+      }
+
+    } catch (error) {
+      console.log(error);
+      return
+    }
+
+
   };
 
   return (
     <>
-      <div className=" container-fluid p-0" style={{ height: "100vh" }}>
-        <div id='finalScore' className="bc_finalScore">
+      {loading ? <PageLoader /> :
+        <div className=" container-fluid p-0" style={{ height: "100vh" }}>
+          <div id='finalScore' className="bc_finalScore">
 
-          <div className=" box_cric_score_all_btn box_cric_btn_score justify-content-between">
-
-            <div>
-              <div className='box_cric_back_btn' onClick={() => navigate('/')}>
-                {svg.app.back_icon} Back
-              </div>
-            </div>
-            <div className='box_cric_score_all_btn m-0'>
+            <div className=" box_cric_score_all_btn box_cric_btn_score justify-content-between">
 
               <div>
-
-                <div>
-                  {renderMatchStatus(status)}
+                <div className='box_cric_back_btn' onClick={() => navigate('/')}>
+                  {svg.app.back_icon} Back
                 </div>
               </div>
-              <button
-                className="box_cric_btn"
-                onClick={() => window.open('/display', '_blank')}
-              >
-                Open Final Score in New Tab
+              <div className='box_cric_score_all_btn m-0'>
 
-              </button>
+                <div>
 
-              {showPDF && (
-                <PDFDownloadLink
-                  document={
-                    <FullMatchPDF
-                      matchInfo={matchInfo}
-                      team1Data={team1Data}
-                      team2Data={team2Data}
-                    />
-                  }
-                  fileName="FinalMatchScorecard.pdf"
-                  className="box_cric_btn ps_z99"
-                >
-                  {({ loading, url }) => {
-                    if (!loading && url) {
-                      setLoadingClass('ps_loader_pdf_dl');
-                      setTimeout(() => {
-                        setShowPDF(false);
-                        setLoadingClass('');
-                      }, 100000);
-
-
-                    }
-                    return loading ? <div >  <span className=" spinner-border spinner-border-sm mr-3" /> Preparing PDF...</div> : <>  <span>Download Final Match PDF</span></>;
-                  }}
-                </PDFDownloadLink>
-              )}
-              <div className={loadingClass}></div>
-
-
-              {!showPDF && (
+                  <div>
+                    {renderMatchStatus(status)}
+                  </div>
+                </div>
                 <button
                   className="box_cric_btn"
-                  onClick={() => setShowPDF(true)}
+                  onClick={() => window.open('/display', '_blank')}
                 >
-                  {svg.app.pdf_download} Create Full Match PDF
+                  Open Final Score in New Tab
+
                 </button>
-              )}
-              <button type="submit" className="box_cric_btn" onClick={() => setIsCreateNew(true)} > {svg.app.create} Create New Match</button>
-              <button type="submit" className="box_cric_btn box_cric_btn_logout" onClick={handleLogoutClick} > {svg.app.logout} Log Out</button>
+
+                {showPDF && (
+                  <PDFDownloadLink
+                    document={
+                      <FullMatchPDF
+                        matchInfo={matchInfo}
+                        team1Data={team1Data}
+                        team2Data={team2Data}
+                      />
+                    }
+                    fileName="FinalMatchScorecard.pdf"
+                    className="box_cric_btn ps_z99"
+                  >
+                    {({ loading, url }) => {
+                      if (!loading && url) {
+                        setLoadingClass('ps_loader_pdf_dl');
+                        setTimeout(() => {
+                          setShowPDF(false);
+                          setLoadingClass('');
+                        }, 5000);
+
+
+                      }
+                      return loading ? <div >  <span className=" spinner-border spinner-border-sm mr-3" /> Preparing PDF...</div> : <>  <span>Download Final Match PDF</span></>;
+                    }}
+                  </PDFDownloadLink>
+                )}
+                <div className={loadingClass}></div>
+
+
+                {!showPDF && (
+                  <button
+                    className="box_cric_btn"
+                    onClick={() => setShowPDF(true)}
+                  >
+                    {svg.app.pdf_download} Create Full Match PDF
+                  </button>
+                )}
+                <button type="submit" className="box_cric_btn" onClick={() => setIsCreateNew(true)} > {svg.app.create} Create New Match</button>
+                <button type="submit" className="box_cric_btn box_cric_btn_logout" onClick={handleLogoutClick} > {svg.app.logout} Log Out</button>
+              </div>
             </div>
+
+            <FinalScore />
           </div>
 
-          <FinalScore />
-        </div>
 
-
-        <div id='scoreTable' className='bc_score_table' >
-          {renderTable(matchInfo.team1, 1, team1Data)}
-          {renderTable(matchInfo.team2, 2, team2Data)}
+          <div id='scoreTable' className='bc_score_table' >
+            {renderTable(matchInfo.team1, 1, team1Data)}
+            {renderTable(matchInfo.team2, 2, team2Data)}
+          </div>
         </div>
-      </div>
+      }
 
 
       <ConfirmationPopup
