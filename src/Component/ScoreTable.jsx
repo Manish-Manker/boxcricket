@@ -962,7 +962,7 @@ const ScoreTable = () => {
                         setTimeout(() => {
                           setShowPDF(false);
                           setLoadingClass('');
-                        }, 500000);
+                        }, 5000);
 
 
                       }
