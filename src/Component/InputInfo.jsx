@@ -5,6 +5,7 @@ import axios from 'axios';
 import PageLoader from './common/pageLoader';
 import ConfirmationPopup from './common/confirmPopup';
 import svg from './common/svg';
+import { toast } from 'react-toastify';
 
 const InputInfo = () => {
 
@@ -40,6 +41,7 @@ const InputInfo = () => {
       }
 
       if (response.data.status === 200) {
+        toast.success(response?.data?.message);
         setUserMatchList(response.data.data);
         console.log(response.data.data);
       }
@@ -159,7 +161,7 @@ const InputInfo = () => {
           navigate('/login');
           return
         }
-
+        toast.success(response?.data?.message);
         const matchId = response.data.data._id;
 
         // Save matchId to localStorage

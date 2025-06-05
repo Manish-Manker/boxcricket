@@ -7,10 +7,25 @@ import FinalScore from './Component/FinalScore'
 import Display from './Component/Display';
 import Signup from './Component/Singup';
 import Login from './Component/Login';
+
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
 
   return (
     <>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="dark"
+        limit={1}
+      />
 
       <BrowserRouter>
         <Routes>

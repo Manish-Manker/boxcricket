@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import PageLoader from './common/pageLoader';
+import { toast } from 'react-toastify';
 
 const Login = () => {
 
@@ -63,6 +64,7 @@ const Login = () => {
         const response = await axios.post(`${DEV_API}/api/login`, formData);
 
         if (response.data.status === 200) {
+            toast.success(response?.data?.message);
           // Store the token
           localStorage.setItem('authToken', response.data.token);
           localStorage.setItem('userData', JSON.stringify(response.data.user));

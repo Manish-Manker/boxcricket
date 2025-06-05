@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import PageLoader from './common/pageLoader';
 import svg from './common/svg';
 import ConfirmationPopup from './common/confirmPopup';
+import { toast } from 'react-toastify';
 
 const ScoreTable = () => {
   // State management
@@ -199,11 +200,13 @@ const ScoreTable = () => {
         }
       });
       if (response.data.status === 401 || response.data.status === 403) {
+        
         navigate('/login');
         return
       }
 
       if (response.data.status === 200) {
+        // toast.success(response?.data?.message);
         setAllNames(response.data.data);
         console.log(response.data.data);
       }
@@ -231,6 +234,7 @@ const ScoreTable = () => {
       }
 
       if (response.data.status === 200) {
+         toast.success(response?.data?.message);
         console.log(response.data);
       }
     }
@@ -796,7 +800,7 @@ const ScoreTable = () => {
                             <div className="d-flex align-items-center gap-2">
                               <button
                                 disabled={status === 'ongoing' ? false : true}
-                                className="box_cric_btn  box_cric_btn_sm"
+                                className={`box_cric_btn box_cric_btn_sm ${status !== 'ongoing' ? 'ps_btn_disabled' : ''}`}
                                 onClick={(e) => handleAddExtraBall(teamNumber, rowIndex, batsmanIndex, overIndex, e)}
                               >
                                 +
@@ -868,7 +872,7 @@ const ScoreTable = () => {
         <span className={`ps_match_status_bg ${statusClass}`}>{statustext}</span>
       </div> */}
 
-      <div className=''>
+      <div className='ps_defalt_drop'>
         <select className={`ps_match_status_box ${statusClass}`} value={status} onChange={handleChange} >
           <option className='ps_match_status_box_select' value="completed">Complete</option>
           <option className='ps_match_status_box_select' value="ongoing">Ongoing</option>
@@ -886,7 +890,7 @@ const ScoreTable = () => {
     let value = event.target.value;
 
     try {
-setLoading(true);
+      setLoading(true);
       let token = localStorage.getItem('authToken');
       let matchId = localStorage.getItem('matchId');
 
@@ -894,10 +898,13 @@ setLoading(true);
         { headers: { 'Authorization': `Bearer ${token}` } });
 
       if (responce.status === 200) {
-        console.log(responce.data);
+        toast.success(responce?.data?.message);
+        console.log("praveen",responce.data);
         setStatus(value);
         setLoading(false);
         // navigate('/');
+      } else {
+        toast.error(responce?.data?.message);
       }
 
     } catch (error) {
@@ -955,7 +962,7 @@ setLoading(true);
                         setTimeout(() => {
                           setShowPDF(false);
                           setLoadingClass('');
-                        }, 5000);
+                        }, 500000);
 
 
                       }
