@@ -943,8 +943,8 @@ h6 {
     font-size: 20px;
 }
 
-.ps_z99{
-z-index: 999999999 !important;
+.ps_z99 {
+    z-index: 999999999 !important;
 }
 
 
@@ -991,7 +991,7 @@ z-index: 999999999 !important;
     border-radius: 30px;
 }
 
-.ps_relative{
+.ps_relative {
     position: relative !important;
 }
 
@@ -1186,7 +1186,7 @@ z-index: 999999999 !important;
     font-size: 14px;
 }
 
-.ps_match_status_box {
+.ps_match_status_box_list {
     font-size: 12px;
     font-weight: 700;
 }
@@ -1207,27 +1207,130 @@ z-index: 999999999 !important;
     border: 1px solid;
 }
 
-.ps_match_status_box_select{
+.ps_match_status_box_select {
     background-color: #ffffff !important;
     color: var(--bc-bg-dark) !important;
 }
 
-.ps_match_status_box:focus-visible{
+.ps_match_status_box:focus-visible {
     /* border: none !important; */
     outline: none !important;
     box-shadow: none !important;
 }
 
-select option:checked,
-select option:hover {
-    box-shadow: 0 0 10px 100px #000 inset;
+
+.ps_match_status_box {
+    position: relative;
 }
 
-select.ps_match_status_box option:hover {
-    box-shadow: 0 0 10px 100px #a81818 inset !important;
+.ps_match_status_box select {
+    appearance: none !important;
+    width: 100%;
+    font-size: 1.15rem;
+    padding: 0.675em 6em 0.675em 1em;
+    background-color: #fff;
+    border: 1px solid #caced1;
+    border-radius: 0.25rem;
+    color: #000;
+    cursor: pointer;
 }
 
+.select-button {
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.675em 1em;
+    border: 1px solid #caced1;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+}
 
+.arrow {
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #000;
+    transition: transform ease-in-out 0.3s;
+}
+
+.select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border: 1px solid #caced1;
+    border-radius: 0.25rem;
+    background-color: white;
+    list-style: none;
+    padding: 10px;
+    margin: 2px 0 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.select-dropdown::-webkit-scrollbar {
+    width: 7px;
+}
+
+.select-dropdown::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 25px;
+}
+
+.select-dropdown::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 25px;
+}
+
+.select-dropdown li {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.custom-select {
+    position: relative;
+    display: inline-block;
+}
+
+.select-button {
+    background-color: #fff;
+    border: 1px solid;
+    padding: 13px;
+    cursor: pointer;
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid #e9ebfa;
+    background-color: white;
+    z-index: 100;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dropdown-option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-option:hover,
+.dropdown-option.focused {
+    background-color: #f1f4fb;
+}
 
 .ps-complete {
     color: var(--bc-green);
@@ -1295,7 +1398,7 @@ select.ps_match_status_box option:hover {
 
     .ps_display_box .box_cric_team_heading h3 {
         line-height: 1.4;
-        font-size: 4rem;
+        font-size: 6rem;
     }
 
     .ps_display_box .box_cric_team_heading h3:after {
@@ -1309,9 +1412,14 @@ select.ps_match_status_box option:hover {
 
     .bc_final_head_boxes .table-responsive {
         overflow-x: auto;
-        height: calc(100% - 85px);
+        height: calc(100% - 125px);
+    }
+
+    .ps_display_box .bc_score_box_show_waiting {
+        height: calc(100% - 120px);
     }
 }
+
 
 
 @media screen and (max-width: 2400px) {

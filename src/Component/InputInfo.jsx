@@ -235,7 +235,7 @@ const InputInfo = () => {
     }
 
     return (
-      <div className='ps_match_status_box'>
+      <div className='ps_match_status_box_list'>
         <span className={` ${statusClass}`}>{statustext}</span>
       </div>
     );
