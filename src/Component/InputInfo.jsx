@@ -213,13 +213,9 @@ const InputInfo = () => {
     let statustext;
 
     switch (status) {
-      case "complete":
+      case "completed":
         statusClass = 'ps-complete';
         statustext = 'Completed';
-        break;
-      case "pending":
-        statusClass = 'ps-pending';
-        statustext = 'Pending';
         break;
       case "ongoing":
         statusClass = 'ps-process';
