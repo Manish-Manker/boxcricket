@@ -7,6 +7,8 @@ import svg from '../common/svg';
 import ConfirmationPopup from '../common/confirmPopup';
 import PageLoader from '../common/pageLoader';
 import Popup from '../common/Popup';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 
 const Users = (props) => {
     const [fullname, setFullName] = useState('');
@@ -16,7 +18,8 @@ const Users = (props) => {
     const [userId, setUserId] = useState('');
     const [addCategoryPopup, setAddCategoryPopup] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    // const [customerList, setCustomerList] = useState('');
+    const navigate = useNavigate();
+
     const [loading, setLoading] = useState(true);
     const [totalRows, setTotalRows] = useState(0);
     const [perPage, setPerPage] = useState(10);
@@ -25,102 +28,61 @@ const Users = (props) => {
     const [page, setPage] = useState(1);
     const [hasSubmittedSearch, setHasSubmittedSearch] = useState(false);
 
+    const [customerList, setcustomerList] = useState([
+        { id: 1, name: 'manish', email: 'YV9G2@example.com', matches: 4, status: 'active', createdAt: '2023-01-01' },
+        { id: 2, name: 'manish', email: 'YV9G2@example.com', matches: 14, status: 'active', createdAt: '2023-01-01' },
+        { id: 3, name: 'manish', email: 'YV9G2@example.com', matches: 5, status: 'active', createdAt: '2023-01-01' },
+        { id: 4, name: 'manish', email: 'YV9G2@example.com', matches: 8, status: 'inactive', createdAt: '2023-01-01' },
+        { id: 5, name: 'manish', email: 'YV9G2@example.com', matches: 21, status: 'active', createdAt: '2023-01-01' },
+    ])
 
-    const customerList = [
-        { _id: '1', fullname: 'John Doe', email: 'john.doe@example.com', matches: 5, status: 1 },
-        { _id: '2', fullname: 'Jane Smith', email: 'jane.smith@example.com', matches: 3, status: 0 },
-        { _id: '3', fullname: 'Alice Johnson', email: 'alice.johnson@example.com', matches: 10, status: 1 },
-        { _id: '4', fullname: 'Bob Brown', email: 'bob.brown@example.com', matches: 2, status: 0 },
-        { _id: '5', fullname: 'Charlie White', email: 'charlie.white@example.com', matches: 7, status: 1 },
-    ];
     const statusOption = [
-        { value: '1', label: 'Active' },
-        { value: '0', label: 'In-Active' },
+        { value: 'active', label: 'Active' },
+        { value: 'inactive', label: 'In-Active' },
     ]
 
-    // useEffect(() => {
-    //     fetchPaymentPlan(1, "admin");
-    // }, []);
 
-    // useEffect(() => {
-    //     fetchCustomers(page, perPage, false, search);
-    // }, [selectedPlan, selectedStatus, selectedVerifyStatus]);
+    useEffect(() => {
+        loadUserData();
+    }, []);
 
+    const loadUserData = () => {
+        try {
+            let token = localStorage.getItem('authToken');
+            const DEV_API = process.env.REACT_APP_DEV_API;
 
-
-    const [formData, setFormData] = useState({
-        team1: '',
-        team2: '',
-        totalOvers: '',
-        oversPerSkin: ''
-    });
-    const [errors, setErrors] = useState({});
-
-    const validateForm = () => {
-        const newErrors = {};
-
-        // Check for empty values
-        if (!formData.team1.trim()) {
-            newErrors.team1 = 'Team 1 name is required';
-        }
-        if (!formData.team2.trim()) {
-            newErrors.team2 = 'Team 2 name is required';
-        }
-        if (!formData.totalOvers) {
-            newErrors.totalOvers = 'Total overs is required';
-        }
-       
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const UpdateStatus = async (e) => {
-        e.preventDefault();
-
-        if (validateForm()) {
-            setBtnLoading(true);
-            try {
-                const DEV_API = process.env.REACT_APP_DEV_API;
-                const token = localStorage.getItem('authToken');
-
-                const response = await axios.post(`${DEV_API}/api/updateStatus`, formData, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.data.status === 401 || response.data.status === 403) {
-                    navigate('/login');
-                    return
+            let responce = axios.get(`${DEV_API}/api/getalluser`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
-                toast.success(response?.data?.message);
-                const matchId = response.data.data._id;
+            }).catch((error) => console.log(error));
 
-                // Save matchId to localStorage
-                localStorage.setItem('matchId', matchId);
-                localStorage.setItem('matchInfo', JSON.stringify(formData));
-
-                // Navigate to score table
-            } catch (error) {
-                console.error('Error creating match:', error);
-                // Handle unauthorized access
-                if (error.response && error.response.status === 401) {
-                    navigate('/login');
-                }
-            } finally {
-                setBtnLoading(false);
+            if (responce.status === 200) {
+                setcustomerList(responce.data.data);
+                setLoading(false);
             }
+
+
+        } catch (error) {
+
         }
+
+    }
+
+    const logout = () => {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        localStorage.removeItem('currentBall');
+        localStorage.removeItem('currentSkinIndex');
+        localStorage.removeItem('isSet');
+        localStorage.removeItem('matchId');
+        localStorage.removeItem('matchInfo');
+        localStorage.removeItem('previousBall');
+        localStorage.removeItem('team1ScoreData');
+        localStorage.removeItem('team2ScoreData');
+        localStorage.removeItem('consecutiveZerosCount');
+        navigate('/login');
     };
-
-    const handleUpdateStatus = () => {
-        setStatusChange(true);
-    };
-
-
-
-
 
 
     const handlePageChange = (page) => {
@@ -131,10 +93,11 @@ const Users = (props) => {
     const handlePerRowsChange = async (newPerPage, page) => {
         setPerPage(newPerPage);
         setLoading(true);
-        // fetchCustomers(page, newPerPage, true);
-        // fetchCustomers(page, newPerPage, true, search);
     };
 
+    const addUSer = () => {
+
+    }
 
 
     const handleSearchKeyupEvent = (e) => {
@@ -146,6 +109,47 @@ const Users = (props) => {
                 setHasSubmittedSearch(true);
                 // fetchCustomers(1, perPage, false, searchValue);
             }
+        }
+    };
+
+    const UpdateStatus = (row, index) => {
+        
+        const updatedList = customerList.map(user => {
+            if (user.id === row.id) {
+                return {
+                    ...user,
+                    status: user.status === 'active' ? 'inactive' : 'active'
+                };
+            }
+            return user;
+        });
+
+        
+        setcustomerList(updatedList);
+
+        try {
+            const token = localStorage.getItem('authToken');
+            const DEV_API = process.env.REACT_APP_DEV_API;
+            let userId = customerList.id
+            let status = customerList.status === 'active' ? 'inactive' : 'active'
+
+            axios.post(`${DEV_API}/api/activeInactiveUser`, {
+               userId,
+               status
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then((res) => {
+                if (res.status === 200) {
+                    // loadUserData();
+                    console.log(res.data.message);
+                    
+                }
+            }).catch((error) => console.log(error));
+
+        } catch (error) {
+            console.error('Error updating status:', error);
         }
     };
 
@@ -166,7 +170,7 @@ const Users = (props) => {
         },
         {
             name: 'User Name', wrap: true,
-            selector: row => row?.fullname,
+            selector: row => row?.name,
             sortable: true,
         },
         { name: 'Email', selector: row => row.email, sortable: true, },
@@ -193,7 +197,7 @@ const Users = (props) => {
                                     title="Status"
                                     className="tooltiped"
                                     id={`status-${row._id}`}
-                                    checked={row.status === 1}
+                                    checked={row.status === 'active'}
                                     onChange={() => UpdateStatus(row, index)}
                                 />
                                 <span className="switch-status"></span>
@@ -281,7 +285,8 @@ const Users = (props) => {
                                         <span className="pu_search_icon">{svg.app.dash_search_icon}</span>
                                     </div>
                                 </li>
-                                <li className='skipg_page_header_custm_title_btn_hide'><button className="box_cric_btn" onClick={() => setAddCategoryPopup(!addCategoryPopup)}>+ Add Customer</button></li>
+                                <li className='skipg_page_header_custm_title_btn_hide'><button className="box_cric_btn" onClick={() => setAddCategoryPopup(!addCategoryPopup)}>+ Add User</button></li>
+                                <li className='skipg_page_header_custm_title_btn_hide'><button className="box_cric_btn" onClick={() => logout()}>Log out</button></li>
 
                             </ul>
                         </div>
@@ -301,6 +306,7 @@ const Users = (props) => {
                     </div>
                 </div>
             </div>
+
             <Popup
                 heading={isEdit ? "Update Customer" : "Add Customer"}
                 show={addCategoryPopup}
@@ -327,11 +333,12 @@ const Users = (props) => {
                                 name="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                            // required={!isEdit}
+                                required={!isEdit}
                             />
                         </div>
 
                     </div>
+                    <li className='skipg_page_header_custm_title_btn_hide'><button className="box_cric_btn" onClick={() => addUSer()}>Add User</button></li>
                 </form>
             </Popup>
 
@@ -340,7 +347,6 @@ const Users = (props) => {
                 closePopup={() => setStatusChange(false)}
                 type={"User"}
                 removeAction={() => {
-                    // getDeleteData(statusChange);
                     setStatusChange(false);
                 }}
             />

@@ -73,7 +73,11 @@ const Login = () => {
           axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
           // Redirect to main page after successful login
-          navigate('/');
+          if(response.data.user.role === 'admin'){
+            navigate('/admin/users');
+          }else{
+            navigate('/');
+          }
         }
       } catch (error) {
         console.error('Error logging in:', error);

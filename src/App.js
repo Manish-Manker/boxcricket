@@ -7,10 +7,11 @@ import FinalScore from './Component/FinalScore'
 import Display from './Component/Display';
 import Signup from './Component/Singup';
 import Login from './Component/Login';
+import Users from './Component/admin/Users.js'
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Users from './Component/admin/Users';
+
 const App = () => {
 
   return (

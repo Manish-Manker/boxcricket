@@ -35,13 +35,17 @@ const InputInfo = () => {
           'Content-Type': 'application/json'
         }
       });
-      if (response.data.status === 401 || response.data.status === 403) {
+      if (response?.data?.status === 401 || response?.data?.status === 403) {
+        console.log("+-+-+-", response);
+
+        // toast.error(response?.data?.message);
+        logout();
         navigate('/login');
         return
       }
 
       if (response.data.status === 200) {
-        toast.success(response?.data?.message);
+        // toast.success(response?.data?.message);
         setUserMatchList(response.data.data);
         console.log(response.data.data);
       }
@@ -158,6 +162,7 @@ const InputInfo = () => {
         });
 
         if (response.data.status === 401 || response.data.status === 403) {
+          toast.error(response?.data?.message);
           navigate('/login');
           return
         }
