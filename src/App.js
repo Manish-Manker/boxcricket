@@ -10,6 +10,7 @@ import Login from './Component/Login';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Users from './Component/admin/Users';
 const App = () => {
 
   return (
@@ -34,6 +35,8 @@ const App = () => {
           <Route path="/" element={<InputInfo />} />
           <Route path="/scoretable" element={<ScoreTable />} />
           <Route path="/display" element={<Display />} />
+
+           <Route path="/admin/users" element={<Users />} />
 
         </Routes>
       </BrowserRouter>
