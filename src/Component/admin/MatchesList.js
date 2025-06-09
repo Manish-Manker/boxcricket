@@ -7,6 +7,9 @@ import svg from '../common/svg';
 import ConfirmationPopup from '../common/confirmPopup';
 import PageLoader from '../common/pageLoader';
 import Popup from '../common/Popup';
+import Logout from '../common/logout';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const MatchesList = (props) => {
     const [fullname, setFullName] = useState('');
@@ -16,7 +19,7 @@ const MatchesList = (props) => {
     const [userId, setUserId] = useState('');
     const [addCategoryPopup, setAddCategoryPopup] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    // const [customerList, setCustomerList] = useState('');
+    const [customerList, setCustomerList] = useState('');
     const [loading, setLoading] = useState(true);
     const [totalRows, setTotalRows] = useState(0);
     const [perPage, setPerPage] = useState(10);
@@ -26,13 +29,27 @@ const MatchesList = (props) => {
     const [hasSubmittedSearch, setHasSubmittedSearch] = useState(false);
 
 
-    const customerList = [
-        { _id: '1', team1: 'kolkata Knight Riders', team2: 'Mumbai Indians', status: "Compleated", date: "30 July 2025", status: "completed" },
-        { _id: '2', team1: 'Punjab Kings', team2: 'Delhi Capitals', status: "Compleated", date: "2 june 2025", status: "ongoing" },
-        { _id: '3', team1: 'RCB', team2: 'Gujrat Titans', status: "Compleated", date: "24 december 2025", status: "ongoing" },
-        { _id: '4', team1: 'Mumbai Indians', team2: 'Rajasthan', status: "Compleated", date: "12 July 2025", status: "completed" },
-        { _id: '5', team1: 'SRH', team2: 'CSK', status: "Compleated", date: "4 march 2025", status: "cancel" },
-    ];
+    const loadData = async () => {
+
+        let userId = localStorage.getItem('userId')
+        let token = localStorage.getItem('authToken');
+        const DEV_API = process.env.REACT_APP_DEV_API;
+
+        let responce = await axios.get(`${DEV_API}/api/userwisematch/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
+        if (responce.data.status === 200) {
+            console.log("data", responce?.data?.data);
+            setCustomerList(responce?.data?.data);
+        }
+    }
+
+    useEffect(() => {
+        loadData();
+    }, [])
 
 
 
@@ -136,6 +153,8 @@ const MatchesList = (props) => {
             )
         },
         { name: 'Team 2', selector: row => row.team2, sortable: true, },
+        { name: 'Overs', selector: row => row.totalOvers, sortable: true, },
+        { name: 'Overs/Skin', selector: row => row.oversPerSkin, sortable: true, },
 
         {
             name: 'Status',
@@ -148,8 +167,8 @@ const MatchesList = (props) => {
 
         {
             name: 'Date',
-            selector: row => moment(row.date).format('Do MMM YYYY'),
-            sortable: false
+            selector: row => moment(row.createdAt).format('Do MMM YYYY'),
+            sortable: true,
         },
 
         // {
@@ -209,6 +228,7 @@ const MatchesList = (props) => {
                                 </li>
 
                                 <li>
+
                                     <div className="pu_search_wrapper">
                                         <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={handleSearchKeyupEvent} />
                                         {search.length > 0 && (
@@ -219,6 +239,7 @@ const MatchesList = (props) => {
                                         <span className="pu_search_icon">{svg.app.dash_search_icon}</span>
                                     </div>
                                 </li>
+                                <li className='skipg_page_header_custm_title_btn_hide'> <Logout /></li>
 
                             </ul>
                         </div>

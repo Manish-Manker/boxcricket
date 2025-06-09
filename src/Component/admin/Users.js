@@ -42,7 +42,7 @@ const Users = (props) => {
     }, []);
 
     const loadUserData = async () => {
-        setLoading(true)
+
         try {
             let token = localStorage.getItem('authToken');
             const DEV_API = process.env.REACT_APP_DEV_API;
@@ -52,19 +52,15 @@ const Users = (props) => {
                     'Authorization': `Bearer ${token}`
                 }
             })
-            
+
             if (responce.data.status === 200) {
                 console.log("data", responce?.data?.data);
                 setcustomerList(responce?.data?.data);
-                // toast.success(responce?.data?.message);
             }
 
 
         } catch (error) {
             console.log("Error", error);
-        }
-        finally {
-            // setLoading(true)
         }
 
     }
@@ -113,7 +109,7 @@ const Users = (props) => {
             email: email,
             password: password
         }
-         const DEV_API = process.env.REACT_APP_DEV_API;
+        const DEV_API = process.env.REACT_APP_DEV_API;
 
         if (validateForm(formData)) {
             try {
@@ -122,16 +118,47 @@ const Users = (props) => {
                     loadUserData();
                     toast.success(response?.data?.message);
                     categoryPopupCloseHandler();
-                    setAddCategoryPopup(false);                   
+                    setAddCategoryPopup(false);
 
                 }
             } catch (error) {
                 console.error('Error signing up:', error);
-                toast.error(error?.response?.data?.message);                
+                toast.error(error?.response?.data?.message);
             }
         }
 
 
+    }
+
+    const updateUSer = async (e) => {
+        e.preventDefault();
+
+        try {
+            const token = localStorage.getItem('authToken');
+            const DEV_API = process.env.REACT_APP_DEV_API;
+
+            let formData = {
+                name: fullname,
+                email: email
+            }
+
+            let responce = await axios.put(`${DEV_API}/api/edituser/${userId}`, formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+
+            if (responce.data.status === 200) {
+                loadUserData();
+                toast.success(responce?.data?.message);
+            }
+
+        } catch (error) {
+            console.log("Error", error);
+        }
+        finally{
+            setAddCategoryPopup(false);
+        }
     }
 
 
@@ -177,6 +204,7 @@ const Users = (props) => {
                         return user;
                     });
                     setcustomerList(updatedList);
+                    toast.success(res.data.message);
                 }
             }).catch((error) => console.log(error));
 
@@ -194,18 +222,18 @@ const Users = (props) => {
         }
     };
 
-       const getEditedData = (user) => {
+    const getEditedData = (user) => {
         setFullName(user.name);
         setEmail(user.email);
-        setUserId(user.id);
+        setUserId(user._id);
         setIsEdit(true);
-        setAddCategoryPopup(true); // Open the popup
-
+        setAddCategoryPopup(true);        
     };
 
 
     const viewMatches = (userId) => {
-        navigate(`/admin/matches/${userId}`);
+        localStorage.setItem('userId', userId);
+        navigate(`/admin/matchList`);
     };
 
     const columns = [
@@ -228,7 +256,7 @@ const Users = (props) => {
             sortable: true
         },
 
-         {
+        {
 
             name: 'View Matches',
             selector: row => row?.matches,
@@ -236,9 +264,9 @@ const Users = (props) => {
             cell: (row, index) => (
                 <>
                     <div className='pu_datatable_btns '>
-                        <a onClick={() => viewMatches(row.id)} className="pu_dt_btn ">
-                        {svg.app.view_icon}
-                    </a>
+                        <a onClick={() => viewMatches(row._id)} className="pu_dt_btn ">
+                            {svg.app.view_icon}
+                        </a>
                     </div>
                 </>
             )
@@ -274,7 +302,7 @@ const Users = (props) => {
             name: 'Actions',
             cell: (row) => (
                 <div className="pu_datatable_btns">
-                     <a onClick={() => getEditedData(row)} className="pu_dt_btn ">
+                    <a onClick={() => getEditedData(row)} className="pu_dt_btn ">
                         {svg.app.dash_edit}
                     </a>
                 </div>
@@ -288,6 +316,7 @@ const Users = (props) => {
         setFullName('');
         setEmail('');
         setPassword('');
+        setAddCategoryPopup(!addCategoryPopup)
     };
 
     const showHidePassword = () => {
@@ -369,7 +398,7 @@ const Users = (props) => {
                 show={addCategoryPopup}
                 onClose={categoryPopupCloseHandler}
             >
-                <form onSubmit={addUSer} autoComplete='off'>
+                <form onSubmit={isEdit ? updateUSer : addUSer} autoComplete='off'>
                     <div className="skipg_input_wrapper">
                         <label className='skipg_form_input_label '>Name</label>
                         <input type="text" className="form-control " placeholder="Full Name" name="fullname" value={fullname} onChange={(e) => setFullName(e.target.value)} />
@@ -390,12 +419,12 @@ const Users = (props) => {
                                 name="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                required={!isEdit}
+                                disabled={isEdit}
                             />
                         </div>
 
                     </div>
-                   <button className="box_cric_btn" type='submit' >Add User</button>
+                    <button className="box_cric_btn" type='submit' >{isEdit ? "Update User" : "Add User"}</button>
                 </form>
             </Popup>
 

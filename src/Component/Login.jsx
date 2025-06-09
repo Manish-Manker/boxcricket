@@ -72,6 +72,8 @@ const Login = () => {
           // Set default authorization header for all future requests
           axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
+          console.log(response.data.user);
+          
           // Redirect to main page after successful login
           if(response.data.user.role === 'admin'){
             navigate('/admin/users');
