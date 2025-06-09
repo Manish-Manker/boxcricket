@@ -2,16 +2,13 @@
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import Select from 'react-select';
-import { toast } from 'react-toastify';
+import moment from 'moment';
 import svg from '../common/svg';
 import ConfirmationPopup from '../common/confirmPopup';
 import PageLoader from '../common/pageLoader';
 import Popup from '../common/Popup';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom'
-import Logout from '../common/logout';
 
-const Users = (props) => {
+const MatchesList = (props) => {
     const [fullname, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,8 +16,7 @@ const Users = (props) => {
     const [userId, setUserId] = useState('');
     const [addCategoryPopup, setAddCategoryPopup] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const navigate = useNavigate();
-
+    // const [customerList, setCustomerList] = useState('');
     const [loading, setLoading] = useState(true);
     const [totalRows, setTotalRows] = useState(0);
     const [perPage, setPerPage] = useState(10);
@@ -29,45 +25,22 @@ const Users = (props) => {
     const [page, setPage] = useState(1);
     const [hasSubmittedSearch, setHasSubmittedSearch] = useState(false);
 
-    const [customerList, setcustomerList] = useState([])
 
-    const statusOption = [
-        { value: 'active', label: 'Active' },
-        { value: 'inactive', label: 'In-Active' },
-    ]
-
-
-    useEffect(() => {
-        loadUserData();
-    }, []);
-
-    const loadUserData = async () => {
-        setLoading(true)
-        try {
-            let token = localStorage.getItem('authToken');
-            const DEV_API = process.env.REACT_APP_DEV_API;
-
-            let responce = await axios.get(`${DEV_API}/api/getalluser`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            
-            if (responce.data.status === 200) {
-                console.log("data", responce?.data?.data);
-                setcustomerList(responce?.data?.data);
-                // toast.success(responce?.data?.message);
-            }
+    const customerList = [
+        { _id: '1', team1: 'kolkata Knight Riders', team2: 'Mumbai Indians', status: "Compleated", date: "30 July 2025", status: "completed" },
+        { _id: '2', team1: 'Punjab Kings', team2: 'Delhi Capitals', status: "Compleated", date: "2 june 2025", status: "ongoing" },
+        { _id: '3', team1: 'RCB', team2: 'Gujrat Titans', status: "Compleated", date: "24 december 2025", status: "ongoing" },
+        { _id: '4', team1: 'Mumbai Indians', team2: 'Rajasthan', status: "Compleated", date: "12 July 2025", status: "completed" },
+        { _id: '5', team1: 'SRH', team2: 'CSK', status: "Compleated", date: "4 march 2025", status: "cancel" },
+    ];
 
 
-        } catch (error) {
-            console.log("Error", error);
-        }
-        finally {
-            // setLoading(true)
-        }
 
-    }
+
+    const handleUpdateStatus = () => {
+        setStatusChange(true);
+    };
+
 
 
     const handlePageChange = (page) => {
@@ -78,61 +51,10 @@ const Users = (props) => {
     const handlePerRowsChange = async (newPerPage, page) => {
         setPerPage(newPerPage);
         setLoading(true);
+        // fetchCustomers(page, newPerPage, true);
+        // fetchCustomers(page, newPerPage, true, search);
     };
 
-    const validateForm = (formData) => {
-        const newErrors = {};
-
-        // Check for empty values
-        if (!formData.name.trim()) {
-            newErrors.name = 'Name is required';
-        }
-
-        // Email validation
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Please enter a valid email address';
-        }
-
-        // Password validation
-        if (!formData.password) {
-            newErrors.password = 'Password is required';
-        } else if (formData.password.length < 6) {
-            newErrors.password = 'Password must be at least 6 characters long';
-        }
-        toast.error(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const addUSer = async (e) => {
-        e.preventDefault();
-
-        let formData = {
-            name: fullname,
-            email: email,
-            password: password
-        }
-         const DEV_API = process.env.REACT_APP_DEV_API;
-
-        if (validateForm(formData)) {
-            try {
-                const response = await axios.post(`${DEV_API}/api/signup`, formData);
-                if (response.data.status === 201) {
-                    loadUserData();
-                    toast.success(response?.data?.message);
-                    categoryPopupCloseHandler();
-                    setAddCategoryPopup(false);                   
-
-                }
-            } catch (error) {
-                console.error('Error signing up:', error);
-                toast.error(error?.response?.data?.message);                
-            }
-        }
-
-
-    }
 
 
     const handleSearchKeyupEvent = (e) => {
@@ -147,45 +69,6 @@ const Users = (props) => {
         }
     };
 
-    const UpdateStatus = (row, index) => {
-
-        try {
-            const token = localStorage.getItem('authToken');
-
-            const DEV_API = process.env.REACT_APP_DEV_API;
-            let userId = customerList[index]?._id
-            let status = customerList[index]?.status === 'active' ? 'inactive' : 'active'
-
-            axios.post(`${DEV_API}/api/activeInactiveUser`, {
-                userId,
-                status
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            }).then((res) => {
-                if (res.status === 200) {
-                    console.log(res.data.message);
-
-                    const updatedList = customerList.map(user => {
-                        if (user._id === row._id) {
-                            return {
-                                ...user,
-                                status: user.status === 'active' ? 'inactive' : 'active'
-                            };
-                        }
-                        return user;
-                    });
-                    setcustomerList(updatedList);
-                }
-            }).catch((error) => console.log(error));
-
-        } catch (error) {
-            console.error('Error updating status:', error);
-        }
-
-    };
-
     const clearSearch = () => {
         setSearch("");
         if (hasSubmittedSearch) {
@@ -194,19 +77,42 @@ const Users = (props) => {
         }
     };
 
-       const getEditedData = (user) => {
-        setFullName(user.name);
-        setEmail(user.email);
-        setUserId(user.id);
-        setIsEdit(true);
-        setAddCategoryPopup(true); // Open the popup
 
-    };
+    const statusOption = [
+        { value: 'completed', label: 'Completed' },
+        { value: 'ongoing', label: 'Ongoing' },
+        { value: 'canceled', label: 'Canceled' },
+    ]
+    const renderMatchStatus = (status) => {
+        let statusClass;
+        let statustext;
 
+        switch (status) {
+            case "completed":
+                statusClass = 'ps-complete-bg';
+                statustext = 'Completed';
+                break;
+            case "ongoing":
+                statusClass = 'ps-process-bg';
+                statustext = 'Ongoing';
+                break;
+            case 'cancel':
+                statusClass = 'ps-cancel-bg';
+                statustext = 'Canceled';
+                break;
+            default:
+                statusClass = 'status-unknown';
+                statustext = 'Unknown';
+        }
 
-    const viewMatches = (userId) => {
-        navigate(`/admin/matches/${userId}`);
-    };
+        return (<>
+
+            <div className='ps_admin_table_status'>
+                <span className={`ps_match_status_bg ${statusClass}`}>{statustext}</span>
+            </div>
+        </>
+        )
+    }
 
     const columns = [
         {
@@ -216,70 +122,44 @@ const Users = (props) => {
             )
         },
         {
-            name: 'User Name', wrap: true,
-            selector: row => row?.name,
+            name: 'Team 1', wrap: true,
+            selector: row => row?.team1,
             sortable: true,
         },
-        { name: 'Email', selector: row => row.email, sortable: true, },
 
         {
-            name: 'No of Matches',
-            selector: row => row?.matchCount,
-            sortable: true
-        },
-
-         {
-
-            name: 'View Matches',
-            selector: row => row?.matches,
-            sortable: false,
-            cell: (row, index) => (
-                <>
-                    <div className='pu_datatable_btns '>
-                        <a onClick={() => viewMatches(row.id)} className="pu_dt_btn ">
-                        {svg.app.view_icon}
-                    </a>
-                    </div>
-                </>
+            name: '', wrap: true,
+            // selector: row => row?.team1,
+            sortable: true,
+            cell: (row) => (
+                <div className='ps-process'>vs</div>
             )
         },
-
+        { name: 'Team 2', selector: row => row.team2, sortable: true, },
 
         {
             name: 'Status',
-
-            sortable: true,
-            cell: (row, index) => (
-                <>
-                    <div className='d-flex align-items-center gap-2'>
-                        <div className='d-flex align-items-center'>
-                            <label htmlFor={`status-${row._id}`} className="switch">
-                                <input
-                                    type="checkbox"
-                                    title="Status"
-                                    className="tooltiped"
-                                    id={`status-${row._id}`}
-                                    checked={row.status === 'active'}
-                                    onChange={() => UpdateStatus(row, index)}
-                                />
-                                <span className="switch-status"></span>
-                            </label>
-                        </div>
-                    </div>
-                </>
+            sortable: false,
+            cell: (row) => (
+                renderMatchStatus(row.status)
             )
         },
+
 
         {
-            name: 'Actions',
-            cell: (row) => (
-                <div className="pu_datatable_btns">
-                     <a onClick={() => getEditedData(row)} className="pu_dt_btn ">
-                        {svg.app.dash_edit}
-                    </a>
-                </div>
-            )
+            name: 'Date',
+            selector: row => moment(row.date).format('Do MMM YYYY'),
+            sortable: false
         },
+
+        // {
+        //     name: 'Actions',
+        //     cell: (row) => (
+        //         <div className="pu_datatable_btns">
+        //             <a className="pu_dt_btn ">{svg.app.dash_edit}</a>
+        //         </div>
+        //     )
+        // },
     ];
 
     const categoryPopupCloseHandler = () => {
@@ -287,7 +167,6 @@ const Users = (props) => {
         setUserId('');
         setFullName('');
         setEmail('');
-        setPassword('');
     };
 
     const showHidePassword = () => {
@@ -298,8 +177,6 @@ const Users = (props) => {
         }
     }
 
-
-
     return (
         <>
             <div className='ps_table_box p-4'>
@@ -308,7 +185,7 @@ const Users = (props) => {
                     <div className="pu_datatable_wrapper skipg_dash_table">
                         <div className='page_tittle_head fwrap'>
                             <div className="box_cric_team_heading">
-                                <h3 className="m-0">Users List</h3>
+                                <h3 className="m-0">Matches List</h3>
                             </div>
 
                             <ul className="pu_pagetitle_right width_100_sc1448">
@@ -325,7 +202,7 @@ const Users = (props) => {
                                             name="status"
                                             options={statusOption}
                                         // onChange={(selectedStatusOption) => {
-                                        //     setSelectedStatus(selectedStatusOption);
+                                        //     setSelectedStatus(selectedStatusOption); 
                                         // }}
                                         />
                                     </div>
@@ -342,8 +219,6 @@ const Users = (props) => {
                                         <span className="pu_search_icon">{svg.app.dash_search_icon}</span>
                                     </div>
                                 </li>
-                                <li className='skipg_page_header_custm_title_btn_hide'><button className="box_cric_btn" onClick={() => setAddCategoryPopup((prev) => !prev)}>+ Add User</button></li>
-                                <li className='skipg_page_header_custm_title_btn_hide'> <Logout /></li>
 
                             </ul>
                         </div>
@@ -363,13 +238,12 @@ const Users = (props) => {
                     </div>
                 </div>
             </div>
-
             <Popup
-                heading={isEdit ? "Update User" : "Add User"}
+                heading={isEdit ? "Update Customer" : "Add Customer"}
                 show={addCategoryPopup}
                 onClose={categoryPopupCloseHandler}
             >
-                <form onSubmit={addUSer} autoComplete='off'>
+                <form onSubmit={""} autoComplete='off'>
                     <div className="skipg_input_wrapper">
                         <label className='skipg_form_input_label '>Name</label>
                         <input type="text" className="form-control " placeholder="Full Name" name="fullname" value={fullname} onChange={(e) => setFullName(e.target.value)} />
@@ -390,12 +264,11 @@ const Users = (props) => {
                                 name="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                required={!isEdit}
+                            // required={!isEdit}
                             />
                         </div>
 
                     </div>
-                   <button className="box_cric_btn" type='submit' >Add User</button>
                 </form>
             </Popup>
 
@@ -404,6 +277,7 @@ const Users = (props) => {
                 closePopup={() => setStatusChange(false)}
                 type={"User"}
                 removeAction={() => {
+                    // getDeleteData(statusChange);
                     setStatusChange(false);
                 }}
             />
@@ -411,4 +285,4 @@ const Users = (props) => {
         </>
     );
 }
-export default Users;
+export default MatchesList;

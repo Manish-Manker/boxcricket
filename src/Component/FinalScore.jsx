@@ -377,7 +377,7 @@ const FinalScore = () => {
                             <div className='col-lg-8'>
                                 <div >
                                     <div className="box_cric_team_heading">
-                                        <h3 className="m-0">Last Ball Status</h3>
+                                        <h3 className="m-0">Last Ball Status</h3>ss
                                     </div>
 
                                     <div className="bc_score_box_show_waiting">
@@ -405,8 +405,6 @@ const FinalScore = () => {
                             <div className='col-lg-4 m-auto'>
                                 <div className='bc_legend_img'> <img src='./images/cricket_legends.jpg'></img></div>
                             </div>
-
-
 
                         </div>
                     </div>

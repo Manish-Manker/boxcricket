@@ -6,6 +6,7 @@ import PageLoader from './common/pageLoader';
 import ConfirmationPopup from './common/confirmPopup';
 import svg from './common/svg';
 import { toast } from 'react-toastify';
+import Logout from './common/logout';
 
 const InputInfo = () => {
 
@@ -14,7 +15,6 @@ const InputInfo = () => {
   const navigate = useNavigate();
   const [btnLoading, setBtnLoading] = useState(false);
   const [userMatchList, setUserMatchList] = useState([]);
-  const [isRemove, setIsRemove] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -39,7 +39,7 @@ const InputInfo = () => {
         console.log("+-+-+-", response);
 
         // toast.error(response?.data?.message);
-        logout();
+        // logout();
         navigate('/login');
         return
       }
@@ -69,33 +69,7 @@ const InputInfo = () => {
     setBtnLoading(false);
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userData');
-    localStorage.removeItem('currentBall');
-    localStorage.removeItem('currentSkinIndex');
-    localStorage.removeItem('isSet');
-    localStorage.removeItem('matchId');
-    localStorage.removeItem('matchInfo');
-    localStorage.removeItem('previousBall');
-    localStorage.removeItem('team1ScoreData');
-    localStorage.removeItem('team2ScoreData');
-    localStorage.removeItem('consecutiveZerosCount');
-    navigate('/login');
-  };
 
-  const handleLogoutClick = () => {
-    setIsRemove(true);
-  };
-
-  const handleConfirmLogout = () => {
-    logout();
-    setIsRemove(false);
-  };
-
-  const handleCancelLogout = () => {
-    setIsRemove(false);
-  };
 
 
   const [formData, setFormData] = useState({
@@ -253,9 +227,7 @@ const InputInfo = () => {
 
       <div className='ps_form_logut_div'>
         <div></div>
-        <div> <button type="submit" className="box_cric_btn box_cric_btn_logout" onClick={handleLogoutClick} >
-          {svg.app.logout}
-          &nbsp; Log Out</button></div>
+        <div>  <Logout /></div>
       </div>
       <div className="container mt-5">
         <div className="row justify-content-center">
@@ -361,14 +333,7 @@ const InputInfo = () => {
       </div>
     </div>
 
-    <ConfirmationPopup
-      shownPopup={isRemove}
-      closePopup={handleCancelLogout}
-      title="Confirm Logout"
-      subTitle="Are you sure you want to log out?"
-      type="User"
-      removeAction={handleConfirmLogout}
-    />
+   
   </>
 
   )

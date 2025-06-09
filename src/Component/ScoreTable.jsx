@@ -9,6 +9,7 @@ import PageLoader from './common/pageLoader';
 import svg from './common/svg';
 import ConfirmationPopup from './common/confirmPopup';
 import { toast } from 'react-toastify';
+import Logout from './common/logout';
 
 const ScoreTable = () => {
   // State management
@@ -18,7 +19,6 @@ const ScoreTable = () => {
   const [loading, setLoading] = useState(true);
   const [showPDF, setShowPDF] = useState(false);
   const [numberOfCols, setNumberOfCols] = useState(0);
-  const [isRemove, setIsRemove] = useState(false);
   const [isCreateNew, setIsCreateNew] = useState(false);
   const [loadingClass, setLoadingClass] = useState('');
   const [status, setStatus] = useState("complete");
@@ -48,29 +48,7 @@ const ScoreTable = () => {
 
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userData');
-    localStorage.removeItem('currentBall');
-    localStorage.removeItem('currentSkinIndex');
-    localStorage.removeItem('isSet');
-    localStorage.removeItem('matchId');
-    localStorage.removeItem('matchInfo');
-    localStorage.removeItem('previousBall');
-    localStorage.removeItem('team1ScoreData');
-    localStorage.removeItem('team2ScoreData');
-    localStorage.removeItem('consecutiveZerosCount');
-    navigate('/login');
-  };
-
-  const handleLogoutClick = () => {
-    setIsRemove(true);
-  };
-
-  const handleConfirmLogout = () => {
-    logout();
-    setIsRemove(false);
-  };
+ 
 
   const handleInputFocus = (value, fieldKey) => {
     setFocusedFieldKey(fieldKey);
@@ -98,7 +76,6 @@ const ScoreTable = () => {
   };
 
   const handleCancelPopup = () => {
-    setIsRemove(false);
     setIsCreateNew(false);
   };
 
@@ -158,7 +135,7 @@ const ScoreTable = () => {
         }
       });
 
-      const { matchInfo: matchData, team1Data: team1Response, team2Data: team2Response } = response.data.data;
+      const { matchInfo: matchData, team1Data: team1Response, team2Data: team2Response } = response.data.data; 
 
       if (matchData) {
         setMatchInfo(matchData);
@@ -982,7 +959,7 @@ const ScoreTable = () => {
                   </button>
                 )}
                 <button type="submit" className="box_cric_btn" onClick={() => setIsCreateNew(true)} > {svg.app.create} Create New Match</button>
-                <button type="submit" className="box_cric_btn box_cric_btn_logout" onClick={handleLogoutClick} > {svg.app.logout} Log Out</button>
+                <Logout />
               </div>
             </div>
 
@@ -998,14 +975,7 @@ const ScoreTable = () => {
       }
 
 
-      <ConfirmationPopup
-        shownPopup={isRemove}
-        closePopup={handleCancelPopup}
-        title="Confirm Logout"
-        subTitle="Are you sure you want to log out?"
-        type="User"
-        removeAction={handleConfirmLogout}
-      />
+    
 
       <ConfirmationPopup
         shownPopup={isCreateNew}

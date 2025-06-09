@@ -8,6 +8,8 @@ import Display from './Component/Display';
 import Signup from './Component/Singup';
 import Login from './Component/Login';
 import Users from './Component/admin/Users.js'
+import NotFound from './NotFound';
+import MatchesList from './Component/admin/MatchesList';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -38,6 +40,9 @@ const App = () => {
           <Route path="/display" element={<Display />} />
 
            <Route path="/admin/users" element={<Users />} />
+           <Route path="/admin/matchList" element={<MatchesList />} />
+
+           <Route path="*" element={<NotFound />} />
 
         </Routes>
       </BrowserRouter>
