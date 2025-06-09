@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import Select from 'react-select';
-import moment from 'moment';
+import { toast } from 'react-toastify';
 import svg from '../common/svg';
 import ConfirmationPopup from '../common/confirmPopup';
 import PageLoader from '../common/pageLoader';
@@ -28,13 +28,7 @@ const Users = (props) => {
     const [page, setPage] = useState(1);
     const [hasSubmittedSearch, setHasSubmittedSearch] = useState(false);
 
-    const [customerList, setcustomerList] = useState([
-        { id: 1, name: 'manish', email: 'YV9G2@example.com', matches: 4, status: 'active', createdAt: '2023-01-01' },
-        { id: 2, name: 'manish', email: 'YV9G2@example.com', matches: 14, status: 'active', createdAt: '2023-01-01' },
-        { id: 3, name: 'manish', email: 'YV9G2@example.com', matches: 5, status: 'active', createdAt: '2023-01-01' },
-        { id: 4, name: 'manish', email: 'YV9G2@example.com', matches: 8, status: 'inactive', createdAt: '2023-01-01' },
-        { id: 5, name: 'manish', email: 'YV9G2@example.com', matches: 21, status: 'active', createdAt: '2023-01-01' },
-    ])
+    const [customerList, setcustomerList] = useState([])
 
     const statusOption = [
         { value: 'active', label: 'Active' },
@@ -46,25 +40,30 @@ const Users = (props) => {
         loadUserData();
     }, []);
 
-    const loadUserData = () => {
+    const loadUserData = async () => {
+        setLoading(true)
         try {
             let token = localStorage.getItem('authToken');
             const DEV_API = process.env.REACT_APP_DEV_API;
 
-            let responce = axios.get(`${DEV_API}/api/getalluser`, {
+            let responce = await axios.get(`${DEV_API}/api/getalluser`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-            }).catch((error) => console.log(error));
-
-            if (responce.status === 200) {
-                setcustomerList(responce.data.data);
-                setLoading(false);
+            })
+            
+            if (responce.data.status === 200) {
+                console.log("data", responce?.data?.data);
+                setcustomerList(responce?.data?.data);
+                // toast.success(responce?.data?.message);
             }
 
 
         } catch (error) {
-
+            console.log("Error", error);
+        }
+        finally {
+            // setLoading(true)
         }
 
     }
@@ -95,7 +94,57 @@ const Users = (props) => {
         setLoading(true);
     };
 
-    const addUSer = () => {
+    const validateForm = (formData) => {
+        const newErrors = {};
+
+        // Check for empty values
+        if (!formData.name.trim()) {
+            newErrors.name = 'Name is required';
+        }
+
+        // Email validation
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Please enter a valid email address';
+        }
+
+        // Password validation
+        if (!formData.password) {
+            newErrors.password = 'Password is required';
+        } else if (formData.password.length < 6) {
+            newErrors.password = 'Password must be at least 6 characters long';
+        }
+        toast.error(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const addUSer = async (e) => {
+        e.preventDefault();
+
+        let formData = {
+            name: fullname,
+            email: email,
+            password: password
+        }
+         const DEV_API = process.env.REACT_APP_DEV_API;
+
+        if (validateForm(formData)) {
+            try {
+                const response = await axios.post(`${DEV_API}/api/signup`, formData);
+                if (response.data.status === 201) {
+                    loadUserData();
+                    toast.success(response?.data?.message);
+                    categoryPopupCloseHandler();
+                    setAddCategoryPopup(false);                   
+
+                }
+            } catch (error) {
+                console.error('Error signing up:', error);
+                toast.error(error?.response?.data?.message);                
+            }
+        }
+
 
     }
 
@@ -113,44 +162,42 @@ const Users = (props) => {
     };
 
     const UpdateStatus = (row, index) => {
-        
-        const updatedList = customerList.map(user => {
-            if (user.id === row.id) {
-                return {
-                    ...user,
-                    status: user.status === 'active' ? 'inactive' : 'active'
-                };
-            }
-            return user;
-        });
-
-        
-        setcustomerList(updatedList);
 
         try {
             const token = localStorage.getItem('authToken');
+
             const DEV_API = process.env.REACT_APP_DEV_API;
-            let userId = customerList.id
-            let status = customerList.status === 'active' ? 'inactive' : 'active'
+            let userId = customerList[index]?._id
+            let status = customerList[index]?.status === 'active' ? 'inactive' : 'active'
 
             axios.post(`${DEV_API}/api/activeInactiveUser`, {
-               userId,
-               status
+                userId,
+                status
             }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             }).then((res) => {
                 if (res.status === 200) {
-                    // loadUserData();
                     console.log(res.data.message);
-                    
+
+                    const updatedList = customerList.map(user => {
+                        if (user._id === row._id) {
+                            return {
+                                ...user,
+                                status: user.status === 'active' ? 'inactive' : 'active'
+                            };
+                        }
+                        return user;
+                    });
+                    setcustomerList(updatedList);
                 }
             }).catch((error) => console.log(error));
 
         } catch (error) {
             console.error('Error updating status:', error);
         }
+
     };
 
     const clearSearch = () => {
@@ -177,16 +224,15 @@ const Users = (props) => {
 
         {
             name: 'No of Matches',
-
-            selector: row => row?.matches,
-            sortable: false
+            selector: row => row?.matchCount,
+            sortable: true
         },
 
 
         {
             name: 'Status',
 
-            sortable: false,
+            sortable: true,
             cell: (row, index) => (
                 <>
                     <div className='d-flex align-items-center gap-2'>
@@ -233,6 +279,7 @@ const Users = (props) => {
         setUserId('');
         setFullName('');
         setEmail('');
+        setPassword('');
     };
 
     const showHidePassword = () => {
@@ -242,6 +289,8 @@ const Users = (props) => {
             setShowPassword(true);
         }
     }
+
+
 
     return (
         <>
@@ -268,7 +317,7 @@ const Users = (props) => {
                                             name="status"
                                             options={statusOption}
                                         // onChange={(selectedStatusOption) => {
-                                        //     setSelectedStatus(selectedStatusOption); 
+                                        //     setSelectedStatus(selectedStatusOption);
                                         // }}
                                         />
                                     </div>
@@ -285,7 +334,7 @@ const Users = (props) => {
                                         <span className="pu_search_icon">{svg.app.dash_search_icon}</span>
                                     </div>
                                 </li>
-                                <li className='skipg_page_header_custm_title_btn_hide'><button className="box_cric_btn" onClick={() => setAddCategoryPopup(!addCategoryPopup)}>+ Add User</button></li>
+                                <li className='skipg_page_header_custm_title_btn_hide'><button className="box_cric_btn" onClick={() => setAddCategoryPopup((prev) => !prev)}>+ Add User</button></li>
                                 <li className='skipg_page_header_custm_title_btn_hide'><button className="box_cric_btn" onClick={() => logout()}>Log out</button></li>
 
                             </ul>
@@ -312,7 +361,7 @@ const Users = (props) => {
                 show={addCategoryPopup}
                 onClose={categoryPopupCloseHandler}
             >
-                <form onSubmit={""} autoComplete='off'>
+                <form onSubmit={addUSer} autoComplete='off'>
                     <div className="skipg_input_wrapper">
                         <label className='skipg_form_input_label '>Name</label>
                         <input type="text" className="form-control " placeholder="Full Name" name="fullname" value={fullname} onChange={(e) => setFullName(e.target.value)} />
@@ -338,7 +387,7 @@ const Users = (props) => {
                         </div>
 
                     </div>
-                    <li className='skipg_page_header_custm_title_btn_hide'><button className="box_cric_btn" onClick={() => addUSer()}>Add User</button></li>
+                    <li className='skipg_page_header_custm_title_btn_hide'><button className="box_cric_btn" type='submit' >Add User</button></li>
                 </form>
             </Popup>
 
