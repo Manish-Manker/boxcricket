@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
-import DataTable from 'react-data-table-component';
+import DataTable, { Alignment } from 'react-data-table-component';
 import Select from 'react-select';
 import moment from 'moment';
 import svg from '../common/svg';
@@ -21,12 +21,13 @@ const MatchesList = (props) => {
     const [isEdit, setIsEdit] = useState(false);
     const [customerList, setCustomerList] = useState('');
     const [loading, setLoading] = useState(true);
-    const [totalRows, setTotalRows] = useState(0);
+    const [totalRows, setTotalRows] = useState(10);
     const [perPage, setPerPage] = useState(10);
-    const [search, setSearch] = useState('');
     const [statusChange, setStatusChange] = useState(false);
     const [page, setPage] = useState(1);
-    const [hasSubmittedSearch, setHasSubmittedSearch] = useState(false);
+
+    const [filterCustomerList, setfilterCustomerList] = useState([])
+    const [isFilter, setIsFilter] = useState(false);
 
 
     const loadData = async () => {
@@ -34,7 +35,7 @@ const MatchesList = (props) => {
         let userId = localStorage.getItem('userId')
         let token = localStorage.getItem('authToken');
         const DEV_API = process.env.REACT_APP_DEV_API;
-
+        setLoading(true);
         let responce = await axios.get(`${DEV_API}/api/userwisematch/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -42,6 +43,7 @@ const MatchesList = (props) => {
         })
 
         if (responce.data.status === 200) {
+            setLoading(false);
             console.log("data", responce?.data?.data);
             setCustomerList(responce?.data?.data);
         }
@@ -51,12 +53,6 @@ const MatchesList = (props) => {
         loadData();
     }, [])
 
-
-
-
-    const handleUpdateStatus = () => {
-        setStatusChange(true);
-    };
 
 
 
@@ -74,31 +70,10 @@ const MatchesList = (props) => {
 
 
 
-    const handleSearchKeyupEvent = (e) => {
-        const searchValue = e.target.value;
-        setSearch(searchValue);
-        if (e.keyCode === 13) {
-            const trimmedValue = searchValue.trim();
-            if (trimmedValue) {
-                setHasSubmittedSearch(true);
-                // fetchCustomers(1, perPage, false, searchValue);
-            }
-        }
-    };
-
-    const clearSearch = () => {
-        setSearch("");
-        if (hasSubmittedSearch) {
-            // fetchCustomers(1, perPage, false, "");
-            setHasSubmittedSearch(false);
-        }
-    };
-
-
     const statusOption = [
         { value: 'completed', label: 'Completed' },
         { value: 'ongoing', label: 'Ongoing' },
-        { value: 'canceled', label: 'Canceled' },
+        { value: 'cancel', label: 'Canceled' },
     ]
     const renderMatchStatus = (status) => {
         let statusClass;
@@ -196,15 +171,43 @@ const MatchesList = (props) => {
         }
     }
 
+    const handleBackClick = () => {
+        window.history.go(-1);
+    };
+
+
+    const applyFilters = (selectedStatusOption) => {
+        const status = selectedStatusOption?.value;
+        const filteredData = customerList.filter(user => {
+            const matchStatus = status ? user.status === status : true;
+            return matchStatus;
+        });
+        setfilterCustomerList(filteredData);
+        setIsFilter(status ? true : false);
+    };
+
     return (
         <>
-            <div className='ps_table_box p-4'>
-                <div className="ps-table-design">
+            <div className='ps_table_box '>
+
+                <div className=" box_cric_score_all_btn box_cric_btn_score justify-content-between px-4">
+
+                    <div>
+                        <div className='box_cric_back_btn' onClick={handleBackClick}>
+                            {svg.app.back_icon} Back
+                        </div>
+                    </div>
+                    <div className='box_cric_score_all_btn m-0'>
+
+                        <Logout />
+                    </div>
+                </div>
+                <div className="ps-table-design m-4">
 
                     <div className="pu_datatable_wrapper skipg_dash_table">
                         <div className='page_tittle_head fwrap'>
                             <div className="box_cric_team_heading">
-                                <h3 className="m-0">Matches List</h3>
+                                <h3 className="m-0">{localStorage.getItem('userName') || ''} -  Matches List</h3>
                             </div>
 
                             <ul className="pu_pagetitle_right width_100_sc1448">
@@ -220,34 +223,20 @@ const MatchesList = (props) => {
                                             isSearchable={false}
                                             name="status"
                                             options={statusOption}
-                                        // onChange={(selectedStatusOption) => {
-                                        //     setSelectedStatus(selectedStatusOption); 
-                                        // }}
+                                            onChange={(selectedStatusOption) => {
+                                                applyFilters(selectedStatusOption);
+                                            }}
                                         />
                                     </div>
                                 </li>
-
-                                <li>
-
-                                    <div className="pu_search_wrapper">
-                                        <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={handleSearchKeyupEvent} />
-                                        {search.length > 0 && (
-                                            <span className="pu_clear_icon" onClick={clearSearch}>
-                                                {svg.app.clear_icon}
-                                            </span>
-                                        )}
-                                        <span className="pu_search_icon">{svg.app.dash_search_icon}</span>
-                                    </div>
-                                </li>
-                                <li className='skipg_page_header_custm_title_btn_hide'> <Logout /></li>
 
                             </ul>
                         </div>
                         <div className=''>
                             <DataTable
                                 columns={columns}
-                                data={customerList}
-                                progressPending={!loading}
+                                 data={isFilter ? filterCustomerList :  customerList}
+                                progressPending={loading}
                                 pagination
                                 paginationServer
                                 paginationTotalRows={totalRows}

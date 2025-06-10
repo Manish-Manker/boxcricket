@@ -28,8 +28,11 @@ const Users = (props) => {
     const [statusChange, setStatusChange] = useState(false);
     const [page, setPage] = useState(1);
     const [hasSubmittedSearch, setHasSubmittedSearch] = useState(false);
-
+    const [userToChangeStatus, setUserToChangeStatus] = useState(null);
+    const [filterCustomerList, setfilterCustomerList] = useState([])
     const [customerList, setcustomerList] = useState([])
+    const [isFilter, setIsFilter] = useState(false)
+    const [SelectedStatus, setSelectedStatus] = useState('');
 
     const statusOption = [
         { value: 'active', label: 'Active' },
@@ -38,12 +41,15 @@ const Users = (props) => {
 
 
     useEffect(() => {
-        loadUserData();
-    }, []);
+        loadUserData(page, perPage);
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userName');
+    }, [page, perPage]);
 
     const loadUserData = async () => {
-
+        setLoading(true)
         try {
+
             let token = localStorage.getItem('authToken');
             const DEV_API = process.env.REACT_APP_DEV_API;
 
@@ -54,8 +60,10 @@ const Users = (props) => {
             })
 
             if (responce.data.status === 200) {
+                setLoading(false);
                 console.log("data", responce?.data?.data);
                 setcustomerList(responce?.data?.data);
+                setTotalRows(responce.data.data.total);
             }
 
 
@@ -71,34 +79,46 @@ const Users = (props) => {
         // fetchCustomers(page, perPage, false, search);
     };
 
-    const handlePerRowsChange = async (newPerPage, page) => {
-        setPerPage(newPerPage);
-        setLoading(true);
+    const handlePerRowsChange = (newPerPage, page) => {
+        setPerPage(newPerPage); // Update the number of rows per page
+        setPage(1); // Reset to page 1
+        // Optionally, you can load data or adjust based on this change
+        loadUserData(); // Adjust this to refetch data if needed
     };
 
-    const validateForm = (formData) => {
+    const validateForm = (formData, isUpdate = false) => {
         const newErrors = {};
+        const errorMessages = [];
 
         // Check for empty values
         if (!formData.name.trim()) {
             newErrors.name = 'Name is required';
+            errorMessages.push(newErrors.name);
         }
 
         // Email validation
         if (!formData.email.trim()) {
             newErrors.email = 'Email is required';
+            errorMessages.push(newErrors.email);
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
             newErrors.email = 'Please enter a valid email address';
+            errorMessages.push(newErrors.email);
         }
 
-        // Password validation
-        if (!formData.password) {
+        // Password validation only for adding user
+        if (!isUpdate && !formData.password) {
             newErrors.password = 'Password is required';
-        } else if (formData.password.length < 6) {
+            errorMessages.push(newErrors.password);
+        } else if (!isUpdate && formData.password.length < 6) {
             newErrors.password = 'Password must be at least 6 characters long';
+            errorMessages.push(newErrors.password);
         }
-        toast.error(newErrors);
-        return Object.keys(newErrors).length === 0;
+
+        if (errorMessages.length > 0) {
+            toast.error(errorMessages.join(', ')); // Show all error messages in a single toast
+        }
+
+        return Object.keys(newErrors).length === 0; // Return true if there are no errors
     };
 
     const addUSer = async (e) => {
@@ -113,8 +133,10 @@ const Users = (props) => {
 
         if (validateForm(formData)) {
             try {
+                setLoading(true)
                 const response = await axios.post(`${DEV_API}/api/signup`, formData);
                 if (response.data.status === 201) {
+                    setLoading(false)
                     loadUserData();
                     toast.success(response?.data?.message);
                     categoryPopupCloseHandler();
@@ -132,32 +154,39 @@ const Users = (props) => {
 
     const updateUSer = async (e) => {
         e.preventDefault();
+        let formData = {
+            name: fullname,
+            email: email
+        };
+        if (validateForm(formData, true)) {
+            try {
+                setLoading(true)
+                const token = localStorage.getItem('authToken');
+                const DEV_API = process.env.REACT_APP_DEV_API;
 
-        try {
-            const token = localStorage.getItem('authToken');
-            const DEV_API = process.env.REACT_APP_DEV_API;
-
-            let formData = {
-                name: fullname,
-                email: email
-            }
-
-            let responce = await axios.put(`${DEV_API}/api/edituser/${userId}`, formData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
+                let formData = {
+                    name: fullname,
+                    email: email
                 }
-            })
 
-            if (responce.data.status === 200) {
-                loadUserData();
-                toast.success(responce?.data?.message);
+                let responce = await axios.put(`${DEV_API}/api/edituser/${userId}`, formData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+
+                if (responce.data.status === 200) {
+                    setLoading(false)
+                    loadUserData();
+                    toast.success(responce?.data?.message);
+                }
+
+            } catch (error) {
+                console.log("Error", error);
             }
-
-        } catch (error) {
-            console.log("Error", error);
-        }
-        finally{
-            setAddCategoryPopup(false);
+            finally {
+                setAddCategoryPopup(false);
+            }
         }
     }
 
@@ -174,44 +203,39 @@ const Users = (props) => {
         }
     };
 
-    const UpdateStatus = (row, index) => {
+    const handleStatusChangeClick = (user) => {
+        setUserToChangeStatus(user); // Store user data for confirmation
+        setStatusChange(true); // Show confirmation popup
+    };
+
+    const confirmStatusChange = async (user) => {
+        const token = localStorage.getItem('authToken');
+        const DEV_API = process.env.REACT_APP_DEV_API;
+
+        let updatedStatus = user.status === 'active' ? 'inactive' : 'active';
 
         try {
-            const token = localStorage.getItem('authToken');
-
-            const DEV_API = process.env.REACT_APP_DEV_API;
-            let userId = customerList[index]?._id
-            let status = customerList[index]?.status === 'active' ? 'inactive' : 'active'
-
-            axios.post(`${DEV_API}/api/activeInactiveUser`, {
-                userId,
-                status
+            const response = await axios.post(`${DEV_API}/api/activeInactiveUser`, {
+                userId: user._id,
+                status: updatedStatus
             }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-            }).then((res) => {
-                if (res.status === 200) {
-                    console.log(res.data.message);
+            });
 
-                    const updatedList = customerList.map(user => {
-                        if (user._id === row._id) {
-                            return {
-                                ...user,
-                                status: user.status === 'active' ? 'inactive' : 'active'
-                            };
-                        }
-                        return user;
-                    });
-                    setcustomerList(updatedList);
-                    toast.success(res.data.message);
-                }
-            }).catch((error) => console.log(error));
-
+            if (response.status === 200) {
+                setcustomerList(prevState =>
+                    prevState.map(u => u._id === user._id ? { ...u, status: updatedStatus } : u)
+                );
+                toast.success(response.data.message);
+            }
         } catch (error) {
-            console.error('Error updating status:', error);
+            toast.error("Failed to change user status: " + error.response?.data?.message || "Unknown error");
+        } finally {
+            setStatusChange(false); // Close confirmation popup
+            setUserToChangeStatus(null); // Clear user data
         }
-
     };
 
     const clearSearch = () => {
@@ -227,12 +251,13 @@ const Users = (props) => {
         setEmail(user.email);
         setUserId(user._id);
         setIsEdit(true);
-        setAddCategoryPopup(true);        
+        setAddCategoryPopup(true);
     };
 
 
-    const viewMatches = (userId) => {
-        localStorage.setItem('userId', userId);
+    const viewMatches = (user) => {
+        localStorage.setItem('userId', user._id);
+        localStorage.setItem('userName', user.name);
         navigate(`/admin/matchList`);
     };
 
@@ -264,7 +289,7 @@ const Users = (props) => {
             cell: (row, index) => (
                 <>
                     <div className='pu_datatable_btns '>
-                        <a onClick={() => viewMatches(row._id)} className="pu_dt_btn ">
+                        <a onClick={() => viewMatches(row)} className="pu_dt_btn ">
                             {svg.app.view_icon}
                         </a>
                     </div>
@@ -288,7 +313,8 @@ const Users = (props) => {
                                     className="tooltiped"
                                     id={`status-${row._id}`}
                                     checked={row.status === 'active'}
-                                    onChange={() => UpdateStatus(row, index)}
+                                    onChange={() => handleStatusChangeClick(row)}
+                                // onChange={() => UpdateStatus(row, index)}
                                 />
                                 <span className="switch-status"></span>
                             </label>
@@ -329,6 +355,26 @@ const Users = (props) => {
 
 
 
+    const applyFilters = () => {
+        const username = search.trim().toLowerCase();
+        const status = SelectedStatus;
+
+        const filteredData = customerList.filter(user => {
+            const matchUsername = username ? user.name.toLowerCase().includes(username) : true;
+            const matchStatus = status ? user.status === status : true;
+
+            return matchUsername && matchStatus;
+        });
+
+        setfilterCustomerList(filteredData);
+        setIsFilter(username || status ? true : false);
+    };
+
+    useEffect(() => {
+        applyFilters();
+    }, [search, SelectedStatus]);
+
+
     return (
         <>
             <div className='ps_table_box p-4'>
@@ -353,16 +399,16 @@ const Users = (props) => {
                                             isSearchable={false}
                                             name="status"
                                             options={statusOption}
-                                        // onChange={(selectedStatusOption) => {
-                                        //     setSelectedStatus(selectedStatusOption);
-                                        // }}
+                                            onChange={(selectedStatusOption) => {
+                                                setSelectedStatus(selectedStatusOption?.value);
+                                            }}
                                         />
                                     </div>
                                 </li>
 
                                 <li>
                                     <div className="pu_search_wrapper">
-                                        <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={handleSearchKeyupEvent} />
+                                        <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target?.value)} onKeyUp={handleSearchKeyupEvent} />
                                         {search.length > 0 && (
                                             <span className="pu_clear_icon" onClick={clearSearch}>
                                                 {svg.app.clear_icon}
@@ -379,14 +425,16 @@ const Users = (props) => {
                         <div className=''>
                             <DataTable
                                 columns={columns}
-                                data={customerList}
-                                progressPending={!loading}
+                                data={isFilter ? filterCustomerList : customerList}
+                                progressPending={loading}
                                 pagination
                                 paginationServer
                                 paginationTotalRows={totalRows}
                                 onChangeRowsPerPage={handlePerRowsChange}
-                                onChangePage={handlePageChange}
+                                onChangePage={(page) => setPage(page)}
                                 progressComponent={<PageLoader />}
+                                //  striped={true} 
+                                highlightOnHover={true}
                             />
                         </div>
                     </div>
@@ -408,7 +456,7 @@ const Users = (props) => {
                         <input type="text" className="form-control " placeholder="Email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
 
-                    <div className='d-flex align-items-center gap-2 '>
+                    {isEdit ? "" : <div className='d-flex align-items-center gap-2 '>
                         <div className="skipg_input_wrapper w-100">
                             <label className='skipg_form_input_label '>Password</label>
                             <div className='skipg_password_show' onClick={() => showHidePassword()}>{showPassword ? svg.app.eye_open_icon : svg.app.eye_close_icon}</div>
@@ -423,18 +471,20 @@ const Users = (props) => {
                             />
                         </div>
 
-                    </div>
+                    </div>}
                     <button className="box_cric_btn" type='submit' >{isEdit ? "Update User" : "Add User"}</button>
                 </form>
             </Popup>
 
+
+
             <ConfirmationPopup
                 shownPopup={!!statusChange}
                 closePopup={() => setStatusChange(false)}
+                title="Confirm Status Change"
+                subTitle={`Are you sure you want to change the status of ${userToChangeStatus?.name}?`}
                 type={"User"}
-                removeAction={() => {
-                    setStatusChange(false);
-                }}
+                removeAction={() => userToChangeStatus && confirmStatusChange(userToChangeStatus)}
             />
 
         </>

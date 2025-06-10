@@ -1192,7 +1192,7 @@ h6 {
 
 
 .ps_admin_table_status .ps_match_status_bg {
-   min-height: 42px;
+    min-height: 42px;
     border-radius: 50px;
     line-height: 1.4;
     width: 150px;
@@ -1382,7 +1382,7 @@ h6 {
 .ps-complete-bg {
     color: var(--bc-green);
     background-color: #0dcd941a !important;
-    border-color:  var(--bc-green) !important;
+    border-color: var(--bc-green) !important;
 }
 
 .ps-pending {
@@ -1392,7 +1392,7 @@ h6 {
 .ps-pending-bg {
     color: var(--bc-red);
     background-color: #f349321a !important;
-     border-color:  var(--bc-red) !important;
+    border-color: var(--bc-red) !important;
 }
 
 .ps-cancel {
@@ -1401,8 +1401,8 @@ h6 {
 
 .ps-cancel-bg {
     color: var(--bc-gray);
- border-color:  var(--bc-gray) !important;
-    background-color: #ececec !important; 
+    border-color: var(--bc-gray) !important;
+    background-color: #ececec !important;
 }
 
 .ps-process {
@@ -1411,7 +1411,7 @@ h6 {
 
 .ps-process-bg {
     color: var(--bc-primary-color);
-    border-color:  var(--bc-primary-color) !important;
+    border-color: var(--bc-primary-color) !important;
     background-color: #fffaf5 !important;
 }
 
@@ -1529,9 +1529,10 @@ h6 {
 }
 
 .select__option--is-focused {
-    background-color:var(--bc-primary-color) !important;;
+    background-color: #f1f1ff !important;
+    ;
     border-radius: 3px !important;
-    color: var(--color-text) !important;
+    color: #353535 !important;
 }
 
 .pu_datatable_wrapper .rdt_TableCell {
@@ -1540,6 +1541,18 @@ h6 {
     color: #434347;
 }
 
+.pu_clear_icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.pu_clear_icon svg path {
+    fill: #acacac;
+}
 
 /* admin section */
 
@@ -1715,7 +1728,7 @@ h6 {
 }
 
 .skipg_input_wrapper input {
-   padding: 15px 15px 15px 20px;
+    padding: 15px 15px 15px 20px;
     position: relative;
     height: 60px;
     border-radius: 10px;
@@ -1739,6 +1752,7 @@ h6 {
     box-shadow: 0 4px 19.2px .8px #ff9c4a17;
     border: 1px solid var(--bc-primary-color);
 }
+
 .skipg_input_wrapper form label {
     margin-bottom: 7px;
     font-size: 15px;
@@ -1798,7 +1812,9 @@ h6 {
     min-width: 120px;
     flex-grow: 1;
 }
-.select__indicator-separator, .skipg_input_wrapper .select__indicator-separator {
+
+.select__indicator-separator,
+.skipg_input_wrapper .select__indicator-separator {
     display: none;
 }
 
@@ -1875,12 +1891,12 @@ h6 {
 /* not found */
 
 .not-found {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
 }
 
 .erp_404_main h3 {
@@ -1895,7 +1911,7 @@ h6 {
     line-height: 40px;
 }
 
-.erp_404_main .box_cric_btn{
+.erp_404_main .box_cric_btn {
     max-width: fit-content;
     margin: auto;
 }
