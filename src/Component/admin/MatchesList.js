@@ -152,6 +152,8 @@ const MatchesList = (props) => {
             setLoading(true);
             let token = localStorage.getItem('authToken');
             let matchId = row._id;
+            console.log("matchId", matchId);
+            
 
             let responce = await axios.put(`${DEV_API}/api/chnageStatus`, { matchId, status: value },
                 { headers: { 'Authorization': `Bearer ${token}` } });
@@ -195,12 +197,12 @@ const MatchesList = (props) => {
         }
 
         return (<>
-
+{/* 
             <div className='ps_admin_table_status'>
                 <span className={`ps_match_status_bg ${statusClass}`}>{statustext}</span>
-            </div>
+            </div> */}
 
-            {/* <div className='ps_matches_dropd'>
+            <div className='ps_matches_dropd'>
                 <div className='ps_defalt_drop'>
                     <select className={`ps_match_status_box ${statusClass}`} value={status.status} onChange={(event) => handleChange(event, status)} >
                         <option className='ps_match_status_box_select' value="completed">Complete</option>
@@ -208,7 +210,7 @@ const MatchesList = (props) => {
                         <option className='ps_match_status_box_select' value="cancel">Cancel</option>
                     </select>
                 </div>
-            </div> */}
+            </div>
         </>
         )
     }

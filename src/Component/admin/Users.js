@@ -11,7 +11,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import Logout from '../common/logout';
 
-const Users = (props) => {
+const Users = () => {
     const [fullname, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -32,9 +32,7 @@ const Users = (props) => {
     const [statusChange, setStatusChange] = useState(false);
     const [hasSubmittedSearch, setHasSubmittedSearch] = useState(false);
     const [userToChangeStatus, setUserToChangeStatus] = useState(null);
-    const [filterCustomerList, setfilterCustomerList] = useState([])
     const [customerList, setcustomerList] = useState([])
-    const [isFilter, setIsFilter] = useState(false)
     const [SelectedStatus, setSelectedStatus] = useState('');
 
     const statusOption = [
@@ -44,40 +42,34 @@ const Users = (props) => {
 
 
     useEffect(() => {
-        loadUserData(page, perPage);
+        loadUserData(page, perPage, SelectedStatus, search);
         localStorage.removeItem('userId');
         localStorage.removeItem('userName');
-    }, [page, perPage]);
+    }, [page, perPage, SelectedStatus, search]);
 
-    const loadUserData = async (page, perPage) => {
+    const loadUserData = async (page, perPage, status, search) => {
+
         setLoading(true)
         try {
-
             let token = localStorage.getItem('authToken');
             const DEV_API = process.env.REACT_APP_DEV_API;
 
-            let responce = await axios.post(`${DEV_API}/api/getalluser`, { page, perPage }, {
+            let responce = await axios.post(`${DEV_API}/api/getalluser`, { page, perPage, status, search }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             })
-
             if (responce.data.status === 200) {
                 setLoading(false);
                 console.log("data", responce?.data?.data);
                 let totalUsers = responce?.data?.totalUsers
                 let data = responce?.data?.data
-                // let pagedata = data.slice((page - 1) * perPage, page * perPage);
-
                 setcustomerList(data);
                 setTotalRows(totalUsers);
             }
-
-
         } catch (error) {
             console.log("Error", error);
         }
-
     }
 
 
@@ -116,10 +108,9 @@ const Users = (props) => {
         }
 
         if (errorMessages.length > 0) {
-            toast.error(errorMessages.join(', ')); // Show all error messages in a single toast
+            toast.error(errorMessages.join(', ')); 
         }
-
-        return Object.keys(newErrors).length === 0; // Return true if there are no errors
+        return Object.keys(newErrors).length === 0;
     };
 
     const addUSer = async (e) => {
@@ -142,7 +133,6 @@ const Users = (props) => {
                     toast.success(response?.data?.message);
                     categoryPopupCloseHandler();
                     setAddCategoryPopup(false);
-
                 }
             } catch (error) {
                 console.error('Error signing up:', error);
@@ -169,7 +159,6 @@ const Users = (props) => {
                     name: fullname,
                     email: email
                 }
-
                 let responce = await axios.put(`${DEV_API}/api/edituser/${userId}`, formData, {
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -181,7 +170,6 @@ const Users = (props) => {
                     loadUserData();
                     toast.success(responce?.data?.message);
                 }
-
             } catch (error) {
                 console.log("Error", error);
             }
@@ -199,14 +187,13 @@ const Users = (props) => {
             const trimmedValue = searchValue.trim();
             if (trimmedValue) {
                 setHasSubmittedSearch(true);
-                // fetchCustomers(1, perPage, false, searchValue);
             }
         }
     };
 
     const handleStatusChangeClick = (user) => {
-        setUserToChangeStatus(user); // Store user data for confirmation
-        setStatusChange(true); // Show confirmation popup
+        setUserToChangeStatus(user);
+        setStatusChange(true);
     };
 
     const confirmStatusChange = async (user) => {
@@ -226,9 +213,7 @@ const Users = (props) => {
             });
 
             if (response.status === 200) {
-                setcustomerList(prevState =>
-                    prevState.map(u => u._id === user._id ? { ...u, status: updatedStatus } : u)
-                );
+                loadUserData(page, perPage, SelectedStatus, search);
                 toast.success(response.data.message);
             }
         } catch (error) {
@@ -355,27 +340,6 @@ const Users = (props) => {
     }
 
 
-
-    const applyFilters = () => {
-        const username = search.trim().toLowerCase();
-        const status = SelectedStatus;
-
-        const filteredData = customerList.filter(user => {
-            const matchUsername = username ? user.name.toLowerCase().includes(username) : true;
-            const matchStatus = status ? user.status === status : true;
-
-            return matchUsername && matchStatus;
-        });
-
-        setfilterCustomerList(filteredData);
-        setIsFilter(username || status ? true : false);
-    };
-
-    useEffect(() => {
-        applyFilters();
-    }, [search, SelectedStatus]);
-
-
     return (
         <>
             <div className='ps_table_box p-4'>
@@ -426,7 +390,7 @@ const Users = (props) => {
                         <div className=''>
                             <DataTable
                                 columns={columns}
-                                data={isFilter ? filterCustomerList : customerList}
+                                data={customerList}
                                 progressPending={loading}
                                 pagination
                                 paginationServer
