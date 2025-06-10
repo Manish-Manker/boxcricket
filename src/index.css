@@ -1192,16 +1192,16 @@ h6 {
 
 
 .ps_admin_table_status .ps_match_status_bg {
-    min-height: 42px;
+    min-height: 40px;
     border-radius: 50px;
     line-height: 1.4;
-    width: 150px;
+    width: 125px;
     font-size: 14px;
     letter-spacing: 0;
     text-transform: uppercase;
-    font-weight: 700;
+    font-weight: 600;
     transition: ease-in-out .5s;
-    padding: 0 25px 0px 15px;
+    padding: 0 15px 0px 15px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1289,6 +1289,17 @@ h6 {
     border-radius: 5px;
     padding: 1rem;
     padding-right: 15px;
+}
+
+.ps_matches_dropd .ps_defalt_drop select {
+     padding: 8px !important;
+      background-position-x: 100%;
+    background-position-y: 8px !important;
+}
+
+.ps_matches_dropd .ps_match_status_box {
+    min-height: 40px !important;
+    font-size: 14px !important;
 }
 
 
@@ -1530,7 +1541,6 @@ h6 {
 
 .select__option--is-focused {
     background-color: #f1f1ff !important;
-    ;
     border-radius: 3px !important;
     color: #353535 !important;
 }

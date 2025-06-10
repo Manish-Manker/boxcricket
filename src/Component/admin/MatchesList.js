@@ -12,6 +12,7 @@ import axios from 'axios';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FullMatchPDF from '../FullMatchPDF';
 import { createRoot } from 'react-dom/client';
+import { toast } from 'react-toastify';
 
 const MatchesList = (props) => {
     const [fullname, setFullName] = useState('');
@@ -29,9 +30,11 @@ const MatchesList = (props) => {
     const [page, setPage] = useState(1);
 
     const [statusChange, setStatusChange] = useState(false);
+    const [status, setStatus] = useState('');
 
     const [filterCustomerList, setfilterCustomerList] = useState([])
     const [isFilter, setIsFilter] = useState(false);
+    const DEV_API = process.env.REACT_APP_DEV_API;
 
 
     const loadData = async (page, perPage) => {
@@ -140,11 +143,40 @@ const MatchesList = (props) => {
         { value: 'ongoing', label: 'Ongoing' },
         { value: 'cancel', label: 'Canceled' },
     ]
+
+
+    const handleChange = async (event, row) => {
+        let value = event.target.value;
+
+        try {
+            setLoading(true);
+            let token = localStorage.getItem('authToken');
+            let matchId = row._id;
+
+            let responce = await axios.put(`${DEV_API}/api/chnageStatus`, { matchId, status: value },
+                { headers: { 'Authorization': `Bearer ${token}` } });
+
+            if (responce.status === 200) {
+                toast.success(responce?.data?.message);
+                console.log("praveen", responce.data);
+                setStatus(value);
+                setLoading(false);
+                // navigate('/');
+            } else {
+                toast.error(responce?.data?.message);
+            }
+        } catch (error) {
+            console.log(error);
+            return
+        }
+    };
+
+
     const renderMatchStatus = (status) => {
         let statusClass;
         let statustext;
 
-        switch (status) {
+        switch (status.status) {
             case "completed":
                 statusClass = 'ps-complete-bg';
                 statustext = 'Completed';
@@ -167,6 +199,16 @@ const MatchesList = (props) => {
             <div className='ps_admin_table_status'>
                 <span className={`ps_match_status_bg ${statusClass}`}>{statustext}</span>
             </div>
+
+            {/* <div className='ps_matches_dropd'>
+                <div className='ps_defalt_drop'>
+                    <select className={`ps_match_status_box ${statusClass}`} value={status.status} onChange={(event) => handleChange(event, status)} >
+                        <option className='ps_match_status_box_select' value="completed">Complete</option>
+                        <option className='ps_match_status_box_select' value="ongoing">Ongoing</option>
+                        <option className='ps_match_status_box_select' value="cancel">Cancel</option>
+                    </select>
+                </div>
+            </div> */}
         </>
         )
     }
@@ -200,7 +242,7 @@ const MatchesList = (props) => {
             name: 'Status',
             sortable: false,
             cell: (row) => (
-                renderMatchStatus(row.status)
+                renderMatchStatus(row)
             )
         },
 
@@ -212,10 +254,10 @@ const MatchesList = (props) => {
         },
 
         {
-            name: 'Scorecard',
+            name: 'Action',
             cell: (row) => (
                 <div className="pu_datatable_btns">
-                    <a className="pu_dt_btn" onClick={() => viewMatchesPDF(row)} >{svg.app.view_icon}</a>
+                    <a className="pu_dt_btn" onClick={() => viewMatchesPDF(row)} >{svg.app.pdf_download_icon}</a>
                 </div>
             )
         },
