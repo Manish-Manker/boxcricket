@@ -1,4 +1,4 @@
-"use client";
+
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import Select from 'react-select';
@@ -21,12 +21,15 @@ const Users = (props) => {
     const [isEdit, setIsEdit] = useState(false);
     const navigate = useNavigate();
 
+
     const [loading, setLoading] = useState(true);
-    const [totalRows, setTotalRows] = useState(0);
+
+    const [totalRows, setTotalRows] = useState(10);
     const [perPage, setPerPage] = useState(10);
+    const [page, setPage] = useState(1);
+
     const [search, setSearch] = useState('');
     const [statusChange, setStatusChange] = useState(false);
-    const [page, setPage] = useState(1);
     const [hasSubmittedSearch, setHasSubmittedSearch] = useState(false);
     const [userToChangeStatus, setUserToChangeStatus] = useState(null);
     const [filterCustomerList, setfilterCustomerList] = useState([])
@@ -46,14 +49,14 @@ const Users = (props) => {
         localStorage.removeItem('userName');
     }, [page, perPage]);
 
-    const loadUserData = async () => {
+    const loadUserData = async (page, perPage) => {
         setLoading(true)
         try {
 
             let token = localStorage.getItem('authToken');
             const DEV_API = process.env.REACT_APP_DEV_API;
 
-            let responce = await axios.get(`${DEV_API}/api/getalluser`, {
+            let responce = await axios.post(`${DEV_API}/api/getalluser`, { page, perPage }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -62,8 +65,12 @@ const Users = (props) => {
             if (responce.data.status === 200) {
                 setLoading(false);
                 console.log("data", responce?.data?.data);
-                setcustomerList(responce?.data?.data);
-                setTotalRows(responce.data.data.total);
+                let totalUsers = responce?.data?.totalUsers
+                let data = responce?.data?.data
+                // let pagedata = data.slice((page - 1) * perPage, page * perPage);
+
+                setcustomerList(data);
+                setTotalRows(totalUsers);
             }
 
 
@@ -74,16 +81,10 @@ const Users = (props) => {
     }
 
 
-    const handlePageChange = (page) => {
-        setPage(page);
-        // fetchCustomers(page, perPage, false, search);
-    };
-
     const handlePerRowsChange = (newPerPage, page) => {
-        setPerPage(newPerPage); // Update the number of rows per page
-        setPage(1); // Reset to page 1
-        // Optionally, you can load data or adjust based on this change
-        loadUserData(); // Adjust this to refetch data if needed
+        setPerPage(newPerPage);
+        setPage(1);
+        loadUserData();
     };
 
     const validateForm = (formData, isUpdate = false) => {

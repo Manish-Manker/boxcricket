@@ -1,4 +1,4 @@
-"use client";
+
 import { useEffect, useState } from 'react';
 import DataTable, { Alignment } from 'react-data-table-component';
 import Select from 'react-select';
@@ -23,115 +23,116 @@ const MatchesList = (props) => {
     const [isEdit, setIsEdit] = useState(false);
     const [customerList, setCustomerList] = useState('');
     const [loading, setLoading] = useState(true);
+
     const [totalRows, setTotalRows] = useState(10);
     const [perPage, setPerPage] = useState(10);
-    const [statusChange, setStatusChange] = useState(false);
     const [page, setPage] = useState(1);
+
+    const [statusChange, setStatusChange] = useState(false);
 
     const [filterCustomerList, setfilterCustomerList] = useState([])
     const [isFilter, setIsFilter] = useState(false);
 
 
-    const loadData = async () => {
+    const loadData = async (page, perPage) => {
 
         let userId = localStorage.getItem('userId')
         let token = localStorage.getItem('authToken');
         const DEV_API = process.env.REACT_APP_DEV_API;
         setLoading(true);
-        let responce = await axios.get(`${DEV_API}/api/userwisematch/${userId}`, {
+        let responce = await axios.post(`${DEV_API}/api/userwisematch/${userId}`, { page, perPage }, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
 
         if (responce.data.status === 200) {
+            let data = responce?.data?.data
+            let totalData = responce?.data?.totalData
+            setCustomerList(data);
+            setTotalRows(totalData);
             setLoading(false);
-            console.log("data", responce?.data?.data);
-            setCustomerList(responce?.data?.data);
         }
     }
+
+
 
     useEffect(() => {
-        loadData();
-    }, [])
+        loadData(page, perPage);
+    }, [page, perPage])
 
 
 
 
-    const handlePageChange = (page) => {
-        setPage(page);
-        // fetchCustomers(page, perPage, false, search);
-    };
 
-    const handlePerRowsChange = async (newPerPage, page) => {
+    const handlePerRowsChange = (newPerPage, page) => {
         setPerPage(newPerPage);
-        setLoading(true);
-        // fetchCustomers(page, newPerPage, true);
-        // fetchCustomers(page, newPerPage, true, search);
+        setPage(1);
+        loadData();
     };
 
-  const viewMatchesPDF = async (data) => {
-    let token = localStorage.getItem('authToken');
-    const DEV_API = process.env.REACT_APP_DEV_API;
-    let matchId = data._id
-     let pdfWindow = null;
+    const viewMatchesPDF = async (data) => {
+        let token = localStorage.getItem('authToken');
+        const DEV_API = process.env.REACT_APP_DEV_API;
+        let matchId = data._id
+        let pdfWindow = null;
 
-    try {
-        let response = await axios.get(`${DEV_API}/api/match/${matchId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (response.data.status === 200) {
-            let data = response?.data?.data;
-            let matchInfo = data?.matchInfo;
-            let team1Data = data?.team1Data;
-            let team2Data = data?.team2Data;
-
-            // Create a temporary div to render the PDF
-            const tempDiv = document.createElement('div');
-            const root = createRoot(tempDiv);
-            
-            root.render(
-                <PDFDownloadLink
-                    document={
-                        <FullMatchPDF
-                            matchInfo={matchInfo}
-                            team1Data={team1Data}
-                            team2Data={team2Data}
-                        />
-                    }
-                    fileName="match-details.pdf"
-                >
-                    {({ blob, url, loading, error }) => {
-                        if (!loading && url) {
-                            // Clean up any previous PDF URL
-                            if (pdfWindow && !pdfWindow.closed) {
-                                pdfWindow.close();
-                            }
-                            // Open new PDF in a tab
-                            pdfWindow = window.open(url, '_blank');
-                            // Clean up the URL object to free memory
-                            URL.revokeObjectURL(url);
-                        }
-                        return null;
-                    }}
-                </PDFDownloadLink>
-            );
-
-            // Cleanup function
-            return () => {
-                root.unmount();
-                if (tempDiv.parentNode) {
-                    tempDiv.parentNode.removeChild(tempDiv);
+        try {
+            let response = await axios.get(`${DEV_API}/api/match/${matchId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
-            };
+            });
+
+            if (response.data.status === 200) {
+                let data = response?.data?.data;
+                let matchInfo = data?.matchInfo;
+                let team1Data = data?.team1Data;
+                let team2Data = data?.team2Data;
+
+                // Create a temporary div to render the PDF
+                const tempDiv = document.createElement('div');
+                const root = createRoot(tempDiv);
+
+                root.render(
+                    <PDFDownloadLink
+                        document={
+                            <FullMatchPDF
+                                matchInfo={matchInfo}
+                                team1Data={team1Data}
+                                team2Data={team2Data}
+                            />
+                        }
+                        fileName="match-details.pdf"
+                    >
+                        {({ blob, url, loading, error }) => {
+                            if (!loading && url) {
+                                // Clean up any previous PDF URL
+                                if (pdfWindow && !pdfWindow.closed) {
+                                    pdfWindow.close();
+                                }
+                                // Open new PDF in a tab
+                                pdfWindow = window.open(url, '_blank');
+                                // Clean up the URL object to free memory
+                                URL.revokeObjectURL(url);
+                            }
+                            return null;
+                        }}
+                    </PDFDownloadLink>
+                );
+
+                // Cleanup function
+                return () => {
+                    root.unmount();
+                    if (tempDiv.parentNode) {
+                        tempDiv.parentNode.removeChild(tempDiv);
+                    }
+                };
+            }
+        } catch (error) {
+            console.error("Error generating PDF:", error);
         }
-    } catch (error) {
-        console.error("Error generating PDF:", error);
-    }
-};
+    };
 
 
     const statusOption = [
@@ -305,8 +306,9 @@ const MatchesList = (props) => {
                                 paginationServer
                                 paginationTotalRows={totalRows}
                                 onChangeRowsPerPage={handlePerRowsChange}
-                                onChangePage={handlePageChange}
+                                onChangePage={(page) => setPage(page)}
                                 progressComponent={<PageLoader />}
+                                highlightOnHover={true}
                             />
                         </div>
                     </div>
