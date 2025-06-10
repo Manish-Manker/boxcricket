@@ -377,7 +377,7 @@ const FinalScore = () => {
                             <div className='col-lg-8'>
                                 <div >
                                     <div className="box_cric_team_heading">
-                                        <h3 className="m-0">Last Ball Status</h3>ss
+                                        <h3 className="m-0">Last Ball Status</h3>
                                     </div>
 
                                     <div className="bc_score_box_show_waiting">

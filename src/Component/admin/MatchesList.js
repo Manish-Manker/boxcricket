@@ -9,7 +9,9 @@ import PageLoader from '../common/pageLoader';
 import Popup from '../common/Popup';
 import Logout from '../common/logout';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import FullMatchPDF from '../FullMatchPDF';
+import { createRoot } from 'react-dom/client';
 
 const MatchesList = (props) => {
     const [fullname, setFullName] = useState('');
@@ -68,6 +70,68 @@ const MatchesList = (props) => {
         // fetchCustomers(page, newPerPage, true, search);
     };
 
+  const viewMatchesPDF = async (data) => {
+    let token = localStorage.getItem('authToken');
+    const DEV_API = process.env.REACT_APP_DEV_API;
+    let matchId = data._id
+     let pdfWindow = null;
+
+    try {
+        let response = await axios.get(`${DEV_API}/api/match/${matchId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.data.status === 200) {
+            let data = response?.data?.data;
+            let matchInfo = data?.matchInfo;
+            let team1Data = data?.team1Data;
+            let team2Data = data?.team2Data;
+
+            // Create a temporary div to render the PDF
+            const tempDiv = document.createElement('div');
+            const root = createRoot(tempDiv);
+            
+            root.render(
+                <PDFDownloadLink
+                    document={
+                        <FullMatchPDF
+                            matchInfo={matchInfo}
+                            team1Data={team1Data}
+                            team2Data={team2Data}
+                        />
+                    }
+                    fileName="match-details.pdf"
+                >
+                    {({ blob, url, loading, error }) => {
+                        if (!loading && url) {
+                            // Clean up any previous PDF URL
+                            if (pdfWindow && !pdfWindow.closed) {
+                                pdfWindow.close();
+                            }
+                            // Open new PDF in a tab
+                            pdfWindow = window.open(url, '_blank');
+                            // Clean up the URL object to free memory
+                            URL.revokeObjectURL(url);
+                        }
+                        return null;
+                    }}
+                </PDFDownloadLink>
+            );
+
+            // Cleanup function
+            return () => {
+                root.unmount();
+                if (tempDiv.parentNode) {
+                    tempDiv.parentNode.removeChild(tempDiv);
+                }
+            };
+        }
+    } catch (error) {
+        console.error("Error generating PDF:", error);
+    }
+};
 
 
     const statusOption = [
@@ -146,14 +210,14 @@ const MatchesList = (props) => {
             sortable: true,
         },
 
-        // {
-        //     name: 'Actions',
-        //     cell: (row) => (
-        //         <div className="pu_datatable_btns">
-        //             <a className="pu_dt_btn ">{svg.app.dash_edit}</a>
-        //         </div>
-        //     )
-        // },
+        {
+            name: 'Scorecard',
+            cell: (row) => (
+                <div className="pu_datatable_btns">
+                    <a className="pu_dt_btn" onClick={() => viewMatchesPDF(row)} >{svg.app.view_icon}</a>
+                </div>
+            )
+        },
     ];
 
     const categoryPopupCloseHandler = () => {
@@ -235,7 +299,7 @@ const MatchesList = (props) => {
                         <div className=''>
                             <DataTable
                                 columns={columns}
-                                 data={isFilter ? filterCustomerList :  customerList}
+                                data={isFilter ? filterCustomerList : customerList}
                                 progressPending={loading}
                                 pagination
                                 paginationServer

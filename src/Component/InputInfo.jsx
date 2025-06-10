@@ -18,10 +18,31 @@ const InputInfo = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
+    const user = localStorage.getItem('userData');
     if (!token) {
       navigate('/login');
     }
+    if(token && user && JSON.parse(user).role === 'admin') {
+      navigate('/admin/users');
+    }
+
   }, []);
+
+   const logout = () => {
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('userData');
+          localStorage.removeItem('currentBall');
+          localStorage.removeItem('currentSkinIndex');
+          localStorage.removeItem('isSet');
+          localStorage.removeItem('matchId');
+          localStorage.removeItem('matchInfo');
+          localStorage.removeItem('previousBall');
+          localStorage.removeItem('team1ScoreData');
+          localStorage.removeItem('team2ScoreData');
+          localStorage.removeItem('consecutiveZerosCount');
+          toast.success("Successfully logged out");
+          navigate('/login');
+      };
 
   const setUserMatchData = async () => {
 
@@ -39,7 +60,7 @@ const InputInfo = () => {
         console.log("+-+-+-", response);
 
         // toast.error(response?.data?.message);
-        // logout();
+        logout();
         navigate('/login');
         return
       }
