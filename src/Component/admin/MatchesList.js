@@ -13,6 +13,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import FullMatchPDF from '../FullMatchPDF';
 import { createRoot } from 'react-dom/client';
 import { toast } from 'react-toastify';
+import AdminLayout from './AdminLayout';
 import { useNavigate } from 'react-router-dom'
 
 const MatchesList = (props) => {
@@ -312,26 +313,17 @@ const MatchesList = (props) => {
 
     return (
         <>
-            <div className='ps_table_box '>
 
-                <div className=" box_cric_score_all_btn box_cric_btn_score justify-content-between px-4">
+         <AdminLayout showBackButton={true} onBackClick={handleBackClick} />
+            <div className='ps_table_box ps_admin_p5'>
 
-                    <div>
-                        <div className='box_cric_back_btn' onClick={handleBackClick}>
-                            {svg.app.back_icon} Back
-                        </div>
-                    </div>
-                    <div className='box_cric_score_all_btn m-0'>
-
-                        <Logout />
-                    </div>
-                </div>
-                <div className="ps-table-design m-4">
+                
+                <div className="ps-table-design ">
 
                     <div className="pu_datatable_wrapper skipg_dash_table">
-                        <div className='page_tittle_head fwrap'>
+                        <div className='page_tittle_head fwrap mb-3'>
                             <div className="box_cric_team_heading">
-                                <h3 className="m-0">{localStorage.getItem('userName') || ''} -  Matches List</h3>
+                                <h3 className="m-0"> Matches List - <span>{localStorage.getItem('userName') || ''}</span></h3>
                             </div>
 
                             <ul className="pu_pagetitle_right width_100_sc1448">
