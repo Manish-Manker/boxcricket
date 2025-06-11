@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import DataTable, { Alignment } from 'react-data-table-component';
+import DataTable from 'react-data-table-component';
 import Select from 'react-select';
 import moment from 'moment';
 import svg from '../common/svg';
@@ -13,6 +13,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import FullMatchPDF from '../FullMatchPDF';
 import { createRoot } from 'react-dom/client';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom'
 
 const MatchesList = (props) => {
     const [fullname, setFullName] = useState('');
@@ -35,26 +36,39 @@ const MatchesList = (props) => {
     const [filterCustomerList, setfilterCustomerList] = useState([])
     const [isFilter, setIsFilter] = useState(false);
     const DEV_API = process.env.REACT_APP_DEV_API;
+    const navigate = useNavigate();
 
 
     const loadData = async (page, perPage, status) => {
 
-        let userId = localStorage.getItem('userId')
-        let token = localStorage.getItem('authToken');
-        const DEV_API = process.env.REACT_APP_DEV_API;
-        setLoading(true);
-        let responce = await axios.post(`${DEV_API}/api/userwisematch/${userId}`, { page, perPage, status }, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
+        try {
+            let userId = localStorage.getItem('userId')
+            let token = localStorage.getItem('authToken');
+            const DEV_API = process.env.REACT_APP_DEV_API;
+            setLoading(true);
+            let responce = await axios.post(`${DEV_API}/api/userwisematch/${userId}`, { page, perPage, status }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
 
-        if (responce.data.status === 200) {
-            let data = responce?.data?.data
-            let totalData = responce?.data?.totalData
-            setCustomerList(data);
-            setTotalRows(totalData);
-            setLoading(false);
+            if (responce.data.status === 200) {
+                let data = responce?.data?.data
+                let totalData = responce?.data?.totalData
+                setCustomerList(data);
+                setTotalRows(totalData);
+                setLoading(false);
+            }
+
+            if (responce.data.status === 401 || responce.data.status === 403) {
+                toast.error(responce?.data?.message);
+                navigate('/login');
+                return
+            }
+
+        } catch (error) {
+            console.log("Error", error);
+            navigate('/admin/users');
         }
     }
 
@@ -72,79 +86,79 @@ const MatchesList = (props) => {
         loadData();
     };
 
-const viewMatchesPDF = async (data) => {
-    let token = localStorage.getItem('authToken');
-    const DEV_API = process.env.REACT_APP_DEV_API;
-    let matchId = data._id;
-    let cleanupFunction = null;
+    const viewMatchesPDF = async (data) => {
+        let token = localStorage.getItem('authToken');
+        const DEV_API = process.env.REACT_APP_DEV_API;
+        let matchId = data._id;
+        let cleanupFunction = null;
 
-    setLoading(true);
+        setLoading(true);
 
-    try {
-        let response = await axios.get(`${DEV_API}/api/match/${matchId}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+        try {
+            let response = await axios.get(`${DEV_API}/api/match/${matchId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
 
-        if (response.data.status === 200) {
-            let data = response?.data?.data;
-            let matchInfo = data?.matchInfo;
-            let team1Data = data?.team1Data;
-            let team2Data = data?.team2Data;
+            if (response.data.status === 200) {
+                let data = response?.data?.data;
+                let matchInfo = data?.matchInfo;
+                let team1Data = data?.team1Data;
+                let team2Data = data?.team2Data;
 
-            // Clean up previous render if exists
-            if (cleanupFunction) {
-                cleanupFunction();
-            }
+                // Clean up previous render if exists
+                if (cleanupFunction) {
+                    cleanupFunction();
+                }
 
-            // Create a temporary div to render the PDF
-            const tempDiv = document.createElement('div');
-            const root = createRoot(tempDiv);
+                // Create a temporary div to render the PDF
+                const tempDiv = document.createElement('div');
+                const root = createRoot(tempDiv);
 
-            let isDownloaded = false;
+                let isDownloaded = false;
 
-            root.render(
-                <PDFDownloadLink
-                    document={
-                        <FullMatchPDF
-                            matchInfo={matchInfo}
-                            team1Data={team1Data}
-                            team2Data={team2Data}
-                        />
-                    }
-                    fileName={`match-details-${matchId}.pdf`}
-                >
-                    {({ blob, url, loading, error }) => {
-                        if (!loading && url && !isDownloaded) {
-                            isDownloaded = true; // Prevent multiple downloads
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.download = `match-details-${matchId}.pdf`;
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                            URL.revokeObjectURL(url);
-                            setLoading(false);
-                            
-                            // Cleanup immediately after download
-                            setTimeout(() => {
-                                root.unmount();
-                                if (tempDiv.parentNode) {
-                                    tempDiv.parentNode.removeChild(tempDiv);
-                                }
-                            }, 100);
+                root.render(
+                    <PDFDownloadLink
+                        document={
+                            <FullMatchPDF
+                                matchInfo={matchInfo}
+                                team1Data={team1Data}
+                                team2Data={team2Data}
+                            />
                         }
-                        return null;
-                    }}
-                </PDFDownloadLink>
-            );
+                        fileName={`match-details-${matchId}.pdf`}
+                    >
+                        {({ blob, url, loading, error }) => {
+                            if (!loading && url && !isDownloaded) {
+                                isDownloaded = true; // Prevent multiple downloads
+                                const link = document.createElement('a');
+                                link.href = url;
+                                link.download = `match-details-${matchId}.pdf`;
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                                URL.revokeObjectURL(url);
+                                setLoading(false);
+
+                                // Cleanup immediately after download
+                                setTimeout(() => {
+                                    root.unmount();
+                                    if (tempDiv.parentNode) {
+                                        tempDiv.parentNode.removeChild(tempDiv);
+                                    }
+                                }, 100);
+                            }
+                            return null;
+                        }}
+                    </PDFDownloadLink>
+                );
+            }
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+            setLoading(false);
         }
-    } catch (error) {
-        console.error("Error generating PDF:", error);
-        setLoading(false);
-    }
-};
+    };
 
 
     const statusOption = [
@@ -162,7 +176,7 @@ const viewMatchesPDF = async (data) => {
             let token = localStorage.getItem('authToken');
             let matchId = row._id;
             console.log("matchId", matchId);
-            
+
 
             let responce = await axios.put(`${DEV_API}/api/chnageStatus`, { matchId, status: value },
                 { headers: { 'Authorization': `Bearer ${token}` } });
@@ -170,7 +184,7 @@ const viewMatchesPDF = async (data) => {
             if (responce.status === 200) {
                 console.log("praveen", responce.data);
                 // loadData();
-                setCustomerList((prev)=> prev.map((item) => item._id === matchId ? { ...item, status: value } : item));
+                setCustomerList((prev) => prev.map((item) => item._id === matchId ? { ...item, status: value } : item));
                 toast.success(responce?.data?.message);
                 setLoading(false);
             } else {
@@ -206,7 +220,7 @@ const viewMatchesPDF = async (data) => {
         }
 
         return (<>
-{/* 
+            {/* 
             <div className='ps_admin_table_status'>
                 <span className={`ps_match_status_bg ${statusClass}`}>{statustext}</span>
             </div> */}
@@ -334,7 +348,7 @@ const viewMatchesPDF = async (data) => {
                                             name="status"
                                             options={statusOption}
                                             onChange={(selectedStatusOption) => {
-                                               setStatus(selectedStatusOption?.value);
+                                                setStatus(selectedStatusOption?.value);
                                             }}
                                         />
                                     </div>

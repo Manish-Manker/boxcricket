@@ -9,7 +9,7 @@ import PageLoader from '../common/pageLoader';
 import Popup from '../common/Popup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
-import Logout from '../common/logout';
+
 import AdminLayout from './AdminLayout';
 
 const Users = () => {
@@ -49,6 +49,31 @@ const Users = () => {
         localStorage.removeItem('userName');
     }, [page, perPage, SelectedStatus, search]);
 
+    const loadTotalData = () => {
+        let token = localStorage.getItem('authToken');
+        const DEV_API = process.env.REACT_APP_DEV_API;
+        axios.get(`${DEV_API}/api/totalData`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then((res) => {
+            if (res.data.status === 200) {
+                setTotalData(res?.data?.data);
+            }
+            if (res.data.status === 401 || res.data.status === 403) {
+                toast.error(res?.data?.message);
+                navigate('/login');
+                return
+            }
+        }).catch((error) => {
+            console.log("Error", error);
+        })
+    }
+
+    useEffect(() => {
+        loadTotalData();
+    }, [])
+
     const loadUserData = async (page, perPage, status, search) => {
 
         setLoading(true)
@@ -68,6 +93,11 @@ const Users = () => {
                 let data = responce?.data?.data
                 setcustomerList(data);
                 setTotalRows(totalUsers);
+            }
+            if (responce.data.status === 401 || responce.data.status === 403) {
+                toast.error(responce?.data?.message);
+                navigate('/login');
+                return
             }
         } catch (error) {
             console.log("Error", error);
@@ -353,7 +383,7 @@ const Users = () => {
                             <h5>Total Users</h5>
                             <span>{totalData.totalUsers}</span>
                         </div>
-                       <div class="skipg_dashboard_boxes_icon">
+                        <div class="skipg_dashboard_boxes_icon">
                             {svg.app.total_user_icon}
                         </div>
                     </div>
