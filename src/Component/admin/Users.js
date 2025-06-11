@@ -70,9 +70,7 @@ const Users = () => {
         })
     }
 
-    useEffect(() => {
-        loadTotalData();
-    }, [])
+  
 
     const loadUserData = async (page, perPage, status, search) => {
 
@@ -87,6 +85,7 @@ const Users = () => {
                 }
             })
             if (responce.data.status === 200) {
+                loadTotalData();
                 setLoading(false);
                 console.log("data", responce?.data?.data);
                 let totalUsers = responce?.data?.totalUsers
