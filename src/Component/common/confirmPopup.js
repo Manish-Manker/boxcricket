@@ -30,7 +30,7 @@ function ConfirmationPopup({
                             <div className='rz_textCOntent '>
                                 <div className="skipg_delete_img"><img src="/images/warning.png" /></div>
                                 <h4>{title ? title : `Are you sure you want to delete this ${type ? type : 'item'} ?`}</h4>
-                                <p>{subTitle ? subTitle : `This ${type ? type : 'item'} will be deleted immediately.`}<span> You can&apos;t undo this action</span></p>                           
+                                <p>{subTitle ? subTitle : `This ${type ? type : 'item'} will be deleted immediately.`}</p>                           
 
                                
                                 <div className="ps_conforms_btns">
