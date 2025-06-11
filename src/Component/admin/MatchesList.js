@@ -37,13 +37,13 @@ const MatchesList = (props) => {
     const DEV_API = process.env.REACT_APP_DEV_API;
 
 
-    const loadData = async (page, perPage) => {
+    const loadData = async (page, perPage, status) => {
 
         let userId = localStorage.getItem('userId')
         let token = localStorage.getItem('authToken');
         const DEV_API = process.env.REACT_APP_DEV_API;
         setLoading(true);
-        let responce = await axios.post(`${DEV_API}/api/userwisematch/${userId}`, { page, perPage }, {
+        let responce = await axios.post(`${DEV_API}/api/userwisematch/${userId}`, { page, perPage, status }, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -61,10 +61,8 @@ const MatchesList = (props) => {
 
 
     useEffect(() => {
-        loadData(page, perPage);
-    }, [page, perPage])
-
-
+        loadData(page, perPage, status);
+    }, [page, perPage, status]);
 
 
 
@@ -74,68 +72,79 @@ const MatchesList = (props) => {
         loadData();
     };
 
-    const viewMatchesPDF = async (data) => {
-        let token = localStorage.getItem('authToken');
-        const DEV_API = process.env.REACT_APP_DEV_API;
-        let matchId = data._id
-        let pdfWindow = null;
+const viewMatchesPDF = async (data) => {
+    let token = localStorage.getItem('authToken');
+    const DEV_API = process.env.REACT_APP_DEV_API;
+    let matchId = data._id;
+    let cleanupFunction = null;
 
-        try {
-            let response = await axios.get(`${DEV_API}/api/match/${matchId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+    setLoading(true);
 
-            if (response.data.status === 200) {
-                let data = response?.data?.data;
-                let matchInfo = data?.matchInfo;
-                let team1Data = data?.team1Data;
-                let team2Data = data?.team2Data;
-
-                // Create a temporary div to render the PDF
-                const tempDiv = document.createElement('div');
-                const root = createRoot(tempDiv);
-
-                root.render(
-                    <PDFDownloadLink
-                        document={
-                            <FullMatchPDF
-                                matchInfo={matchInfo}
-                                team1Data={team1Data}
-                                team2Data={team2Data}
-                            />
-                        }
-                        fileName="match-details.pdf"
-                    >
-                        {({ blob, url, loading, error }) => {
-                            if (!loading && url) {
-                                // Clean up any previous PDF URL
-                                if (pdfWindow && !pdfWindow.closed) {
-                                    pdfWindow.close();
-                                }
-                                // Open new PDF in a tab
-                                pdfWindow = window.open(url, '_blank');
-                                // Clean up the URL object to free memory
-                                URL.revokeObjectURL(url);
-                            }
-                            return null;
-                        }}
-                    </PDFDownloadLink>
-                );
-
-                // Cleanup function
-                return () => {
-                    root.unmount();
-                    if (tempDiv.parentNode) {
-                        tempDiv.parentNode.removeChild(tempDiv);
-                    }
-                };
+    try {
+        let response = await axios.get(`${DEV_API}/api/match/${matchId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
-        } catch (error) {
-            console.error("Error generating PDF:", error);
+        });
+
+        if (response.data.status === 200) {
+            let data = response?.data?.data;
+            let matchInfo = data?.matchInfo;
+            let team1Data = data?.team1Data;
+            let team2Data = data?.team2Data;
+
+            // Clean up previous render if exists
+            if (cleanupFunction) {
+                cleanupFunction();
+            }
+
+            // Create a temporary div to render the PDF
+            const tempDiv = document.createElement('div');
+            const root = createRoot(tempDiv);
+
+            let isDownloaded = false;
+
+            root.render(
+                <PDFDownloadLink
+                    document={
+                        <FullMatchPDF
+                            matchInfo={matchInfo}
+                            team1Data={team1Data}
+                            team2Data={team2Data}
+                        />
+                    }
+                    fileName={`match-details-${matchId}.pdf`}
+                >
+                    {({ blob, url, loading, error }) => {
+                        if (!loading && url && !isDownloaded) {
+                            isDownloaded = true; // Prevent multiple downloads
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.download = `match-details-${matchId}.pdf`;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            URL.revokeObjectURL(url);
+                            setLoading(false);
+                            
+                            // Cleanup immediately after download
+                            setTimeout(() => {
+                                root.unmount();
+                                if (tempDiv.parentNode) {
+                                    tempDiv.parentNode.removeChild(tempDiv);
+                                }
+                            }, 100);
+                        }
+                        return null;
+                    }}
+                </PDFDownloadLink>
+            );
         }
-    };
+    } catch (error) {
+        console.error("Error generating PDF:", error);
+        setLoading(false);
+    }
+};
 
 
     const statusOption = [
@@ -159,11 +168,11 @@ const MatchesList = (props) => {
                 { headers: { 'Authorization': `Bearer ${token}` } });
 
             if (responce.status === 200) {
-                toast.success(responce?.data?.message);
                 console.log("praveen", responce.data);
-                setStatus(value);
+                // loadData();
+                setCustomerList((prev)=> prev.map((item) => item._id === matchId ? { ...item, status: value } : item));
+                toast.success(responce?.data?.message);
                 setLoading(false);
-                // navigate('/');
             } else {
                 toast.error(responce?.data?.message);
             }
@@ -242,6 +251,7 @@ const MatchesList = (props) => {
 
         {
             name: 'Status',
+            width: '200px',
             sortable: false,
             cell: (row) => (
                 renderMatchStatus(row)
@@ -285,15 +295,6 @@ const MatchesList = (props) => {
     };
 
 
-    const applyFilters = (selectedStatusOption) => {
-        const status = selectedStatusOption?.value;
-        const filteredData = customerList.filter(user => {
-            const matchStatus = status ? user.status === status : true;
-            return matchStatus;
-        });
-        setfilterCustomerList(filteredData);
-        setIsFilter(status ? true : false);
-    };
 
     return (
         <>
@@ -333,7 +334,7 @@ const MatchesList = (props) => {
                                             name="status"
                                             options={statusOption}
                                             onChange={(selectedStatusOption) => {
-                                                applyFilters(selectedStatusOption);
+                                               setStatus(selectedStatusOption?.value);
                                             }}
                                         />
                                     </div>
@@ -384,7 +385,6 @@ const MatchesList = (props) => {
                                 name="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                            // required={!isEdit}
                             />
                         </div>
 

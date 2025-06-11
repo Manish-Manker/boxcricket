@@ -80,7 +80,7 @@ const FinalScoreTable = ({ matchInfo, team1Data, team2Data }) => {
     <View style={{ marginBottom: 20 }}>
 
        <View style={{ display: 'flex', alignItems: 'flex-end', marginBottom: 8 }}>
-      <Image src='./images/cricket_legends.jpg' style={{ width: 100, height: 100 }} />
+      <Image src='../images/cricket_legends.jpg' style={{ width: 100, height: 100 }} />
       </View>
       <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 8 }}>Final Score</Text>
       <View style={{ display: 'table', width: '100%', borderStyle: 'solid', borderWidth: '0.5', borderColor: '#e9ebfa', borderRightWidth: '1px' }}>
