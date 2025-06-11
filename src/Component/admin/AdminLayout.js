@@ -10,7 +10,7 @@ const AdminLayout = ({ children, showBackButton, onBackClick }) => {
                 <div>
                     {showBackButton && (
                         <div className='box_cric_back_btn' onClick={onBackClick}>
-                            {svg.app.back_icon} Back
+                            {svg.app.back_icon} <span>Back</span> 
                         </div>
                     )}
                 </div>

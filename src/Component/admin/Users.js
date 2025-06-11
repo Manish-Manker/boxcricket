@@ -420,7 +420,7 @@ const Users = () => {
                     <div className="ps-table-design">
 
                         <div className="pu_datatable_wrapper skipg_dash_table">
-                            <div className='page_tittle_head fwrap'>
+                            <div className='page_tittle_head fwrap mb-3'>
                                 <div className="box_cric_team_heading">
                                     <h3 className="m-0">Users List</h3>
                                 </div>

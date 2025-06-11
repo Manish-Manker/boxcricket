@@ -306,11 +306,11 @@ h6 {
 .box_cric_team_heading h3 span {
     color: var(--bc-primary-color);
     font-size: 21px;
-     font-weight: 700;
+    font-weight: 700;
 }
 
-.fwrap{
-    flex-wrap: wrap ;
+.fwrap {
+    flex-wrap: wrap;
 }
 
 .skipg_dashboard_boxes:hover {
@@ -1351,8 +1351,8 @@ h6 {
 }
 
 .skipg_dashboard_boxes h5 {
-    font-size: 21px;
-    font-weight: 500;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .skipg_dashboard_boxes span {
@@ -1372,13 +1372,14 @@ h6 {
     background-color: #f0f3fa;
 }
 
-.skipg_dashboard_boxes .skipg_dashboard_boxes_icon svg{
+.skipg_dashboard_boxes .skipg_dashboard_boxes_icon svg {
     width: 40px;
     height: 40px;
 }
 
-.skipg_dashboard_boxes .skipg_dashboard_boxes_icon svg path,circle{
-    fill:#444a64 !important;
+.skipg_dashboard_boxes .skipg_dashboard_boxes_icon svg path,
+circle {
+    fill: #444a64 !important;
 }
 
 .select-dropdown {
@@ -1599,7 +1600,7 @@ h6 {
 
 
 .ps_table_box .pu_datatable_wrapper {
-    overflow: hidden;
+    overflow: visible;
     padding: 0px 0px;
     min-height: auto;
 }
@@ -1708,6 +1709,11 @@ h6 {
 .pu_datatable_wrapper .rdt_TableRow {
     border-bottom-color: #EAEAEA !important;
     min-height: 60px;
+}
+
+.pu_datatable_wrapper .rdt_TableRow:hover{
+    background-color: #f1f4fba6 !important;
+    outline: none !important;
 }
 
 .pu_datatable_wrapper .rdt_Pagination {
@@ -2274,6 +2280,36 @@ h6 {
         height: auto;
     }
 
+    .box_cric_back_btn span {
+        display: none;
+    }
+
+    .box_cric_btn_logout span {
+        display: none;
+    }
+
+    .box_cric_btn_logout svg {
+        width: 25px;
+        height: 25px;
+
+    }
+
+    .bc_btn_logoutMob {
+        background-color: transparent !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    .bc_btn_logoutMob svg path {
+        fill: #202b3f;
+    }
+
+    .ps_navbar_box_logo {
+        max-width: 166px;
+        height: 40px;
+        object-fit: contain;
+    }
+
 
 
 }
@@ -2289,5 +2325,6 @@ h6 {
         width: 100%;
         max-width: 100% !important;
     }
+
 
 }

@@ -7,7 +7,6 @@ import svg from '../common/svg';
 import ConfirmationPopup from '../common/confirmPopup';
 import PageLoader from '../common/pageLoader';
 import Popup from '../common/Popup';
-import Logout from '../common/logout';
 import axios from 'axios';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import FullMatchPDF from '../FullMatchPDF';
@@ -31,13 +30,18 @@ const MatchesList = (props) => {
     const [perPage, setPerPage] = useState(10);
     const [page, setPage] = useState(1);
 
-    const [statusChange, setStatusChange] = useState(false);
     const [status, setStatus] = useState('');
 
     const [filterCustomerList, setfilterCustomerList] = useState([])
     const [isFilter, setIsFilter] = useState(false);
     const DEV_API = process.env.REACT_APP_DEV_API;
     const navigate = useNavigate();
+
+
+    const [currentStatus, setCurrentStatus] = useState(null); 
+    const [statusToChange, setStatusToChange] = useState(null); 
+    const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
+    const [selectedMatch, setSelectedMatch] = useState(null); 
 
 
     const loadData = async (page, perPage, status) => {
@@ -169,31 +173,40 @@ const MatchesList = (props) => {
     ]
 
 
-    const handleChange = async (event, row) => {
-        let value = event.target.value;
+   const handleChange = (event, row) => {
+        const value = event.target.value;
 
-        try {
-            setLoading(true);
-            let token = localStorage.getItem('authToken');
-            let matchId = row._id;
-            console.log("matchId", matchId);
+        setCurrentStatus(value); // Store the new status in state
+        setStatusToChange(value); // Store the new status for confirmation
+        setSelectedMatch(row); // Store which match is being changed
+        setShowConfirmationPopup(true); // Trigger the confirmation popup
+    };
 
+    const confirmStatusChange = async () => {
+        if (selectedMatch) {
+            try {
+                setLoading(true);
+                let token = localStorage.getItem('authToken');
+                let matchId = selectedMatch._id;
 
-            let responce = await axios.put(`${DEV_API}/api/chnageStatus`, { matchId, status: value },
-                { headers: { 'Authorization': `Bearer ${token}` } });
+                let response = await axios.put(`${DEV_API}/api/chnageStatus`, { matchId, status: statusToChange },
+                    { headers: { 'Authorization': `Bearer ${token}` } });
 
-            if (responce.status === 200) {
-                console.log("praveen", responce.data);
-                // loadData();
-                setCustomerList((prev) => prev.map((item) => item._id === matchId ? { ...item, status: value } : item));
-                toast.success(responce?.data?.message);
+                if (response.status === 200) {
+                    console.log("Status updated:", response.data);
+                    setCustomerList((prev) => prev.map((item) => item._id === matchId ? { ...item, status: statusToChange } : item));
+                    toast.success(response?.data?.message);
+                }
+            } catch (error) {
+                console.error("Error updating status:", error);
+            } finally {
                 setLoading(false);
-            } else {
-                toast.error(responce?.data?.message);
+                setShowConfirmationPopup(false); // Close popup irrespective of success/failure
+                // Reset states after confirmation
+                setCurrentStatus(null);
+                setSelectedMatch(null);
+                setStatusToChange(null);
             }
-        } catch (error) {
-            console.log(error);
-            return
         }
     };
 
@@ -228,7 +241,8 @@ const MatchesList = (props) => {
 
             <div className='ps_matches_dropd'>
                 <div className='ps_defalt_drop'>
-                    <select className={`ps_match_status_box ${statusClass}`} value={status.status} onChange={(event) => handleChange(event, status)} >
+                    <select className={`ps_match_status_box ${statusClass}`} value={status.status} 
+                    onChange={(event) => handleChange(event, status)} >
                         <option className='ps_match_status_box_select' value="completed">Complete</option>
                         <option className='ps_match_status_box_select' value="ongoing">Ongoing</option>
                         <option className='ps_match_status_box_select' value="cancel">Cancel</option>
@@ -307,6 +321,12 @@ const MatchesList = (props) => {
 
     const handleBackClick = () => {
         window.history.go(-1);
+    };
+
+    const cancelStatusChange = () => {
+        setShowConfirmationPopup(false); // Close popup without action
+        setCurrentStatus(null); // Reset current status
+        setSelectedMatch(null); // Clear selected match
     };
 
 
@@ -398,14 +418,12 @@ const MatchesList = (props) => {
                 </form>
             </Popup>
 
-            <ConfirmationPopup
-                shownPopup={!!statusChange}
-                closePopup={() => setStatusChange(false)}
-                type={"User"}
-                removeAction={() => {
-                    // getDeleteData(statusChange);
-                    setStatusChange(false);
-                }}
+           <ConfirmationPopup
+                shownPopup={showConfirmationPopup}
+                closePopup={cancelStatusChange}
+                title="Confirm Status Change"
+                subTitle={`Are you sure you want to change the status to "${statusToChange}"?`}
+                removeAction={confirmStatusChange}
             />
 
         </>

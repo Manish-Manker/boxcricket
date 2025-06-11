@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ConfirmationPopup from './confirmPopup';
+import svg from './svg';
 
 const Logout = () => {
     const [isRemove, setIsRemove] = useState(false);
@@ -39,8 +40,8 @@ const Logout = () => {
 
     return (
         <>
-            <button className="box_cric_btn box_cric_btn_logout" onClick={handleLogoutClick}>
-                Log Out
+            <button className="box_cric_btn box_cric_btn_logout bc_btn_logoutMob" onClick={handleLogoutClick}>
+               {svg.app.logout} <span>Log Out</span> 
             </button>
 
             <ConfirmationPopup
