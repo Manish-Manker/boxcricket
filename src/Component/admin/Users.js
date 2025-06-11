@@ -21,6 +21,7 @@ const Users = () => {
     const [isEdit, setIsEdit] = useState(false);
     const navigate = useNavigate();
 
+    const [totalData, setTotalData] = useState({totalUsers: 0,ActiveUsers: 0,InActiveUsers: 0,ToalMatches: 0});
 
     const [loading, setLoading] = useState(true);
 
@@ -342,6 +343,12 @@ const Users = () => {
 
     return (
         <>
+        <div>
+            <h2>Total Users - {totalData.totalUsers} </h2>
+            <h2>Avtive Users - {totalData.ActiveUsers} </h2>
+            <h2>Inactive Users -{totalData.InActiveUsers} </h2>
+            <h2>Total Matches -{totalData.ToalMatches} </h2>
+        </div>
             <div className='ps_table_box p-4'>
                 <div className="ps-table-design">
 
