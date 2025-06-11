@@ -10,6 +10,7 @@ import Popup from '../common/Popup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import Logout from '../common/logout';
+import AdminLayout from './AdminLayout';
 
 const Users = () => {
     const [fullname, setFullName] = useState('');
@@ -21,7 +22,7 @@ const Users = () => {
     const [isEdit, setIsEdit] = useState(false);
     const navigate = useNavigate();
 
-    const [totalData, setTotalData] = useState({totalUsers: 0,ActiveUsers: 0,InActiveUsers: 0,ToalMatches: 0});
+    const [totalData, setTotalData] = useState({ totalUsers: 0, ActiveUsers: 0, InActiveUsers: 0, ToalMatches: 0 });
 
     const [loading, setLoading] = useState(true);
 
@@ -109,7 +110,7 @@ const Users = () => {
         }
 
         if (errorMessages.length > 0) {
-            toast.error(errorMessages.join(', ')); 
+            toast.error(errorMessages.join(', '));
         }
         return Object.keys(newErrors).length === 0;
     };
@@ -343,71 +344,109 @@ const Users = () => {
 
     return (
         <>
-        <div>
-            <h2>Total Users - {totalData.totalUsers} </h2>
-            <h2>Avtive Users - {totalData.ActiveUsers} </h2>
-            <h2>Inactive Users -{totalData.InActiveUsers} </h2>
-            <h2>Total Matches -{totalData.ToalMatches} </h2>
-        </div>
-            <div className='ps_table_box p-4'>
-                <div className="ps-table-design">
 
-                    <div className="pu_datatable_wrapper skipg_dash_table">
-                        <div className='page_tittle_head fwrap'>
-                            <div className="box_cric_team_heading">
-                                <h3 className="m-0">Users List</h3>
-                            </div>
-
-                            <ul className="pu_pagetitle_right width_100_sc1448">
-
-                                <li>
-                                    <div className='skipg_dropdown_input'>
-                                        <label>Filter By Status</label>
-                                        <span className="separator">|</span>
-                                        <Select
-                                            className="basic-single"
-                                            classNamePrefix="select"
-                                            isClearable={true}
-                                            isSearchable={false}
-                                            name="status"
-                                            options={statusOption}
-                                            onChange={(selectedStatusOption) => {
-                                                setSelectedStatus(selectedStatusOption?.value);
-                                            }}
-                                        />
-                                    </div>
-                                </li>
-
-                                <li>
-                                    <div className="pu_search_wrapper">
-                                        <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target?.value)} onKeyUp={handleSearchKeyupEvent} />
-                                        {search.length > 0 && (
-                                            <span className="pu_clear_icon" onClick={clearSearch}>
-                                                {svg.app.clear_icon}
-                                            </span>
-                                        )}
-                                        <span className="pu_search_icon">{svg.app.dash_search_icon}</span>
-                                    </div>
-                                </li>
-                                <li className='skipg_page_header_custm_title_btn_hide'><button className="box_cric_btn" onClick={() => setAddCategoryPopup((prev) => !prev)}>+ Add User</button></li>
-                                <li className='skipg_page_header_custm_title_btn_hide'> <Logout /></li>
-
-                            </ul>
+            <AdminLayout />
+            <div className='ps_admin_p5'>
+                <div className='skipg_dashboard_box_section'>
+                    <div class="skipg_dashboard_boxes">
+                        <div>
+                            <h5>Total Users</h5>
+                            <span>{totalData.totalUsers}</span>
                         </div>
-                        <div className=''>
-                            <DataTable
-                                columns={columns}
-                                data={customerList}
-                                progressPending={loading}
-                                pagination
-                                paginationServer
-                                paginationTotalRows={totalRows}
-                                onChangeRowsPerPage={handlePerRowsChange}
-                                onChangePage={(page) => setPage(page)}
-                                progressComponent={<PageLoader />}
-                                //  striped={true} 
-                                highlightOnHover={true}
-                            />
+                       <div class="skipg_dashboard_boxes_icon">
+                            {svg.app.total_user_icon}
+                        </div>
+                    </div>
+                    <div class="skipg_dashboard_boxes">
+                        <div>
+                            <h5>Avtive Users</h5>
+                            <span>{totalData.ActiveUsers}</span>
+                        </div>
+                        <div class="skipg_dashboard_boxes_icon">
+                            {svg.app.active_user_icon}
+                        </div>
+                    </div>
+                    <div class="skipg_dashboard_boxes">
+                        <div>
+                            <h5>Inactive Users</h5>
+                            <span>{totalData.InActiveUsers}</span>
+                        </div>
+                        <div class="skipg_dashboard_boxes_icon">
+                            {svg.app.inactice_user_icon}
+                        </div>
+                    </div>
+                    <div class="skipg_dashboard_boxes">
+                        <div>
+                            <h5>Total Matches</h5>
+                            <span>{totalData.ToalMatches}</span>
+                        </div>
+                        <div class="skipg_dashboard_boxes_icon">
+                            {svg.app.total_matches_icon}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div className='ps_table_box '>
+                    <div className="ps-table-design">
+
+                        <div className="pu_datatable_wrapper skipg_dash_table">
+                            <div className='page_tittle_head fwrap'>
+                                <div className="box_cric_team_heading">
+                                    <h3 className="m-0">Users List</h3>
+                                </div>
+
+                                <ul className="pu_pagetitle_right width_100_sc1448">
+
+                                    <li>
+                                        <div className='skipg_dropdown_input'>
+                                            <label>Filter By Status</label>
+                                            <span className="separator">|</span>
+                                            <Select
+                                                className="basic-single"
+                                                classNamePrefix="select"
+                                                isClearable={true}
+                                                isSearchable={false}
+                                                name="status"
+                                                options={statusOption}
+                                                onChange={(selectedStatusOption) => {
+                                                    setSelectedStatus(selectedStatusOption?.value);
+                                                }}
+                                            />
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <div className="pu_search_wrapper">
+                                            <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target?.value)} onKeyUp={handleSearchKeyupEvent} />
+                                            {search.length > 0 && (
+                                                <span className="pu_clear_icon" onClick={clearSearch}>
+                                                    {svg.app.clear_icon}
+                                                </span>
+                                            )}
+                                            <span className="pu_search_icon">{svg.app.dash_search_icon}</span>
+                                        </div>
+                                    </li>
+                                    <li className='skipg_page_header_custm_title_btn_hide'><button className="box_cric_btn" onClick={() => setAddCategoryPopup((prev) => !prev)}>+ Add User</button></li>
+
+
+                                </ul>
+                            </div>
+                            <div className=''>
+                                <DataTable
+                                    columns={columns}
+                                    data={customerList}
+                                    progressPending={loading}
+                                    pagination
+                                    paginationServer
+                                    paginationTotalRows={totalRows}
+                                    onChangeRowsPerPage={handlePerRowsChange}
+                                    onChangePage={(page) => setPage(page)}
+                                    progressComponent={<PageLoader />}
+                                    //  striped={true} 
+                                    highlightOnHover={true}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

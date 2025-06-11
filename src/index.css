@@ -299,7 +299,13 @@ h6 {
     color: var(--erp-title-color);
     font-weight: 600;
     margin-bottom: 0;
-    font-size: 20px;
+    font-size: 22px;
+    position: relative;
+}
+
+.skipg_dashboard_boxes:hover {
+    box-shadow: inset 0 0 0 0 rgba(0, 0, 0, .06), 0 11px 10px -2px hsla(0, 0%, 76%, .26);
+    transform: translateY(-5px);
 }
 
 .box_cric_team_heading h3:after {
@@ -1292,8 +1298,8 @@ h6 {
 }
 
 .ps_matches_dropd .ps_defalt_drop select {
-     padding: 8px !important;
-      background-position-x: 100%;
+    padding: 8px !important;
+    background-position-x: 100%;
     background-position-y: 8px !important;
 }
 
@@ -1308,6 +1314,61 @@ h6 {
     border-right: 5px solid transparent;
     border-top: 6px solid #000;
     transition: transform ease-in-out 0.3s;
+}
+
+.skipg_dashboard_box_section {
+    display: grid;
+    grid-gap: 20px;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 2fr));
+    padding: 10px 0px 30px;
+}
+
+
+
+.skipg_dashboard_boxes {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 18px 30px;
+    max-height: 150px;
+    box-shadow: 0 8px 10px 0 #43434708;
+    transition: all .5s;
+    box-shadow: inset 0 -2px 3px 0 rgba(0, 0, 0, .06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.skipg_dashboard_boxes h5 {
+    font-size: 21px;
+    font-weight: 500;
+}
+
+.skipg_dashboard_boxes span {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+
+.skipg_dashboard_boxes .skipg_dashboard_boxes_icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    background-color: #f0f3fa;
+}
+
+.skipg_dashboard_boxes .skipg_dashboard_boxes_icon svg{
+    width: 40px;
+    height: 40px;
+}
+
+.skipg_dashboard_boxes .skipg_dashboard_boxes_icon svg path,circle{
+    fill:#444a64 !important;
 }
 
 .select-dropdown {
@@ -1615,27 +1676,24 @@ h6 {
 }
 
 .pu_datatable_wrapper .rdt_TableHeadRow {
-    background-color: #F9FAFC;
+    background-color: #f1f4fb;
     /* border-bottom: 1px solid #EAEAEA;
     border-top: 1px solid #EAEAEA; */
     /* box-shadow: inset 0px -2px 3px rgb(0, 0, 0, 0.06); */
 }
 
 .pu_datatable_wrapper .rdt_TableCol {
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 600;
-    color: #84858C;
+    line-height: 55px;
+    color: #1f2138;
 }
 
 .pu_datatable_wrapper .rdt_TableCol_Sortable>span {
     font-size: 8px;
 }
 
-.pu_datatable_wrapper .rdt_TableCol {
-    font-size: 16px;
-    font-weight: 500;
-    color: #3a3a3a;
-}
+
 
 .pu_datatable_wrapper .rdt_TableRow {
     border-bottom-color: #EAEAEA !important;
@@ -1924,6 +1982,38 @@ h6 {
 .erp_404_main .box_cric_btn {
     max-width: fit-content;
     margin: auto;
+}
+
+
+.ps_navbar_box {
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 13px 30px;
+    background-color: #fff;
+    box-shadow: 0 18px 30px 0 rgba(177, 193, 224, .1);
+    width: 100%;
+
+}
+
+.ps_navbar_box_logo {
+    max-width: 200px;
+    height: 50px;
+    object-fit: contain;
+}
+
+.ps_navbar_box_logo img {
+    width: 100%;
+    height: 100%;
+}
+
+.ps_admin_p5 {
+    padding: 100px 30px 30px;
 }
 
 
