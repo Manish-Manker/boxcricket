@@ -15,7 +15,7 @@ const Display = () => {
     const [imagecounst, setImagecounst] = useState(0);
     const [currentTeam, setCurrentTeam] = useState(null);
     const [currentOverStatus, setCurrentOverStatus] = useState(null);
-    const[battingTeamName, setBattingTeamName] = useState('');
+    const [battingTeamName, setBattingTeamName] = useState('');
 
     const imageList = ['./images/gravinPRO.png', './images/Ninth_Cloud.png', './images/khuber.png', './images/THINKCLOUD.png', './images/storyWala.png', './images/pixelnx.png', './images/gravin.png', './images/SevenHeavenFinal.png'];
 
@@ -59,6 +59,7 @@ const Display = () => {
     }, [isSet]);
 
     useEffect(() => {
+
         let currentOver = JSON.parse(localStorage.getItem('currentOverData'));
         if (currentOver) {
             setCurrentOverStatus(currentOver);
@@ -69,7 +70,10 @@ const Display = () => {
                 setCurrentTeam(JSON.parse(localStorage.getItem('team2ScoreData')));
                 setBattingTeamName(JSON.parse(localStorage.getItem('matchInfo')).team2);
             }
+        } else {
+            setCurrentOverStatus(null);
         }
+
     }, [currentBall, team1Data, team2Data]);
 
 
