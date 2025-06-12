@@ -22,6 +22,7 @@ const ScoreTable = () => {
   const [isCreateNew, setIsCreateNew] = useState(false);
   const [loadingClass, setLoadingClass] = useState('');
   const [status, setStatus] = useState("complete");
+  const [rowOverIndex, setRowOverIndex] = useState(null);
   const navigate = useNavigate();
   const DEV_API = process.env.REACT_APP_DEV_API;
 
@@ -48,7 +49,7 @@ const ScoreTable = () => {
 
   }, []);
 
- 
+
 
   const handleInputFocus = (value, fieldKey) => {
     setFocusedFieldKey(fieldKey);
@@ -135,7 +136,7 @@ const ScoreTable = () => {
         }
       });
 
-      const { matchInfo: matchData, team1Data: team1Response, team2Data: team2Response } = response.data.data; 
+      const { matchInfo: matchData, team1Data: team1Response, team2Data: team2Response } = response.data.data;
 
       if (matchData) {
         setMatchInfo(matchData);
@@ -177,7 +178,7 @@ const ScoreTable = () => {
         }
       });
       if (response.data.status === 401 || response.data.status === 403) {
-        
+
         navigate('/login');
         return
       }
@@ -211,7 +212,7 @@ const ScoreTable = () => {
       }
 
       if (response.data.status === 200) {
-         toast.success(response?.data?.message);
+        toast.success(response?.data?.message);
         console.log(response.data);
       }
     }
@@ -328,9 +329,9 @@ const ScoreTable = () => {
       const value = ball.toUpperCase();
 
       // Handle special ball types
-      if (value === 'W') return 2 + parseInt(extraRun || 0);  // Wide ball: 1 run + extra runs
-      if (value === 'N') return 2 + parseInt(extraRun || 0);  // No ball: 1 run + extra runs
-      if (['R', 'C', 'B', 'S', 'H'].includes(value)) return -5;  // Wickets: -5 runs
+      if (value === 'W') return 2 + parseInt(extraRun || 0);
+      if (value === 'N') return 2 + parseInt(extraRun || 0);
+      if (['R', 'C', 'B', 'S', 'H'].includes(value)) return -5;
 
       // Handle numeric values
       const numValue = parseInt(value);
@@ -603,6 +604,19 @@ const ScoreTable = () => {
     })
   }
 
+  const handelTick = (teamNumber, rowIndex, overIndex, overNumber) => {
+    setRowOverIndex({teamNumber, rowIndex, overIndex });
+    let data = {
+      teamNumber: teamNumber,
+      rowIndex: rowIndex,
+      overIndex: overIndex,
+      overNumber: overNumber
+    }
+    localStorage.setItem('currentOverData', JSON.stringify(data));
+
+
+  }
+
 
   const renderTable = (teamName, teamNumber, teamData) => {
     return (
@@ -621,372 +635,380 @@ const ScoreTable = () => {
                     {Array(numberOfCols).fill().map((_, i) => (
                       <td key={i} className="text-center fw-bold border-head">
                         {pair.pairId * numberOfCols - numberOfCols + i + 1}
+                      
+                        <button style={{ backgroundColor: teamNumber === rowOverIndex?.teamNumber && rowIndex === rowOverIndex?.rowIndex && i == rowOverIndex?.overIndex ? "green" : "" }}
+                        onClick={() => handelTick(teamNumber, rowIndex, i, `${pair.pairId * numberOfCols - numberOfCols + i + 1}`)} >
+                        tick
+                      </button>
+                      
                       </td>
                     ))}
-                    <td className="fw-bold border-head">Total</td>
-                  </tr>
-                  {/* Second row - Bowler names */}
-                  <tr>
-                    <td className="bb-1" colSpan="2"></td>
-                    {pair.batsmen[0].overs.map((over, overIndex) => (
-                      <td key={overIndex} className="bb-1 ps_relative">
-                        <input
-                          type="text"
-                          className="form-control box_cric_input_filed_name"
-                          placeholder="Bowler name"
-                          autoComplete="off"
-                          disabled={status === 'ongoing' ? false : true}
-                          value={over.bowlerName}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            handleBowlerNameChange(teamNumber, rowIndex, overIndex, value);
-                            handleInputFocus(value, { type: 'bowler', teamNumber, rowIndex, overIndex, value });
-                          }}
-                          onBlur={() => handleInputBlur(over.bowlerName)}
-                        />
-                        {focusedFieldKey?.type === 'bowler' &&
-                          focusedFieldKey.teamNumber === teamNumber &&
-                          focusedFieldKey.rowIndex === rowIndex &&
-                          focusedFieldKey.overIndex === overIndex &&
-                          filteredSuggestions.length > 0 && (
-                            <ul className="suggestion-dropdown ">
-                              {filteredSuggestions.map((name, idx) => (
-                                <li
-                                  key={idx}
-                                  onMouseDown={() =>
-                                    handleSuggestionClick(
-                                      {
-                                        onChange: (val) => handleBowlerNameChange(teamNumber, rowIndex, overIndex, val)
-                                      },
-                                      name
-                                    )
-                                  }
-                                  style={{ padding: '2px 10px', cursor: 'pointer' }}
-                                >
-                                  {name}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                      </td>
-                    ))}
-                    <td className="bb-1"></td>
-                  </tr>
-                  {/* Batsmen rows */}
-                  {pair.batsmen.map((batsman, batsmanIndex) => (
-                    <tr key={`${pair.pairId}-${batsmanIndex}`}>
-                      {batsmanIndex === 0 && (
-                        <td rowSpan="2" className="align-middle text-center" style={{ width: '40px' }}>
-                          {pair.pairId}
-                        </td>
-                      )}
-                      <td className='ps_relative' style={{ width: '150px' }}>
-                        <input
-                          type="text"
-                          className="form-control box_cric_input_filed_name"
-                          placeholder="Batsman name"
-                          autoComplete="off"
-                          disabled={status === 'ongoing' ? false : true}
-                          value={batsman.name}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            handleBatsmanNameChange(teamNumber, rowIndex, batsmanIndex, value);
-                            handleInputFocus(value, { type: 'batsman', teamNumber, rowIndex, batsmanIndex, value });
-                          }}
-                          onBlur={() => handleInputBlur(batsman.name)}
-                        />
-                        {focusedFieldKey?.type === 'batsman' &&
-                          focusedFieldKey.teamNumber === teamNumber &&
-                          focusedFieldKey.rowIndex === rowIndex &&
-                          focusedFieldKey.batsmanIndex === batsmanIndex &&
-                          filteredSuggestions.length > 0 && (
-                            <ul className="suggestion-dropdown">
-                              {filteredSuggestions.map((name, idx) => (
-                                <li
-                                  key={idx}
-                                  onMouseDown={() =>
-                                    handleSuggestionClick(
-                                      {
-                                        onChange: (val) => handleBatsmanNameChange(teamNumber, rowIndex, batsmanIndex, val)
-                                      },
-                                      name
-                                    )
-                                  }
-                                  style={{ padding: '4px 10px', cursor: 'pointer' }}
-                                >
-                                  {name}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                      </td>
-                      {batsman.overs.map((over, overIndex) => (
-                        <td key={overIndex} className="p-2">
-                          <div className="d-flex justify-content-between gap-1 align-items-start" style={{ minWidth: '160px' }}>
-                            {/* 6 balls */}
-                            <div className='d-flex justify-content-center gap-1'>
-                              {over.balls.map((ball, ballIndex) => (
-                                <div key={ballIndex} className="d-flex flex-column align-items-center">
-                                  <div className="d-flex">
-                                    <input
-                                      type="text"
-                                      disabled={status === 'ongoing' ? false : true}
-                                      className="form-control box_cric_input_score"
-                                      value={ball}
-                                      onChange={(e) => handleBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
-                                    />
-                                  </div>
-                                  {/* Show extra runs input for W and n below */}
-                                  {(ball === 'W' || ball === 'n' || ball === 'N' || ball === 'w') && (
-                                    <input
-                                      type="text"
-                                      disabled={status === 'ongoing' ? false : true}
-                                      className="form-control box_cric_input_score mt-1"
-                                      value={over.extraRuns[ballIndex] || ''}
-                                      onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
-                                      placeholder=""
-                                    />
-                                  )}
-                                </div>))}
-
-                              {/* Extra balls section */}                              {over.extraBalls && over.extraBalls.map((extraBall, extraBallIndex) => (
-                                <div key={`extra-${extraBallIndex}`} className="d-flex flex-column align-items-center">
-                                  <input
-                                    type="text"
-                                    disabled={status === 'ongoing' ? false : true}
-                                    className="form-control box_cric_input_score"
-                                    value={extraBall}
-                                    onChange={(e) => handleExtraBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex, e.target.value)}
-                                  />
-                                  {/* Show extra runs input for W and N below */}
-                                  {(extraBall?.toUpperCase() === 'W' || extraBall?.toUpperCase() === 'N') && (
-                                    <input
-                                      type="text"
-                                      className="form-control box_cric_input_score mt-1"
-                                      disabled={status === 'ongoing' ? false : true}
-                                      value={over.extraRuns[extraBallIndex + over.balls.length] || ''}
-                                      onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex + over.balls.length, e.target.value)}
-                                      placeholder=""
-                                    />
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-
-                            {/* Score total and Add Extra Ball button side by side */}
-                            <div className="d-flex align-items-center gap-2">
-                              <button
-                                disabled={status === 'ongoing' ? false : true}
-                                className={`box_cric_btn box_cric_btn_sm ${status !== 'ongoing' ? 'ps_btn_disabled' : ''}`}
-                                onClick={(e) => handleAddExtraBall(teamNumber, rowIndex, batsmanIndex, overIndex, e)}
+                  <td className="fw-bold border-head">Total</td>
+                </tr>
+                  {/* Second row - Bowler names */ }
+                < tr >
+                <td className="bb-1" colSpan="2"></td>
+                    {
+                  pair.batsmen[0].overs.map((over, overIndex) => (
+                    <td key={overIndex} className="bb-1 ps_relative">
+                      <input
+                        type="text"
+                        className="form-control box_cric_input_filed_name"
+                        placeholder="Bowler name"
+                        autoComplete="off"
+                        disabled={status === 'ongoing' ? false : true}
+                        value={over.bowlerName}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          handleBowlerNameChange(teamNumber, rowIndex, overIndex, value);
+                          handleInputFocus(value, { type: 'bowler', teamNumber, rowIndex, overIndex, value });
+                        }}
+                        onBlur={() => handleInputBlur(over.bowlerName)}
+                      />
+                      {focusedFieldKey?.type === 'bowler' &&
+                        focusedFieldKey.teamNumber === teamNumber &&
+                        focusedFieldKey.rowIndex === rowIndex &&
+                        focusedFieldKey.overIndex === overIndex &&
+                        filteredSuggestions.length > 0 && (
+                          <ul className="suggestion-dropdown ">
+                            {filteredSuggestions.map((name, idx) => (
+                              <li
+                                key={idx}
+                                onMouseDown={() =>
+                                  handleSuggestionClick(
+                                    {
+                                      onChange: (val) => handleBowlerNameChange(teamNumber, rowIndex, overIndex, val)
+                                    },
+                                    name
+                                  )
+                                }
+                                style={{ padding: '2px 10px', cursor: 'pointer' }}
                               >
-                                +
-                              </button>
-                              <input
-                                type="text"
-                                className="form-control box_cric_input_score box_cric_input_scoreTT"
-                                value={over.overTotal}
-                                readOnly
-                              />
-                            </div>
-                          </div>
-                        </td>
+                                {name}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                    </td>
+                  ))
+                }
+                < td className = "bb-1" ></td>
+          </tr>
+          {/* Batsmen rows */}
+          {pair.batsmen.map((batsman, batsmanIndex) => (
+            <tr key={`${pair.pairId}-${batsmanIndex}`}>
+              {batsmanIndex === 0 && (
+                <td rowSpan="2" className="align-middle text-center" style={{ width: '40px' }}>
+                  {pair.pairId}
+                </td>
+              )}
+              <td className='ps_relative' style={{ width: '150px' }}>
+                <input
+                  type="text"
+                  className="form-control box_cric_input_filed_name"
+                  placeholder="Batsman name"
+                  autoComplete="off"
+                  disabled={status === 'ongoing' ? false : true}
+                  value={batsman.name}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    handleBatsmanNameChange(teamNumber, rowIndex, batsmanIndex, value);
+                    handleInputFocus(value, { type: 'batsman', teamNumber, rowIndex, batsmanIndex, value });
+                  }}
+                  onBlur={() => handleInputBlur(batsman.name)}
+                />
+                {focusedFieldKey?.type === 'batsman' &&
+                  focusedFieldKey.teamNumber === teamNumber &&
+                  focusedFieldKey.rowIndex === rowIndex &&
+                  focusedFieldKey.batsmanIndex === batsmanIndex &&
+                  filteredSuggestions.length > 0 && (
+                    <ul className="suggestion-dropdown">
+                      {filteredSuggestions.map((name, idx) => (
+                        <li
+                          key={idx}
+                          onMouseDown={() =>
+                            handleSuggestionClick(
+                              {
+                                onChange: (val) => handleBatsmanNameChange(teamNumber, rowIndex, batsmanIndex, val)
+                              },
+                              name
+                            )
+                          }
+                          style={{ padding: '4px 10px', cursor: 'pointer' }}
+                        >
+                          {name}
+                        </li>
                       ))}
-                      <td className="align-middle text-center">
-                        {calculateBatsmanTotal(batsman.overs)}
-                      </td>
-                    </tr>
-                  ))}
-                  {/* Total row */}
-                  <tr className="border-bottom border-dark">
-                    <td colSpan="2" className="text-end pe-3">
-                      {(pair.pairId - 1) * numberOfCols + 1}/{pair.pairId * numberOfCols}
-                    </td>
-                    {pair.totals.map((total, idx) => (
-                      <td key={idx} className="text-center">{total}</td>
-                    ))}
-                    <td className="text-center">
-                      {calculateBatsmanTotal(pair.batsmen[0].overs) + calculateBatsmanTotal(pair.batsmen[1].overs)}
-                    </td>
-                  </tr>
-                </React.Fragment>
+                    </ul>
+                  )}
+              </td>
+              {batsman.overs.map((over, overIndex) => (
+                <td key={overIndex} className="p-2">
+                  <div className="d-flex justify-content-between gap-1 align-items-start" style={{ minWidth: '160px' }}>
+                    {/* 6 balls */}
+                    <div className='d-flex justify-content-center gap-1'>
+                      {over.balls.map((ball, ballIndex) => (
+                        <div key={ballIndex} className="d-flex flex-column align-items-center">
+                          <div className="d-flex">
+                            <input
+                              type="text"
+                              disabled={status === 'ongoing' ? false : true}
+                              className="form-control box_cric_input_score"
+                              value={ball}
+                              onChange={(e) => handleBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
+                            />
+                          </div>
+                          {/* Show extra runs input for W and n below */}
+                          {(ball === 'W' || ball === 'n' || ball === 'N' || ball === 'w') && (
+                            <input
+                              type="text"
+                              disabled={status === 'ongoing' ? false : true}
+                              className="form-control box_cric_input_score mt-1"
+                              value={over.extraRuns[ballIndex] || ''}
+                              onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, ballIndex, e.target.value)}
+                              placeholder=""
+                            />
+                          )}
+                        </div>))}
+
+                      {/* Extra balls section */}                              {over.extraBalls && over.extraBalls.map((extraBall, extraBallIndex) => (
+                        <div key={`extra-${extraBallIndex}`} className="d-flex flex-column align-items-center">
+                          <input
+                            type="text"
+                            disabled={status === 'ongoing' ? false : true}
+                            className="form-control box_cric_input_score"
+                            value={extraBall}
+                            onChange={(e) => handleExtraBallChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex, e.target.value)}
+                          />
+                          {/* Show extra runs input for W and N below */}
+                          {(extraBall?.toUpperCase() === 'W' || extraBall?.toUpperCase() === 'N') && (
+                            <input
+                              type="text"
+                              className="form-control box_cric_input_score mt-1"
+                              disabled={status === 'ongoing' ? false : true}
+                              value={over.extraRuns[extraBallIndex + over.balls.length] || ''}
+                              onChange={(e) => handleExtraRunsChange(teamNumber, rowIndex, batsmanIndex, overIndex, extraBallIndex + over.balls.length, e.target.value)}
+                              placeholder=""
+                            />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Score total and Add Extra Ball button side by side */}
+                    <div className="d-flex align-items-center gap-2">
+                      <button
+                        disabled={status === 'ongoing' ? false : true}
+                        className={`box_cric_btn box_cric_btn_sm ${status !== 'ongoing' ? 'ps_btn_disabled' : ''}`}
+                        onClick={(e) => handleAddExtraBall(teamNumber, rowIndex, batsmanIndex, overIndex, e)}
+                      >
+                        +
+                      </button>
+                      <input
+                        type="text"
+                        className="form-control box_cric_input_score box_cric_input_scoreTT"
+                        value={over.overTotal}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                </td>
               ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+              <td className="align-middle text-center">
+                {calculateBatsmanTotal(batsman.overs)}
+              </td>
+            </tr>
+          ))}
+          {/* Total row */}
+          <tr className="border-bottom border-dark">
+            <td colSpan="2" className="text-end pe-3">
+              {(pair.pairId - 1) * numberOfCols + 1}/{pair.pairId * numberOfCols}
+            </td>
+            {pair.totals.map((total, idx) => (
+              <td key={idx} className="text-center">{total}</td>
+            ))}
+            <td className="text-center">
+              {calculateBatsmanTotal(pair.batsmen[0].overs) + calculateBatsmanTotal(pair.batsmen[1].overs)}
+            </td>
+          </tr>
+        </React.Fragment>
+              ))}
+      </tbody>
+          </table >
+        </div >
+      </div >
     )
   }
 
-  if (loading || !matchInfo || !team1Data || !team2Data) {
-    return <PageLoader />
+if (loading || !matchInfo || !team1Data || !team2Data) {
+  return <PageLoader />
+}
+
+const renderMatchStatus = (status) => {
+  let statusClass;
+  let statustext;
+
+  switch (status) {
+    case "completed":
+      statusClass = 'ps-complete-bg';
+      statustext = 'Completed';
+      break;
+    case "ongoing":
+      statusClass = 'ps-process-bg';
+      statustext = 'Ongoing';
+      break;
+    case 'cancel':
+      statusClass = 'ps-cancel-bg';
+      statustext = 'Canceled';
+      break;
+    default:
+      statusClass = 'status-unknown';
+      statustext = 'Unknown';
   }
 
-  const renderMatchStatus = (status) => {
-    let statusClass;
-    let statustext;
-
-    switch (status) {
-      case "completed":
-        statusClass = 'ps-complete-bg';
-        statustext = 'Completed';
-        break;
-      case "ongoing":
-        statusClass = 'ps-process-bg';
-        statustext = 'Ongoing';
-        break;
-      case 'cancel':
-        statusClass = 'ps-cancel-bg';
-        statustext = 'Canceled';
-        break;
-      default:
-        statusClass = 'status-unknown';
-        statustext = 'Unknown';
-    }
-
-    return (<>
-      {/* <div className='ps_match_status_box'>
+  return (<>
+    {/* <div className='ps_match_status_box'>
         <span className={`ps_match_status_bg ${statusClass}`}>{statustext}</span>
       </div> */}
 
-      <div className='ps_defalt_drop'>
-        <select className={`ps_match_status_box ${statusClass}`} value={status} onChange={handleChange} >
-          <option className='ps_match_status_box_select' value="completed">Complete</option>
-          <option className='ps_match_status_box_select' value="ongoing">Ongoing</option>
-          <option className='ps_match_status_box_select' value="cancel">Cancel</option>
-        </select>
+    <div className='ps_defalt_drop'>
+      <select className={`ps_match_status_box ${statusClass}`} value={status} onChange={handleChange} >
+        <option className='ps_match_status_box_select' value="completed">Complete</option>
+        <option className='ps_match_status_box_select' value="ongoing">Ongoing</option>
+        <option className='ps_match_status_box_select' value="cancel">Cancel</option>
+      </select>
+    </div>
+
+  </>
+
+
+  );
+};
+
+const handleChange = async (event) => {
+  let value = event.target.value;
+
+  try {
+    setLoading(true);
+    let token = localStorage.getItem('authToken');
+    let matchId = localStorage.getItem('matchId');
+
+    let responce = await axios.put(`${DEV_API}/api/chnageStatus`, { matchId, status: value },
+      { headers: { 'Authorization': `Bearer ${token}` } });
+
+    if (responce.status === 200) {
+      toast.success(responce?.data?.message);
+      console.log("praveen", responce.data);
+      setStatus(value);
+      setLoading(false);
+      // navigate('/');
+    } else {
+      toast.error(responce?.data?.message);
+    }
+
+  } catch (error) {
+    console.log(error);
+    return
+  }
+
+
+};
+
+return (
+  <>
+    {loading ? <PageLoader /> :
+      <div className=" container-fluid p-0" style={{ height: "100vh" }}>
+        <div id='finalScore' className="bc_finalScore">
+
+          <div className=" box_cric_score_all_btn box_cric_btn_score justify-content-between">
+
+            <div>
+              <div className='box_cric_back_btn' onClick={() => navigate('/')}>
+                {svg.app.back_icon} Back
+              </div>
+            </div>
+            <div className='box_cric_score_all_btn m-0'>
+
+              <div>
+
+                <div>
+                  {renderMatchStatus(status)}
+                </div>
+              </div>
+              <button
+                className="box_cric_btn"
+                onClick={() => window.open('/display', '_blank')}
+              >
+                Open Final Score in New Tab
+
+              </button>
+
+              {showPDF && (
+                <PDFDownloadLink
+                  document={
+                    <FullMatchPDF
+                      matchInfo={matchInfo}
+                      team1Data={team1Data}
+                      team2Data={team2Data}
+                    />
+                  }
+                  fileName="FinalMatchScorecard.pdf"
+                  className="box_cric_btn ps_z99"
+                >
+                  {({ loading, url }) => {
+                    if (!loading && url) {
+                      setLoadingClass('ps_loader_pdf_dl');
+                      setTimeout(() => {
+                        setShowPDF(false);
+                        setLoadingClass('');
+                      }, 5000);
+
+
+                    }
+                    return loading ? <div >  <span className=" spinner-border spinner-border-sm mr-3" /> Preparing PDF...</div> : <>  <span>Download Final Match PDF</span></>;
+                  }}
+                </PDFDownloadLink>
+              )}
+              <div className={loadingClass}></div>
+
+
+              {!showPDF && (
+                <button
+                  className="box_cric_btn"
+                  onClick={() => setShowPDF(true)}
+                >
+                  {svg.app.pdf_download} Create Full Match PDF
+                </button>
+              )}
+              <button type="submit" className="box_cric_btn" onClick={() => setIsCreateNew(true)} > {svg.app.create} Create New Match</button>
+              <Logout />
+            </div>
+          </div>
+
+          <FinalScore />
+        </div>
+
+
+        <div id='scoreTable' className='bc_score_table' >
+          {renderTable(matchInfo.team1, 1, team1Data)}
+          {renderTable(matchInfo.team2, 2, team2Data)}
+        </div>
       </div>
-
-    </>
-
-
-    );
-  };
-
-  const handleChange = async (event) => {
-    let value = event.target.value;
-
-    try {
-      setLoading(true);
-      let token = localStorage.getItem('authToken');
-      let matchId = localStorage.getItem('matchId');
-
-      let responce = await axios.put(`${DEV_API}/api/chnageStatus`, { matchId, status: value },
-        { headers: { 'Authorization': `Bearer ${token}` } });
-
-      if (responce.status === 200) {
-        toast.success(responce?.data?.message);
-        console.log("praveen",responce.data);
-        setStatus(value);
-        setLoading(false);
-        // navigate('/');
-      } else {
-        toast.error(responce?.data?.message);
-      }
-
-    } catch (error) {
-      console.log(error);
-      return
     }
 
 
-  };
-
-  return (
-    <>
-      {loading ? <PageLoader /> :
-        <div className=" container-fluid p-0" style={{ height: "100vh" }}>
-          <div id='finalScore' className="bc_finalScore">
-
-            <div className=" box_cric_score_all_btn box_cric_btn_score justify-content-between">
-
-              <div>
-                <div className='box_cric_back_btn' onClick={() => navigate('/')}>
-                  {svg.app.back_icon} Back
-                </div>
-              </div>
-              <div className='box_cric_score_all_btn m-0'>
-
-                <div>
-
-                  <div>
-                    {renderMatchStatus(status)}
-                  </div>
-                </div>
-                <button
-                  className="box_cric_btn"
-                  onClick={() => window.open('/display', '_blank')}
-                >
-                  Open Final Score in New Tab
-
-                </button>
-
-                {showPDF && (
-                  <PDFDownloadLink
-                    document={
-                      <FullMatchPDF
-                        matchInfo={matchInfo}
-                        team1Data={team1Data}
-                        team2Data={team2Data}
-                      />
-                    }
-                    fileName="FinalMatchScorecard.pdf"
-                    className="box_cric_btn ps_z99"
-                  >
-                    {({ loading, url }) => {
-                      if (!loading && url) {
-                        setLoadingClass('ps_loader_pdf_dl');
-                        setTimeout(() => {
-                          setShowPDF(false);
-                          setLoadingClass('');
-                        }, 5000);
 
 
-                      }
-                      return loading ? <div >  <span className=" spinner-border spinner-border-sm mr-3" /> Preparing PDF...</div> : <>  <span>Download Final Match PDF</span></>;
-                    }}
-                  </PDFDownloadLink>
-                )}
-                <div className={loadingClass}></div>
+    <ConfirmationPopup
+      shownPopup={isCreateNew}
+      closePopup={handleCancelPopup}
+      title="Create New Match"
+      subTitle="Are you sure you want to create new match?"
+      type="User"
+      removeAction={createNewMatch}
+    />
 
-
-                {!showPDF && (
-                  <button
-                    className="box_cric_btn"
-                    onClick={() => setShowPDF(true)}
-                  >
-                    {svg.app.pdf_download} Create Full Match PDF
-                  </button>
-                )}
-                <button type="submit" className="box_cric_btn" onClick={() => setIsCreateNew(true)} > {svg.app.create} Create New Match</button>
-                <Logout />
-              </div>
-            </div>
-
-            <FinalScore />
-          </div>
-
-
-          <div id='scoreTable' className='bc_score_table' >
-            {renderTable(matchInfo.team1, 1, team1Data)}
-            {renderTable(matchInfo.team2, 2, team2Data)}
-          </div>
-        </div>
-      }
-
-
-    
-
-      <ConfirmationPopup
-        shownPopup={isCreateNew}
-        closePopup={handleCancelPopup}
-        title="Create New Match"
-        subTitle="Are you sure you want to create new match?"
-        type="User"
-        removeAction={createNewMatch}
-      />
-
-      <style jsx>{`
+    <style jsx>{`
   .suggestion-dropdown {
     position: absolute;
     background: white;
@@ -1020,8 +1042,8 @@ const ScoreTable = () => {
     position: relative;
   }
 `}</style>
-    </>
-  )
+  </>
+)
 }
 
 export default ScoreTable

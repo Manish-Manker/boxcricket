@@ -13,6 +13,10 @@ const Display = () => {
     const [ballCounter, setBallCounter] = useState(0);
     const [isSet, setIsSet] = useState(false);
     const [imagecounst, setImagecounst] = useState(0);
+    const [currentTeam, setCurrentTeam] = useState(null);
+    const [currentOverStatus, setCurrentOverStatus] = useState(null);
+    const[battingTeamName, setBattingTeamName] = useState('');
+
     const imageList = ['./images/gravinPRO.png', './images/Ninth_Cloud.png', './images/khuber.png', './images/THINKCLOUD.png', './images/storyWala.png', './images/pixelnx.png', './images/gravin.png', './images/SevenHeavenFinal.png'];
 
     // Initial setup effect
@@ -53,6 +57,21 @@ const Display = () => {
         setImagecounst(isSet);
 
     }, [isSet]);
+
+    useEffect(() => {
+        let currentOver = JSON.parse(localStorage.getItem('currentOverData'));
+        if (currentOver) {
+            setCurrentOverStatus(currentOver);
+            if (currentOver.teamNumber === 1) {
+                setCurrentTeam(JSON.parse(localStorage.getItem('team1ScoreData')));
+                setBattingTeamName(JSON.parse(localStorage.getItem('matchInfo')).team1);
+            } else {
+                setCurrentTeam(JSON.parse(localStorage.getItem('team2ScoreData')));
+                setBattingTeamName(JSON.parse(localStorage.getItem('matchInfo')).team2);
+            }
+        }
+    }, [currentBall, team1Data, team2Data]);
+
 
 
 
@@ -350,8 +369,8 @@ const Display = () => {
                                     <div className="bc_score_box_show_waiting">
                                         {currentBall ? (
                                             <>
-                                                {/* <h2 className="mb-3 text-center">{currentBall.toUpperCase()}</h2> */}
                                                 <div className="text-center fs-5 mb-0">{getBallDescription(currentBall)}</div>
+
                                             </>
                                         ) : (
                                             <>
@@ -363,8 +382,122 @@ const Display = () => {
                                                         <h6 className='letter animate'>Waiting for ball...</h6>
                                                     </div>
                                                 </div>
-
                                             </>
+                                        )}
+                                    </div>
+                                    <div>
+                                        {currentOverStatus && (
+                                            <div className='bc_current_over_box'>
+                                                <div className="box_cric_team_heading mb-2">
+
+                                                    <h3 className="m-0">Over {currentOverStatus.overNumber}</h3>
+                                                    <h3 className="m-0">Batting Team: {battingTeamName}</h3>
+                                                    <tr className="border-top border-dark">
+                                                        <td colSpan="2" className="text-end pe-2">Bowler:</td>
+                                                        <td colSpan="8" className="fw-bold">
+                                                            {currentTeam[currentOverStatus.rowIndex].batsmen[0].overs[currentOverStatus.overIndex].bowlerName}
+                                                        </td>
+                                                    </tr>
+
+                                                </div>
+                                                <div className="table-responsive">
+                                                    <table className="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th className="text-center">Batsman</th>
+                                                                <th colSpan="6" className="text-center">Balls</th>
+                                                                <th className="text-center">Total
+                                                                    <tr>
+                                                                        {currentTeam[currentOverStatus.rowIndex]?.totals[currentOverStatus?.overIndex]}
+                                                                    </tr>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {currentTeam[currentOverStatus.rowIndex].batsmen.map((batsman, batsmanIndex) => (
+                                                                <tr key={`batsman-${batsmanIndex}`}>
+
+                                                                    <td className='ps_relative' style={{ width: '150px' }}>
+                                                                        <input
+                                                                            type="text"
+                                                                            className="form-control box_cric_input_filed_name"
+                                                                            placeholder="Batsman name"
+                                                                            autoComplete="off"
+                                                                            value={batsman.name}
+                                                                            disabled={true}
+                                                                        />
+
+                                                                    </td>
+                                                                    {batsman.overs.map((over, overIndex) => (
+                                                                        overIndex === currentOverStatus.overIndex && (
+                                                                            <td key={overIndex} className="p-2">
+                                                                                <div className="d-flex justify-content-between gap-1 align-items-start" style={{ minWidth: '160px' }}>
+                                                                                    {/* 6 balls */}
+                                                                                    <div className='d-flex justify-content-center gap-1'>
+                                                                                        {batsman.overs[overIndex].balls.map((ball, ballIndex) => (
+                                                                                            <div key={ballIndex} className="d-flex flex-column align-items-center">
+                                                                                                <div className="d-flex">
+                                                                                                    <input
+                                                                                                        type="text"
+                                                                                                        disabled={true}
+                                                                                                        className="form-control box_cric_input_score"
+                                                                                                        value={ball}
+                                                                                                    />
+                                                                                                </div>
+                                                                                                {(ball === 'W' || ball === 'n' || ball === 'N' || ball === 'w') && (
+                                                                                                    <input
+                                                                                                        type="text"
+                                                                                                        disabled={true}
+                                                                                                        className="form-control box_cric_input_score mt-1"
+                                                                                                        value={over.extraRuns[ballIndex] || ''}
+                                                                                                        placeholder=""
+                                                                                                    />
+                                                                                                )}
+                                                                                            </div>))}
+
+                                                                                        {/* Extra balls section */}
+                                                                                        {over.extraBalls && over.extraBalls.map((extraBall, extraBallIndex) => (
+                                                                                            <div key={`extra-${extraBallIndex}`} className="d-flex flex-column align-items-center">
+                                                                                                <input
+                                                                                                    type="text"
+                                                                                                    disabled={true}
+                                                                                                    className="form-control box_cric_input_score"
+                                                                                                    value={extraBall}
+                                                                                                />
+                                                                                                {/* Show extra runs input for W and N below */}
+                                                                                                {(extraBall?.toUpperCase() === 'W' || extraBall?.toUpperCase() === 'N') && (
+                                                                                                    <input
+                                                                                                        type="text"
+                                                                                                        className="form-control box_cric_input_score mt-1"
+                                                                                                        disabled={true}
+                                                                                                        value={over.extraRuns[extraBallIndex + over.balls.length] || ''}
+                                                                                                        placeholder=""
+                                                                                                    />
+                                                                                                )}
+                                                                                            </div>
+                                                                                        ))}
+                                                                                    </div>
+
+                                                                                    {/* Score total and Add Extra Ball button side by side */}
+                                                                                    <div className="d-flex align-items-center gap-2">
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            className="form-control box_cric_input_score box_cric_input_scoreTT"
+                                                                                            value={over.overTotal}
+                                                                                            readOnly
+                                                                                        />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                        )))}
+                                                                </tr>
+                                                            ))}
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -379,9 +512,6 @@ const Display = () => {
                     </div>
                 </div>
             </div>
-
-            {/* Current Ball Info - 40% width */}
-
         </div>
     )
 }
