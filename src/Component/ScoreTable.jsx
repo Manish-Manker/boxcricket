@@ -644,12 +644,17 @@ const ScoreTable = () => {
                     {Array(numberOfCols).fill().map((_, i) => (
                       <td key={i} className="text-center fw-bold border-head">
                         {pair.pairId * numberOfCols - numberOfCols + i + 1}
+                        <div className='ps_check_btn_displayover'>
+                          <input
+                            type="checkbox"
+                            id={`checkbox-${teamNumber}-${rowIndex}-${i}`} 
+                            className='ps_check_btn_displayover'
+                            checked={teamNumber === rowOverIndex?.teamNumber && rowIndex === rowOverIndex?.rowIndex && i === rowOverIndex?.overIndex}
+                            onChange={() => handelTick(teamNumber, rowIndex, i, `${pair.pairId * numberOfCols - numberOfCols + i + 1}`)}
+                          />
 
-                        <button style={{ backgroundColor: teamNumber === rowOverIndex?.teamNumber && rowIndex === rowOverIndex?.rowIndex && i == rowOverIndex?.overIndex ? "green" : "" }}
-                          onClick={() => handelTick(teamNumber, rowIndex, i, `${pair.pairId * numberOfCols - numberOfCols + i + 1}`)} >
-                          tick
-                        </button>
-
+                          <label htmlFor={`checkbox-${teamNumber}-${rowIndex}-${i}`}></label>
+                        </div>
                       </td>
                     ))}
                     <td className="fw-bold border-head">Total</td>

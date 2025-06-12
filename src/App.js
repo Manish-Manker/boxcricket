@@ -27,7 +27,7 @@ const App = () => {
         rtl={false}
         pauseOnFocusLoss
         draggable
-        theme="dark"
+        theme="light"
         limit={1}
       />
 

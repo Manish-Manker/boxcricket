@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import PageLoader from './common/pageLoader';
 import { toast } from 'react-toastify';
+import svg from './common/svg';
 
 const Login = () => {
 
@@ -11,6 +12,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
    const [btnLoading, setBtnLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false); 
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -132,15 +134,26 @@ const Login = () => {
                       {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                     </div>
 
-                    <div className="mb-3">
+                    <div className="mb-3 ps_position_relative">
                       <label className="form-label">Password</label>
                       <input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                         placeholder='Enter your password'
                         value={formData.password}
                         onChange={(e) => handleInputChange('password', e.target.value)}
                       />
+
+                      <span
+                        onClick={() => setShowPassword(!showPassword)} // Toggle password visibility on click
+                        style={{ cursor: 'pointer', position: 'absolute', right: '20px', bottom: '20%' }}
+                      >
+                        {showPassword ? (
+                         svg.app.open_eye_icon
+                        ) : (
+                          svg.app.close_eye_icon
+                        )}
+                      </span>
                       {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                     </div>
 

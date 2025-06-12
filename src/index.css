@@ -369,6 +369,11 @@ h6 {
     line-height: 40px;
     text-align: center;
     font-size: 18px;
+    position: relative;
+}
+
+.ps_position_relative{
+    position: relative;
 }
 
 
@@ -485,6 +490,21 @@ h6 {
 .bc_final_score .box_cric_team_box {
     margin: 0;
 }
+
+
+.ps_display_waitng_board {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+    color: #fff;
+}
+
+.ps_display_waitng_board h6{
+    color: #fff !important;
+}
+
 
 
 .bc_loader_box {
@@ -706,6 +726,20 @@ h6 {
 }
 
 
+.ps_waiting_gif {
+    max-width: 150px;
+    height: 150px;
+    width: 100%;
+    object-fit: contain;
+    margin: auto;
+}
+
+.ps_waiting_gif img {
+    width: 100%;
+    height: 100%;
+}
+
+
 @keyframes done-animating {
     0% {
         transform: scale(1);
@@ -821,7 +855,7 @@ h6 {
     max-height: 100%;
     min-height: 100%;
     padding: 15px 25px;
-    background-color: #fff;
+    /* background-color: #fff; */
 }
 
 .ps_display_box .box_cric_team_heading h3 {
@@ -847,9 +881,9 @@ h6 {
     width: 100%;
     height: 100%;
     margin: auto;
-    margin-top: 15%;
+    margin-top: 45%;
     text-align: center;
-    max-width: 60%;
+    max-width: 100%;
 }
 
 .ps_display_box .bc_show_score_b_img img {
@@ -906,6 +940,7 @@ h6 {
 .ps_display_box .bb-1 {
     background-color: #151636 !important;
     border-bottom: 1px solid var(--bc-border-color-dark) !important;
+    vertical-align: middle;
 }
 
 .ps_display_box .bc_final_head_boxes {
@@ -923,13 +958,61 @@ h6 {
 
 #display_final {
     max-height: 100%;
-    height: 55vh;
+    height: 50vh;
     margin-bottom: 15px;
 }
 
 #display_status {
     max-height: 100%;
-    height: calc(45vh - 25px);
+    height: calc(50vh - 25px);
+}
+
+.display_score_box .display_head {
+    background-color: #353655;
+    color: #fff;
+    border: none;
+    font-size: 2.5rem;
+    line-height: 1.5;
+}
+
+.display_score_box .display_head_body {
+    background-color: #151636;
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    font-size: 2.5rem;
+    vertical-align: middle;
+    border: 1px solid #ffffff12;
+    line-height: 1;
+}
+
+.display_score_box .box_cric_input_score {
+    background-color: #353655;
+    color: #fff;
+    border: none;
+    font-size: 3rem;
+    width: 4rem;
+    height: 4rem;
+}
+
+.display_score_box .display_score_box_name input {
+    background-color: transparent !important;
+    color: #fff;
+    border: none;
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: normal;
+}
+
+.display_score_box .table-bordered {
+    border-color: #ffffff12 !important;
+    margin-bottom: 0px;
+}
+
+.bc_current_over_box {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 
@@ -1636,6 +1719,48 @@ circle {
     fill: #acacac;
 }
 
+
+
+.ps_check_btn_displayover {
+    top: 25%;
+    /* float: right; */
+    position: absolute;
+    right: 10px;
+}
+
+
+.ps_check_btn_displayover input[type="checkbox"] {
+    display: none;
+}
+
+.ps_check_btn_displayover input[type="checkbox"]+label {
+    width: 22px;
+    height: 22px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* When checked, style the checkbox */
+.ps_check_btn_displayover input[type="checkbox"]:checked+label {
+    background-color: var(--bc-primary-color);
+    border: 1px solid #ff8c2c;
+}
+
+/* Create the checkmark effect */
+.ps_check_btn_displayover input[type="checkbox"]:checked+label::after {
+    content: '✔';
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-size: 12px;
+    transform: translate(-50%, -50%);
+}
+
 /* admin section */
 
 
@@ -1711,7 +1836,7 @@ circle {
     min-height: 60px;
 }
 
-.pu_datatable_wrapper .rdt_TableRow:hover{
+.pu_datatable_wrapper .rdt_TableRow:hover {
     background-color: #f1f4fba6 !important;
     outline: none !important;
 }
@@ -2108,6 +2233,51 @@ circle {
 
     .ps_display_box .bc_score_box_show_waiting {
         height: calc(100% - 120px);
+    }
+
+    .display_score_box .display_head {
+        font-size: 6rem;
+        line-height: 2;
+    }
+
+    .display_score_box .display_head_body {
+        font-size: 6rem;
+        line-height: 1;
+    }
+
+    .display_score_box .display_score_box_name input {
+        font-size: 7rem;
+        height: auto;
+    }
+
+
+    .display_score_box .box_cric_input_score {
+        background-color: #353655;
+        color: #fff;
+        border: none;
+        font-size: 8rem;
+        width: 10rem;
+        height: 10rem;
+    }
+
+    .ps_display_box .bb-1 {
+        max-width: 20rem;
+    }
+
+    .ps_waiting_gif {
+        max-width: 350px;
+        height: 350px;
+        width: 100%;
+        object-fit: contain;
+        margin: auto;
+    }
+
+    .ps_waiting_gif img {
+        width: 100%;
+        height: 100%;
+    }
+    .ps_display_box .bc_legend_img{
+        margin-top: 50%;
     }
 }
 

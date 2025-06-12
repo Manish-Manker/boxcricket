@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import PageLoader from './common/pageLoader';
+import svg from './common/svg';
 
 const Signup = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,12 +17,12 @@ const Signup = () => {
   const [errors, setErrors] = useState({});
   const DEV_API = process.env.REACT_APP_DEV_API;
 
-   useEffect(() => {
-        const token = localStorage.getItem('authToken');
-        if (token) {
-          navigate('/');
-        }
-      }, []);
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      navigate('/');
+    }
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -36,7 +38,7 @@ const Signup = () => {
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
     }
-    
+
     // Email validation
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
@@ -85,7 +87,7 @@ const Signup = () => {
   return (
     <div className='boxc_input_box'>
       {loading ? (
-         <PageLoader/>
+        <PageLoader />
       ) : (
         <div className="container mt-5">
           <div className="row justify-content-center">
@@ -126,15 +128,26 @@ const Signup = () => {
                       {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                     </div>
 
-                    <div className="mb-3">
+                    <div className="mb-3 ps_position_relative">
                       <label className="form-label">Password</label>
                       <input
-                        type="password"
+                         type={showPassword ? 'text' : 'password'}
                         className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                         placeholder='Enter your password'
                         value={formData.password}
                         onChange={(e) => handleInputChange('password', e.target.value)}
                       />
+
+                      <span
+                        onClick={() => setShowPassword(!showPassword)} // Toggle password visibility on click
+                        style={{ cursor: 'pointer', position: 'absolute', right: '20px', bottom: '20%' }}
+                      >
+                        {showPassword ? (
+                          svg.app.open_eye_icon
+                        ) : (
+                          svg.app.close_eye_icon
+                        )}
+                      </span>
                       {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                     </div>
 
@@ -144,11 +157,11 @@ const Signup = () => {
                       </div>
                     )}
 
-                    <button type="submit" disabled={true}  className={`box_cric_btn ${true ? 'ps_btn_disabled' : ''}`} >Sign Up</button>
-                    
+                    <button type="submit" disabled={true} className={`box_cric_btn ${true ? 'ps_btn_disabled' : ''}`} >Sign Up</button>
+
 
                     <div className="mt-4 text-center">
-                       <h5 className='ps_sign_link_fade mb-3'>Sign up is Comming Soon </h5>
+                      <h5 className='ps_sign_link_fade mb-3'>Sign up is Coming Soon </h5>
                       <p>Already have an account? <a href="/login" className="ps_sign_link">Login here</a></p>
                     </div>
                   </form>
