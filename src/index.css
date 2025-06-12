@@ -395,7 +395,7 @@ h6 {
 .ps_mic_off svg {
     width: 45px;
     height: 40px;
-    fill: var(--bc-primary-color);
+    fill: #1f2138;
 }
 
 .ps_mic_on {

@@ -407,7 +407,7 @@ const Display = () => {
                                                                     <input
                                                                         type="text"
                                                                         className="form-control box_cric_input_filed_name"
-                                                                        placeholder="Batsman name"
+                                                                        placeholder=""
                                                                         autoComplete="off"
                                                                         value={batsman.name}
                                                                         disabled={true}

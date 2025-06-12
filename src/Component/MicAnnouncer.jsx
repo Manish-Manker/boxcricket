@@ -1,6 +1,7 @@
 // components/MicAnnouncer.js
 import React, { useState, useRef } from "react";
 import svg from "./common/svg";
+import { toast } from "react-toastify";
 
 const MicAnnouncer = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -23,7 +24,8 @@ const MicAnnouncer = () => {
     setIsRecording(true);
   } catch (err) {
     console.error("Mic start error:", err);
-    alert("Microphone not found or access denied. Please check your system and browser permissions.");
+    // alert("Microphone not found or access denied. Please check your system and browser permissions.");
+    toast.error("Microphone not found or access denied. Please check your system and browser permissions.");
   }
 };
 
