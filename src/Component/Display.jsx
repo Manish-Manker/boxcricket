@@ -325,8 +325,8 @@ const Display = () => {
                                     </tr>
                                     <tr>
                                         <th className='bb-1'></th>
-                                        {skinColumns.map(num => (
-                                            <th key={num} className="text-center bb-1 ps_display_lh_ft ps_display_team_skin">{num}</th>
+                                        {skinColumns.map((num , index) => (
+                                            <th key={index} className="text-center bb-1 ps_display_lh_ft ps_display_team_skin">{num}</th>
                                         ))}
                                         <th className='bb-1'></th>
                                     </tr>
@@ -385,7 +385,7 @@ const Display = () => {
                                                     <thead>
                                                         <tr>
                                                             <th style={{maxWidth:"100px"}} className="text-center display_head">Batsman</th>
-                                                            <th colSpan="6" className="text-center display_head">Baller</th>
+                                                            <th colSpan="6" className="text-center display_head">Bowler</th>
                                                             <th className="text-center display_head">Total </th>
                                                         </tr>
                                                     </thead>
@@ -443,7 +443,7 @@ const Display = () => {
 
                                                                                     {/* Extra balls section */}
                                                                                     {over.extraBalls && over.extraBalls.map((extraBall, extraBallIndex) => (
-                                                                                        <div key={`extra-${extraBallIndex}`} className="d-flex flex-column align-items-center">
+                                                                                        <div key={`extra-${extraBallIndex+'-'+overIndex}`} className="d-flex flex-column align-items-center">
                                                                                             <input
                                                                                                 type="text"
                                                                                                 disabled={true}
@@ -467,7 +467,7 @@ const Display = () => {
 
                                                                             </div>
                                                                         </td>
-                                                                        <td key={overIndex} className=" bb-1">
+                                                                        <td  className=" bb-1">
                                                                             {/* Score total and Add Extra Ball button side by side */}
                                                                             <div className="d-flex justify-content-center gap-1 align-items-center display_score_box_name ">
                                                                                 <input
@@ -488,7 +488,7 @@ const Display = () => {
                                                 </table>
                                             </div>
                                         </div>
-                                    ) : <div className='ps_display_waitng_board'> <div class="inner-text done-animating "><h6 class="letter animate">Waiting for scoreboard...</h6></div></div>}
+                                    ) : <div className='ps_display_waitng_board'> <div className="inner-text done-animating "><h6 className="letter animate">Waiting for scoreboard...</h6></div></div>}
                                 </div>
 
                             </div>

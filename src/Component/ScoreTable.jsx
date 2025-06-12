@@ -10,6 +10,7 @@ import svg from './common/svg';
 import ConfirmationPopup from './common/confirmPopup';
 import { toast } from 'react-toastify';
 import Logout from './common/logout';
+import MicAnnouncer from './MicAnnouncer';
 
 const ScoreTable = () => {
   // State management
@@ -29,6 +30,7 @@ const ScoreTable = () => {
   const [allNames, setAllNames] = useState(['manish', 'manker', 'nam', 'rohit', 'rahul']);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [focusedFieldKey, setFocusedFieldKey] = useState(null);
+
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -647,7 +649,7 @@ const ScoreTable = () => {
                         <div className='ps_check_btn_displayover'>
                           <input
                             type="checkbox"
-                            id={`checkbox-${teamNumber}-${rowIndex}-${i}`} 
+                            id={`checkbox-${teamNumber}-${rowIndex}-${i}`}
                             className='ps_check_btn_displayover'
                             checked={teamNumber === rowOverIndex?.teamNumber && rowIndex === rowOverIndex?.rowIndex && i === rowOverIndex?.overIndex}
                             onChange={() => handelTick(teamNumber, rowIndex, i, `${pair.pairId * numberOfCols - numberOfCols + i + 1}`)}
@@ -942,6 +944,11 @@ const ScoreTable = () => {
                 </div>
               </div>
               <div className='box_cric_score_all_btn m-0'>
+
+                <div style={{ }}>
+                  <MicAnnouncer />
+                </div>
+
 
                 <div>
 
