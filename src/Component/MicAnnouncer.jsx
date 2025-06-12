@@ -1,5 +1,6 @@
 // components/MicAnnouncer.js
 import React, { useState, useRef } from "react";
+import svg from "./common/svg";
 
 const MicAnnouncer = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -49,17 +50,10 @@ const MicAnnouncer = () => {
   return (
     <button
       onClick={toggleMic}
-      style={{
-        fontSize: "1.5rem",
-        padding: "10px 20px",
-        backgroundColor: isRecording ? "#f44336" : "#4CAF50",
-        color: "white",
-        border: "none",
-        borderRadius: "8px",
-        cursor: "pointer",
-      }}
+     className="ps_mic_btn_box"
     >
-      {isRecording ? "🛑 Stop Mic" : "🎤 Start Mic"}
+      {/* {isRecording ? " Stop Mic" : " Start Mic"} */}
+      {isRecording ? <div className="ps_mic_on"><img src="../images/mic_animation.gif"></img></div> : <div className="ps_mic_off">{svg.app.mic_icon}</div> }
     </button>
   );
 };

@@ -372,8 +372,41 @@ h6 {
     position: relative;
 }
 
-.ps_position_relative{
+.ps_position_relative {
     position: relative;
+}
+
+.ps_mic_btn_box {
+    font-size: 1.5rem;
+    padding: 10px 20px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    height: 60px;
+    width: 115px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.ps_mic_off svg {
+    width: 45px;
+    height: 40px;
+    fill: var(--bc-primary-color);
+}
+
+.ps_mic_on {
+    width: 65px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.ps_mic_on img {
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -501,7 +534,7 @@ h6 {
     color: #fff;
 }
 
-.ps_display_waitng_board h6{
+.ps_display_waitng_board h6 {
     color: #fff !important;
 }
 
@@ -2277,7 +2310,8 @@ circle {
         width: 100%;
         height: 100%;
     }
-    .ps_display_box .bc_legend_img{
+
+    .ps_display_box .bc_legend_img {
         margin-top: 50%;
     }
 }
