@@ -70,7 +70,7 @@ const Users = () => {
         })
     }
 
-  
+
 
     const loadUserData = async (page, perPage, status, search) => {
 
@@ -306,7 +306,8 @@ const Users = () => {
             cell: (row, index) => (
                 <>
                     <div className='pu_datatable_btns '>
-                        <a onClick={() => viewMatches(row)} className="pu_dt_btn ">
+                        <a onClick={() => viewMatches(row)} className="pu_dt_btn ps_tooltip_icon">
+                             <span class="tooltiptext">Matches List</span>
                             {svg.app.view_icon}
                         </a>
                     </div>
@@ -344,10 +345,11 @@ const Users = () => {
         {
             name: 'Actions',
             cell: (row) => (
-                <div className="pu_datatable_btns">
-                    <a onClick={() => getEditedData(row)} className="pu_dt_btn ">
-                        {svg.app.dash_edit}
-                    </a>
+                <div className="pu_datatable_btns ">
+                        <a onClick={() => getEditedData(row)} className="pu_dt_btn ps_tooltip_icon">
+                              <span class="tooltiptext">Update User</span>
+                            {svg.app.dash_edit}
+                        </a>
                 </div>
             )
         },
