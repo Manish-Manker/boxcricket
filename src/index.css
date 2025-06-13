@@ -887,7 +887,7 @@ h6 {
     margin-bottom: 10px;
     max-height: 100%;
     min-height: 100%;
-    padding: 15px 25px;
+    /* padding: 15px 25px; */
     /* background-color: #fff; */
 }
 
@@ -1024,8 +1024,8 @@ h6 {
     color: #fff;
     border: none;
     font-size: 3rem;
-    width: 4rem;
-    height: 4rem;
+    width: 3.5rem;
+    height: 3.5rem;
 }
 
 .display_score_box .display_score_box_name input {

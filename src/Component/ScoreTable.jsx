@@ -960,7 +960,7 @@ const ScoreTable = () => {
                   className="box_cric_btn"
                   onClick={() => window.open('/display', '_blank')}
                 >
-                  Open Final Score in New Tab
+                  Open Final Score
 
                 </button>
 
@@ -986,11 +986,11 @@ const ScoreTable = () => {
 
 
                       }
-                      return loading ? <div >  <span className=" spinner-border spinner-border-sm mr-3" /> Preparing PDF...</div> : <>  <span>Download Final Match PDF</span></>;
+                      return loading ? <div >  <span className=" spinner-border spinner-border-sm mr-3" /> Preparing PDF...</div> : <>  <span>Download Match PDF</span></>;
                     }}
                   </PDFDownloadLink>
                 )}
-                <div className={loadingClass}></div>
+                {loadingClass && <div className={loadingClass}></div>}
 
 
                 {!showPDF && (
@@ -998,7 +998,7 @@ const ScoreTable = () => {
                     className="box_cric_btn"
                     onClick={() => setShowPDF(true)}
                   >
-                    {svg.app.pdf_download} Create Full Match PDF
+                    {svg.app.pdf_download} Create Match PDF
                   </button>
                 )}
                 <button type="submit" className="box_cric_btn" onClick={() => setIsCreateNew(true)} > {svg.app.create} Create New Match</button>
