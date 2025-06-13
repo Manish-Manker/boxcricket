@@ -403,7 +403,7 @@ const FinalScore = () => {
                             </div>
 
                             <div className='col-lg-4 m-auto'>
-                                <div className='bc_legend_img'> <img src='./images/cricket_legends.jpg'></img></div>
+                                <div className='bc_legend_img'> <img src='./images/cricket_legends.png'></img></div>
                             </div>
 
                         </div>

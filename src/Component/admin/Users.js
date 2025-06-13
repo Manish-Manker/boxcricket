@@ -497,9 +497,8 @@ const Users = () => {
                     </div>
 
                     {isEdit ? "" : <div className='d-flex align-items-center gap-2 '>
-                        <div className="skipg_input_wrapper w-100">
+                        <div className="skipg_input_wrapper w-100 ps_position_relative">
                             <label className='skipg_form_input_label '>Password</label>
-                            <div className='skipg_password_show' onClick={() => showHidePassword()}>{showPassword ? svg.app.eye_open_icon : svg.app.eye_close_icon}</div>
                             <input
                                 type={showPassword === true ? "text" : "password"}
                                 className="form-control "
@@ -509,6 +508,16 @@ const Users = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 disabled={isEdit}
                             />
+                            <span
+                                onClick={() => setShowPassword(!showPassword)} // Toggle password visibility on click
+                                style={{ cursor: 'pointer', position: 'absolute', right: '20px', bottom: '20%' }}
+                            >
+                                {showPassword ? (
+                                    svg.app.open_eye_icon
+                                ) : (
+                                    svg.app.close_eye_icon
+                                )}
+                            </span>
                         </div>
 
                     </div>}
