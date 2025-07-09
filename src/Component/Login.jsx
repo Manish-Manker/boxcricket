@@ -173,6 +173,9 @@ const Login = () => {
                     <div className="mt-4 text-center">
                       <p>Don't have an account? <a href="/signup" className="ps_sign_link">Sign up here</a></p>
                     </div>
+                     <div className="mt-4 text-center">
+                      <p><a href="/forgot-password" className="ps_sign_link">Forgot Password</a></p>
+                    </div>
                   </form>
                 </div>
               </div>
