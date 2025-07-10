@@ -8,11 +8,10 @@ import svg from './common/svg';
 
 const Login = () => {
 
-
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-   const [btnLoading, setBtnLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false); 
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -22,13 +21,18 @@ const Login = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
-    if (token) {
+    const user = localStorage.getItem('userData');
+
+    if (token && user && JSON.parse(user).role === 'admin') {
+      navigate('/admin/users');
+    }
+    else if (token) {
       navigate('/');
     }
   }, []);
 
   useEffect(() => {
-    setBtnLoading(false); 
+    setBtnLoading(false);
   }, []);
 
   useEffect(() => {
@@ -66,7 +70,7 @@ const Login = () => {
         const response = await axios.post(`${DEV_API}/api/login`, formData);
 
         if (response.data.status === 200) {
-            toast.success(response?.data?.message);
+          toast.success(response?.data?.message);
           // Store the token
           localStorage.setItem('authToken', response.data.token);
           localStorage.setItem('userData', JSON.stringify(response.data.user));
@@ -75,11 +79,11 @@ const Login = () => {
           axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
           console.log(response.data.user);
-          
+
           // Redirect to main page after successful login
-          if(response.data.user.role === 'admin'){
+          if (response.data.user.role === 'admin') {
             navigate('/admin/users');
-          }else{
+          } else {
             navigate('/');
           }
         }
@@ -105,7 +109,7 @@ const Login = () => {
   return (
     <div className='boxc_input_box'>
       {loading ? (
-         <PageLoader/>
+        <PageLoader />
       ) : (
         <div className="container mt-5">
           <div className="row justify-content-center">
@@ -149,7 +153,7 @@ const Login = () => {
                         style={{ cursor: 'pointer', position: 'absolute', right: '20px', bottom: '20%' }}
                       >
                         {showPassword ? (
-                         svg.app.open_eye_icon
+                          svg.app.open_eye_icon
                         ) : (
                           svg.app.close_eye_icon
                         )}
@@ -166,8 +170,8 @@ const Login = () => {
                     <button type="submit" className="box_cric_btn" disabled={btnLoading}>
                       {btnLoading ? (
                         <span className="spinner-border spinner-border-sm mr-3" />
-                      ) : ( "")}
-                       &nbsp; Login
+                      ) : ("")}
+                      &nbsp; Login
                     </button>
 
                     <div className="mt-4 text-center">

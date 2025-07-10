@@ -28,21 +28,41 @@ const InputInfo = () => {
 
   }, []);
 
-   const logout = () => {
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('userData');
-          localStorage.removeItem('currentBall');
-          localStorage.removeItem('currentSkinIndex');
-          localStorage.removeItem('isSet');
-          localStorage.removeItem('matchId');
-          localStorage.removeItem('matchInfo');
-          localStorage.removeItem('previousBall');
-          localStorage.removeItem('team1ScoreData');
-          localStorage.removeItem('team2ScoreData');
-          localStorage.removeItem('consecutiveZerosCount');
-          toast.success("Successfully logged out");
-          navigate('/login');
-      };
+  const logout = async () => {
+        let token = localStorage.getItem('authToken');
+        let userData = localStorage.getItem('userData');
+        const DEV_API = process.env.REACT_APP_DEV_API;
+
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        localStorage.removeItem('currentBall');
+        localStorage.removeItem('currentSkinIndex');
+        localStorage.removeItem('isSet');
+        localStorage.removeItem('matchId');
+        localStorage.removeItem('matchInfo');
+        localStorage.removeItem('previousBall');
+        localStorage.removeItem('team1ScoreData');
+        localStorage.removeItem('team2ScoreData');
+        localStorage.removeItem('consecutiveZerosCount');
+
+        // try {
+        //     let response = await axios.post(`${DEV_API}/api/logOut`,
+        //         { userId: JSON.parse(userData)?.id },
+        //         {
+        //             headers: { 'Authorization': `Bearer ${token}` }
+        //         }
+        //     );
+
+        //     if (response?.data?.status === 200) {
+        //         toast.success(response?.data?.message);
+        //     }
+        // } catch (error) {
+        //     console.log("error", error);
+        // }
+        // finally {
+            navigate('/login');
+        // }
+    };
 
   const setUserMatchData = async () => {
 
@@ -56,12 +76,11 @@ const InputInfo = () => {
           'Content-Type': 'application/json'
         }
       });
-      if (response?.data?.status === 401 || response?.data?.status === 403) {
+      if (response?.data?.status === 401 || response?.data?.status === 403 || response?.status === 401 || response?.status === 403) {
         console.log("+-+-+-", response);
 
-        // toast.error(response?.data?.message);
         logout();
-        navigate('/login');
+        // navigate('/login');
         return
       }
 

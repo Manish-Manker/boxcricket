@@ -27,7 +27,7 @@ const ScoreTable = () => {
   const navigate = useNavigate();
   const DEV_API = process.env.REACT_APP_DEV_API;
 
-  const [allNames, setAllNames] = useState(['manish', 'manker', 'nam', 'rohit', 'rahul']);
+  const [allNames, setAllNames] = useState(['manish', 'manker', 'mohit', 'rohit', 'rahul']);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [focusedFieldKey, setFocusedFieldKey] = useState(null);
 
@@ -52,6 +52,43 @@ const ScoreTable = () => {
     localStorage.removeItem('currentOverData');
   }, []);
 
+    const logout = async () => {
+        let token = localStorage.getItem('authToken');
+        let userData = localStorage.getItem('userData');
+        const DEV_API = process.env.REACT_APP_DEV_API;
+
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        localStorage.removeItem('currentBall');
+        localStorage.removeItem('currentSkinIndex');
+        localStorage.removeItem('isSet');
+        localStorage.removeItem('matchId');
+        localStorage.removeItem('matchInfo');
+        localStorage.removeItem('previousBall');
+        localStorage.removeItem('team1ScoreData');
+        localStorage.removeItem('team2ScoreData');
+        localStorage.removeItem('consecutiveZerosCount');
+
+        // try {
+        //     let response = await axios.post(`${DEV_API}/api/logOut`,
+        //         { userId: JSON.parse(userData)?.id },
+        //         {
+        //             headers: { 'Authorization': `Bearer ${token}` }
+        //         }
+        //     );
+
+        //     if (response?.data?.status === 200) {
+        //         toast.success(response?.data?.message);
+        //     }
+        // } catch (error) {
+        //     console.log("error", error);
+        // }
+        // finally {
+        //     navigate('/login');
+        // }
+        
+            navigate('/login');
+    };
 
 
   const handleInputFocus = (value, fieldKey) => {
@@ -139,6 +176,13 @@ const ScoreTable = () => {
         }
       });
 
+       if (response.status == 401 || response.data.status == 403) {
+        console.log("+-+-+-", response);
+        
+        logout();
+        return;
+      }
+
       const { matchInfo: matchData, team1Data: team1Response, team2Data: team2Response } = response.data.data;
 
       if (matchData) {
@@ -181,9 +225,8 @@ const ScoreTable = () => {
         }
       });
       if (response.data.status === 401 || response.data.status === 403) {
-
-        navigate('/login');
-        return
+        logout();
+        return;
       }
 
       if (response.data.status === 200) {
@@ -227,8 +270,8 @@ const ScoreTable = () => {
 
   // Initial data load
   useEffect(() => {
-    loadData();
     loadplayerName();
+    loadData();
   }, []);
 
   // Auto-save team data effects
