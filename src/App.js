@@ -13,6 +13,7 @@ import MatchesList from './Component/admin/MatchesList';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LandingPage from './Component/LandingPage.jsx';
 
 const App = () => {
 
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<InputInfo />} />
+           <Route path="/landing" element={<LandingPage />} />
           <Route path="/scoretable" element={<ScoreTable />} />
           <Route path="/display" element={<Display />} />
 
