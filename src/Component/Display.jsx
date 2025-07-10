@@ -19,13 +19,6 @@ const Display = () => {
 
     const imageList = ['./images/gravinPRO.png', './images/Ninth_Cloud.png', './images/khuber.png', './images/THINKCLOUD.png', './images/storyWala.png', './images/pixelnx.png', './images/gravin.png', './images/SevenHeavenFinal.png'];
 
-    // Initial setup effect
-    useEffect(() => {
-        const token = localStorage.getItem('authToken');
-        if (!token) {
-            navigate('/login');
-        }
-    }, []);
 
 
 

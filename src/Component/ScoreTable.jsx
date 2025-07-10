@@ -33,10 +33,6 @@ const ScoreTable = () => {
 
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      navigate('/login');
-    }
     const matchId = localStorage.getItem('matchId');
     if (!matchId) {
       navigate('/');
@@ -121,7 +117,7 @@ const ScoreTable = () => {
   };
 
   const createNewMatch = () => {
-    navigate('/');
+    navigate('/input');
     setIsCreateNew(false);
   }
 

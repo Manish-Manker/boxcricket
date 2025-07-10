@@ -16,53 +16,42 @@ const InputInfo = () => {
   const [btnLoading, setBtnLoading] = useState(false);
   const [userMatchList, setUserMatchList] = useState([]);
 
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    const user = localStorage.getItem('userData');
-    if (!token) {
-      navigate('/login');
-    }
-    if(token && user && JSON.parse(user).role === 'admin') {
-      navigate('/admin/users');
-    }
-
-  }, []);
 
   const logout = async () => {
-        let token = localStorage.getItem('authToken');
-        let userData = localStorage.getItem('userData');
-        const DEV_API = process.env.REACT_APP_DEV_API;
+    let token = localStorage.getItem('authToken');
+    let userData = localStorage.getItem('userData');
+    const DEV_API = process.env.REACT_APP_DEV_API;
 
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('userData');
-        localStorage.removeItem('currentBall');
-        localStorage.removeItem('currentSkinIndex');
-        localStorage.removeItem('isSet');
-        localStorage.removeItem('matchId');
-        localStorage.removeItem('matchInfo');
-        localStorage.removeItem('previousBall');
-        localStorage.removeItem('team1ScoreData');
-        localStorage.removeItem('team2ScoreData');
-        localStorage.removeItem('consecutiveZerosCount');
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    localStorage.removeItem('currentBall');
+    localStorage.removeItem('currentSkinIndex');
+    localStorage.removeItem('isSet');
+    localStorage.removeItem('matchId');
+    localStorage.removeItem('matchInfo');
+    localStorage.removeItem('previousBall');
+    localStorage.removeItem('team1ScoreData');
+    localStorage.removeItem('team2ScoreData');
+    localStorage.removeItem('consecutiveZerosCount');
 
-        // try {
-        //     let response = await axios.post(`${DEV_API}/api/logOut`,
-        //         { userId: JSON.parse(userData)?.id },
-        //         {
-        //             headers: { 'Authorization': `Bearer ${token}` }
-        //         }
-        //     );
+    // try {
+    //     let response = await axios.post(`${DEV_API}/api/logOut`,
+    //         { userId: JSON.parse(userData)?.id },
+    //         {
+    //             headers: { 'Authorization': `Bearer ${token}` }
+    //         }
+    //     );
 
-        //     if (response?.data?.status === 200) {
-        //         toast.success(response?.data?.message);
-        //     }
-        // } catch (error) {
-        //     console.log("error", error);
-        // }
-        // finally {
-            navigate('/login');
-        // }
-    };
+    //     if (response?.data?.status === 200) {
+    //         toast.success(response?.data?.message);
+    //     }
+    // } catch (error) {
+    //     console.log("error", error);
+    // }
+    // finally {
+    navigate('/login');
+    // }
+  };
 
   const setUserMatchData = async () => {
 
@@ -267,6 +256,9 @@ const InputInfo = () => {
 
       <div className='ps_form_logut_div'>
         <div></div>
+
+        <div>  <button onClick={() => navigate('/')} >Home Page</button></div>
+
         <div>  <Logout /></div>
       </div>
       <div className="container mt-5">
@@ -373,7 +365,7 @@ const InputInfo = () => {
       </div>
     </div>
 
-   
+
   </>
 
   )

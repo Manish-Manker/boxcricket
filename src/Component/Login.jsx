@@ -27,7 +27,7 @@ const Login = () => {
       navigate('/admin/users');
     }
     else if (token) {
-      navigate('/');
+      navigate('/input');
     }
   }, []);
 
@@ -84,7 +84,7 @@ const Login = () => {
           if (response.data.user.role === 'admin') {
             navigate('/admin/users');
           } else {
-            navigate('/');
+            navigate('/input');
           }
         }
       } catch (error) {
@@ -111,7 +111,9 @@ const Login = () => {
       {loading ? (
         <PageLoader />
       ) : (
+
         <div className="container mt-5">
+          <button onClick={() => navigate('/')} >Back To Home</button>
           <div className="row justify-content-center">
             <div className="col-md-12">
               <div className='boxc_input_box_form'>
@@ -177,8 +179,8 @@ const Login = () => {
                     <div className="mt-4 text-center">
                       <p>Don't have an account? <a href="/signup" className="ps_sign_link">Sign up here</a></p>
                     </div>
-                     <div className="mt-4 text-center">
-                      <p><a href="/forgot-password" className="ps_sign_link">Forgot Password</a></p>
+                    <div className="mt-4 text-center">
+                      <p><a href="/forgotPassword" className="ps_sign_link">Forgot Password</a></p>
                     </div>
                   </form>
                 </div>

@@ -74,7 +74,7 @@ export default function LandingPage() {
                         <Link to="#" onClick={() => featuresRef.current.scrollIntoView({ behavior: 'smooth' })}>Features</Link>
                         <Link to="#" onClick={() => testimonialsRef.current.scrollIntoView({ behavior: 'smooth' })}>Testimonials</Link>
                         <Link to="#start">Download Sample Report</Link>
-                        <Link to="#" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}>Get Started</Link>
+                        <Link to="/login" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}>Get Started</Link>
                         <button className="ps_lp_btn">Book a demo</button>
                     </div>
                 </div>
