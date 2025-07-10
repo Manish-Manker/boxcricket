@@ -257,7 +257,7 @@ const InputInfo = () => {
       <div className='ps_form_logut_div'>
         <div></div>
 
-        <div>  <button onClick={() => navigate('/')} >Home Page</button></div>
+        <div>  <button className='box_cric_btn' onClick={() => navigate('/')} >Home Page</button></div>
 
         <div>  <Logout /></div>
       </div>

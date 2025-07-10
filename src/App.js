@@ -5,8 +5,8 @@ import ScoreTable from './Component/ScoreTable'
 import './index.css';
 import FinalScore from './Component/FinalScore'
 import Display from './Component/Display';
-import Signup from './Component/Singup';
-import Login from './Component/Login';
+import Signup from './Component/auth/Singup';
+import Login from './Component/auth/Login';
 import Users from './Component/admin/Users.js'
 import NotFound from './NotFound';
 import MatchesList from './Component/admin/MatchesList';
@@ -15,7 +15,9 @@ import ProtectedRoute from './Component/ProtectedRoute'
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import LandingPage from './Component/LandingPage.jsx';
+
+import ResetPassword from './Component/auth/ResetPassword.jsx';
+import LandingPage from './Component/auth/LandingPage.jsx';
 
 const App = () => {
 
@@ -42,6 +44,7 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
+            <Route path="/resetPassword" element={<ResetPassword />} />
 
 
           <Route element={<ProtectedRoute />} >

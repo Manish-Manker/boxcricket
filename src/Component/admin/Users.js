@@ -390,7 +390,7 @@ const Users = () => {
                     </div>
                     <div class="skipg_dashboard_boxes">
                         <div>
-                            <h5>Avtive Users</h5>
+                            <h5>Active Users</h5>
                             <span>{totalData.ActiveUsers}</span>
                         </div>
                         <div class="skipg_dashboard_boxes_icon">
