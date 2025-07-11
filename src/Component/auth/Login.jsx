@@ -179,13 +179,12 @@ const Login = () => {
                     </button>
 
                     <div className="d-flex justify-content-between mt-4 ">
-                      {/* <p>Don't have an account? <a href="/signup" className="ps_sign_link">Sign up</a></p> */}
+                     <p onClick={() => navigate('/')}  style={{cursor:"pointer"}}> Back To Home</p>
                       <p><Link to="/forgotPassword" className="ps_sign_link">Forgot Password</Link></p>
                     </div>
-                    {/* <div className="mt-4 text-center">
-                      <p onClick={() => navigate('/')}  style={{cursor:"pointer"}}> Back To Home</p>
-                       <p><a href="/resetPassword" className="ps_sign_link">Reset Password</a></p>
-                    </div> */}
+                    <div className="mt-4 text-center">
+                     
+                    </div>
                   </form>
                 </div>
               </div>

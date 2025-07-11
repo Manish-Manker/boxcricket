@@ -132,7 +132,7 @@ const ChangePassword = () => {
 
                                             <span
                                                 onClick={() => setShowPassword(!showPassword)}
-                                                style={{ cursor: 'pointer', position: 'absolute', right: '20px', bottom: '20%' }}
+                                                style={{ cursor: 'pointer', position: 'absolute', right: '30px', top: '48px' }}
                                             >
                                                 {showPassword ? (
                                                     svg.app.open_eye_icon
@@ -155,7 +155,7 @@ const ChangePassword = () => {
 
                                             <span
                                                 onClick={() => setShowCfmPassword(!showCfmPassword)}
-                                                style={{ cursor: 'pointer', position: 'absolute', right: '20px', bottom: '20%' }}
+                                                style={{ cursor: 'pointer', position: 'absolute', right: '30px',  top: '48px' }}
                                             >
                                                 {showCfmPassword ? (
                                                     svg.app.open_eye_icon

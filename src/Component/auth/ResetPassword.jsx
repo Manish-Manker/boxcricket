@@ -14,6 +14,7 @@ const ResetPassword = () => {
     const [password, setPassword] = useState('');
     const [cfmPassword, setCfmPassword] = useState('');
     const [errors, setErrors] = useState({});
+     const [btnLoading, setBtnLoading] = useState(false);
     const DEV_API = process.env.REACT_APP_DEV_API;
 
     useEffect(() => {
@@ -35,6 +36,9 @@ const ResetPassword = () => {
         return passwordRegex.test(password);
     };
 
+    useEffect(() => {
+        setErrors({});
+    },[password, cfmPassword]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -45,6 +49,7 @@ const ResetPassword = () => {
         }
 
         if (validatePassword(password)) {
+              setBtnLoading(true);
             try {
                 const response = await axios.post(`${DEV_API}/api/resetPassword`, { password, token: window.location.search.split('?')[1] });
                 if (response.data.status === 200) {
@@ -61,6 +66,7 @@ const ResetPassword = () => {
             }
         }
         else {
+              setBtnLoading(false);
             setErrors({ password: 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character' });
             return
         }
@@ -101,7 +107,7 @@ const ResetPassword = () => {
 
                                             <span
                                                 onClick={() => setShowPassword(!showPassword)}
-                                                style={{ cursor: 'pointer', position: 'absolute', right: '20px', bottom: '20%' }}
+                                                style={{ cursor: 'pointer', position: 'absolute', right: '30px', top: '48px' }}
                                             >
                                                 {showPassword ? (
                                                     svg.app.open_eye_icon
@@ -124,7 +130,7 @@ const ResetPassword = () => {
 
                                             <span
                                                 onClick={() => setShowCfmPassword(!showCfmPassword)}
-                                                style={{ cursor: 'pointer', position: 'absolute', right: '20px', bottom: '20%' }}
+                                                style={{ cursor: 'pointer', position: 'absolute', right: '30px', top: '48px' }}
                                             >
                                                 {showCfmPassword ? (
                                                     svg.app.open_eye_icon
@@ -142,7 +148,9 @@ const ResetPassword = () => {
                                             </div>
                                         )}
 
-                                        <button type="submit" className={`box_cric_btn `} >Submit</button>
+                                        <button type="submit" className={`box_cric_btn `} > {btnLoading ? (
+                        <span className="spinner-border spinner-border-sm mr-3" />
+                      ) : ("")} Submit</button>
 
                                         <div className="mt-4 text-center">
 
