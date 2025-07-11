@@ -12,7 +12,7 @@ import NotFound from './NotFound';
 import MatchesList from './Component/admin/MatchesList';
 import ForgotPassword from './Component/auth/ForgotPassword';
 import ProtectedRoute from './Component/ProtectedRoute'
-
+import ChangePassword from './Component/ChangePassword';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -54,6 +54,8 @@ const App = () => {
             <Route path="/display" element={<Display />} />
             <Route path="/admin/users" element={<Users />} />
             <Route path="/admin/matchList" element={<MatchesList />} />
+            <Route path="/changePassword" element={<ChangePassword />} />
+
           </Route>
 
 

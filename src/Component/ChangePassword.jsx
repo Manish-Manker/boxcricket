@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate , Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import PageLoader from '../common/pageLoader';
-import svg from '../common/svg';
+import PageLoader from '../Component/common/pageLoader';
+import svg from '../Component/common/svg';
 import { toast } from 'react-toastify';
 
-const ResetPassword = () => {
+const ChangePassword = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -16,19 +16,43 @@ const ResetPassword = () => {
     const [errors, setErrors] = useState({});
     const DEV_API = process.env.REACT_APP_DEV_API;
 
-    useEffect(() => {
-        const token = localStorage.getItem('authToken');
-        if (token) {
-            navigate('/');
-        }
-    }, []);
 
-    useEffect(() => {
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-        }, 1500);
-    }, []);
+    const logout = async () => {
+        let token = localStorage.getItem('authToken');
+        let userData = localStorage.getItem('userData');
+        const DEV_API = process.env.REACT_APP_DEV_API;
+
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userData');
+        localStorage.removeItem('currentBall');
+        localStorage.removeItem('currentSkinIndex');
+        localStorage.removeItem('isSet');
+        localStorage.removeItem('matchId');
+        localStorage.removeItem('matchInfo');
+        localStorage.removeItem('previousBall');
+        localStorage.removeItem('team1ScoreData');
+        localStorage.removeItem('team2ScoreData');
+        localStorage.removeItem('consecutiveZerosCount');
+
+        try {
+            let response = await axios.post(`${DEV_API}/api/logOut`,
+                { userId: JSON.parse(userData)?.id },
+                {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }
+            );
+
+            if (response?.data?.status === 200) {
+                toast.success(response?.data?.message);
+            }
+        } catch (error) {
+            console.log("error", error);
+        }
+        finally {
+            navigate('/login');
+        }
+    };
+
 
     const validatePassword = (password) => {
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -46,12 +70,19 @@ const ResetPassword = () => {
 
         if (validatePassword(password)) {
             try {
-                const response = await axios.post(`${DEV_API}/api/resetPassword`, { password, token: window.location.search.split('?')[1] });
+                const response = await axios.post(`${DEV_API}/api/changePassword`, { password }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
                 if (response.data.status === 200) {
-                    toast.success(response?.data?.message || 'Password reset successfully');
+                    toast.success(response?.data?.message || 'Password changed successfully');
+
                     setTimeout(() => {
+                        logout();
                         navigate('/login');
-                    }, 2000);
+                    }, 1000);
                 }
             } catch (error) {
                 console.error('Error signing up:', error);
@@ -83,7 +114,7 @@ const ResetPassword = () => {
                                         </Link>
                                     </div>
                                     <div className='bc_form_head'>
-                                        <h3>Reset Your Account Password?</h3>
+                                        <h3>Change Your Account Password?</h3>
                                     </div>
 
                                     <form onSubmit={handleSubmit}>
@@ -146,7 +177,7 @@ const ResetPassword = () => {
 
                                         <div className="mt-4 text-center">
 
-                                            <p className='mb-0'>Back to <Link to="/login" className="ps_sign_link">Login </Link></p>
+                                            <p className='mb-0'>Back to <Link to="/" className="ps_sign_link">Home </Link></p>
                                         </div>
                                     </form>
                                 </div>
@@ -159,4 +190,4 @@ const ResetPassword = () => {
     );
 };
 
-export default ResetPassword;
+export default ChangePassword;

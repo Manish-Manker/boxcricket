@@ -91,7 +91,7 @@ const InputInfo = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 1500)
+    }, 1000)
   }, [])
 
   useEffect(() => {
@@ -258,6 +258,7 @@ const InputInfo = () => {
         <div></div>
 
         <div>  <button className='box_cric_btn' onClick={() => navigate('/')} >Home Page</button></div>
+        <div>  <button className='box_cric_btn' onClick={() => navigate('/changePassword')} >Change Password</button></div>
 
         <div>  <Logout /></div>
       </div>

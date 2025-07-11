@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import PageLoader from '../common/pageLoader';
@@ -56,7 +56,7 @@ const Login = () => {
     if (!formData.password) {
       newErrors.password = 'Password is required';
     }
-    
+
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -114,15 +114,15 @@ const Login = () => {
       ) : (
 
         <div className="container mt-5">
-        
+
           <div className="row justify-content-center">
             <div className="col-md-12">
               <div className='boxc_input_box_form'>
                 <div className='w-100'>
                   <div className="bc_login_logo">
-                    <a href="/#" className="wpa_logo">
+                    <Link to="/" className="wpa_logo">
                       <img src="./images/logo.svg" alt="logo" />
-                    </a>
+                    </Link>
                   </div>
                   <div className='bc_form_head'>
                     <h3>Welcome Back to Pixa-Score!</h3>
@@ -170,6 +170,7 @@ const Login = () => {
                       </div>
                     )}
 
+                    
                     <button type="submit" className="box_cric_btn" disabled={btnLoading}>
                       {btnLoading ? (
                         <span className="spinner-border spinner-border-sm mr-3" />
@@ -178,13 +179,13 @@ const Login = () => {
                     </button>
 
                     <div className="d-flex justify-content-between mt-4 ">
-                      <p>Don't have an account? <a href="/signup" className="ps_sign_link">Sign up</a></p>
-                        <p><a href="/forgotPassword" className="ps_sign_link">Forgot Password</a></p>
+                      {/* <p>Don't have an account? <a href="/signup" className="ps_sign_link">Sign up</a></p> */}
+                      <p><Link to="/forgotPassword" className="ps_sign_link">Forgot Password</Link></p>
                     </div>
-                    <div className="mt-4 text-center">
+                    {/* <div className="mt-4 text-center">
                       <p onClick={() => navigate('/')}  style={{cursor:"pointer"}}> Back To Home</p>
                        <p><a href="/resetPassword" className="ps_sign_link">Reset Password</a></p>
-                    </div>
+                    </div> */}
                   </form>
                 </div>
               </div>

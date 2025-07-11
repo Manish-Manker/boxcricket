@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import PageLoader from '../common/pageLoader';
-
+import { toast } from 'react-toastify';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-  });
+  const [email, setEmail] = useState('');
   const [errors, setErrors] = useState({});
   const DEV_API = process.env.REACT_APP_DEV_API;
+
+  const [visibelity, setVisibility] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -28,43 +28,38 @@ const ForgotPassword = () => {
     }, 1500);
   }, []);
 
-  const validateForm = () => {
-    const newErrors = {};
-   
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (validateForm()) {
+    if (validateEmail(email)) {
       try {
-        // const response = await axios.post(`${DEV_API}/api/signup`, formData);
-        // if (response.data.status === 201) {
-        //   navigate('/login');
-        // }
+        const response = await axios.post(`${DEV_API}/api/forgotPassword`, { email });
+        if (response.data.status === 200) {
+          setVisibility(true);
+          toast.success(response?.data?.message);
+          setTimeout(() => {
+            // navigate('/login');
+            navigate(`/resetPassword?${response.data.token}`);
+          }, 2000);
+        }
       } catch (error) {
         console.error('Error signing up:', error);
         setErrors({
-          submit: error.response?.data?.message || 'An error occurred during signup'
+          submit: error.response?.data?.message || 'An error occurred'
         });
       }
+    } else {
+      toast.error('Please enter a valid email address');
     }
   };
 
-  const handleInputChange = (field, value) => {
-    setFormData({ ...formData, [field]: value });
-    if (errors[field]) {
-      setErrors({ ...errors, [field]: null });
-    }
-  };
+
 
   return (
     <div className='boxc_input_box'>
@@ -77,25 +72,24 @@ const ForgotPassword = () => {
               <div className='boxc_input_box_form'>
                 <div className='w-100'>
                   <div className="bc_login_logo">
-                    <a href="/" className="wpa_logo">
+                    <Link to="/" className="wpa_logo">
                       <img src="./images/logo.svg" alt="logo" />
-                    </a>
+                    </Link>
                   </div>
+
                   <div className='bc_form_head'>
                     <h3>Forgot Your Account Password?</h3>
                   </div>
 
                   <form onSubmit={handleSubmit}>
-                    
-
                     <div className="mb-3">
                       <label className="form-label">Email</label>
                       <input
                         type="email"
                         className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                         placeholder='Enter your email'
-                        value={formData.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                       />
                       {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                     </div>
@@ -106,11 +100,11 @@ const ForgotPassword = () => {
                       </div>
                     )}
 
-                    <button type="submit" disabled={true} className={`box_cric_btn ${true ? 'ps_btn_disabled' : ''}`} >Sign Up</button>
+                    <button type="submit" className={`box_cric_btn`} >Submit</button>
 
                     <div className="mt-4 text-center">
-                      <p>OTP has been send to this email</p>
-                      <p className='mb-0'>Back to <a href="/login" className="ps_sign_link">Login </a></p>
+                      {visibelity && <p>Reset Link has been send to this email</p>}
+                      <p className='mb-0'>Back to <Link to="/login" className="ps_sign_link">Login </Link></p>
                     </div>
                   </form>
                 </div>
