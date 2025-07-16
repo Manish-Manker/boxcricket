@@ -9,7 +9,7 @@ import PageLoader from '../common/pageLoader';
 import Popup from '../common/Popup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
-
+import moment from 'moment';
 import AdminLayout from './AdminLayout';
 
 const Users = () => {
@@ -32,10 +32,13 @@ const Users = () => {
 
     const [search, setSearch] = useState('');
     const [statusChange, setStatusChange] = useState(false);
+    const [loginChange, setLoginChange] = useState(false);
     const [hasSubmittedSearch, setHasSubmittedSearch] = useState(false);
     const [userToChangeStatus, setUserToChangeStatus] = useState(null);
     const [customerList, setcustomerList] = useState([])
     const [SelectedStatus, setSelectedStatus] = useState('');
+
+    const [updatedPassword, setUpdatedPassword] = useState(false);
 
     const statusOption = [
         { value: 'active', label: 'Active' },
@@ -47,7 +50,7 @@ const Users = () => {
         loadUserData(page, perPage, SelectedStatus, search);
         localStorage.removeItem('userId');
         localStorage.removeItem('userName');
-    }, [page, perPage, SelectedStatus, search]);
+    }, [page, perPage, SelectedStatus]);
 
     const loadTotalData = () => {
         let token = localStorage.getItem('authToken');
@@ -70,8 +73,6 @@ const Users = () => {
         })
     }
 
-
-
     const loadUserData = async (page, perPage, status, search) => {
 
         setLoading(true)
@@ -87,7 +88,6 @@ const Users = () => {
             if (responce.data.status === 200) {
                 loadTotalData();
                 setLoading(false);
-                console.log("data", responce?.data?.data);
                 let totalUsers = responce?.data?.totalUsers
                 let data = responce?.data?.data
                 setcustomerList(data);
@@ -103,11 +103,17 @@ const Users = () => {
         }
     }
 
+    useEffect(() => {
+        if (search === '' && hasSubmittedSearch) {
+            loadUserData(page, perPage, SelectedStatus, '');
+            setHasSubmittedSearch(false);
+        }
+    }, [search, hasSubmittedSearch]);
+
 
     const handlePerRowsChange = (newPerPage, page) => {
         setPerPage(newPerPage);
         setPage(1);
-        loadUserData();
     };
 
     const validateForm = (formData, isUpdate = false) => {
@@ -129,7 +135,6 @@ const Users = () => {
             errorMessages.push(newErrors.email);
         }
 
-        // Password validation only for adding user
         if (!isUpdate && !formData.password) {
             newErrors.password = 'Password is required';
             errorMessages.push(newErrors.password);
@@ -180,16 +185,17 @@ const Users = () => {
             name: fullname,
             email: email
         };
-        if (validateForm(formData, true)) {
+
+        if (updatedPassword) {
+            formData.password = password;
+        }
+
+        if (validateForm(formData)) {
             try {
                 setLoading(true)
                 const token = localStorage.getItem('authToken');
                 const DEV_API = process.env.REACT_APP_DEV_API;
 
-                let formData = {
-                    name: fullname,
-                    email: email
-                }
                 let responce = await axios.put(`${DEV_API}/api/edituser/${userId}`, formData, {
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -206,6 +212,7 @@ const Users = () => {
             }
             finally {
                 setAddCategoryPopup(false);
+                setLoading(false);
             }
         }
     }
@@ -244,14 +251,64 @@ const Users = () => {
             });
 
             if (response.status === 200) {
-                loadUserData(page, perPage, SelectedStatus, search);
+                setcustomerList((prevList) =>
+                    prevList.map((item) => {
+                        if (item._id === user._id) {
+                            return { ...item, status: updatedStatus };
+                        }
+                        return item;
+                    })
+                );
+                loadTotalData();
                 toast.success(response.data.message);
             }
         } catch (error) {
             toast.error("Failed to change user status: " + error.response?.data?.message || "Unknown error");
+            return;
         } finally {
-            setStatusChange(false); // Close confirmation popup
-            setUserToChangeStatus(null); // Clear user data
+            setStatusChange(false);
+            setUserToChangeStatus(null);
+        }
+    };
+
+    const handleLoginStatusChangeClick = (user) => {
+        setUserToChangeStatus(user);
+        setLoginChange(true);
+    }
+
+    const confirmLoginStatusChange = async (user) => {
+        const token = localStorage.getItem('authToken');
+        const DEV_API = process.env.REACT_APP_DEV_API;
+
+        let updatedStatus = false;
+
+        try {
+            const response = await axios.post(`${DEV_API}/api/changeLoginStatus`, {
+                userId: user._id,
+                status: updatedStatus
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.status === 200) {
+                setcustomerList((prevList) =>
+                    prevList.map((item) => {
+                        if (item._id === user._id) {
+                            return { ...item, isLoggedIn: updatedStatus };
+                        }
+                        return item;
+                    })
+                );
+                toast.success(response.data.message);
+            }
+        } catch (error) {
+            toast.error("Failed to change user status: " + error.response?.data?.message || "Unknown error");
+            return
+        } finally {
+            setLoginChange(false);
+            setUserToChangeStatus(null);
         }
     };
 
@@ -288,14 +345,17 @@ const Users = () => {
         {
             name: 'User Name', wrap: true,
             selector: row => row?.name,
-            sortable: true,
+            // sortable: true,
         },
-        { name: 'Email', selector: row => row.email, sortable: true, },
+        {
+            name: 'Email', selector: row => row.email,
+            // sortable: true,
+        },
 
         {
             name: 'No of Matches',
             selector: row => row?.matchCount,
-            sortable: true
+            // sortable: true
         },
 
         {
@@ -307,7 +367,7 @@ const Users = () => {
                 <>
                     <div className='pu_datatable_btns '>
                         <a onClick={() => viewMatches(row)} className="pu_dt_btn ps_tooltip_icon">
-                             <span class="tooltiptext">Matches List</span>
+                            <span className="tooltiptext">Matches List</span>
                             {svg.app.view_icon}
                         </a>
                     </div>
@@ -319,7 +379,7 @@ const Users = () => {
         {
             name: 'Status',
 
-            sortable: true,
+            // sortable: true,
             cell: (row, index) => (
                 <>
                     <div className='d-flex align-items-center gap-2'>
@@ -343,13 +403,45 @@ const Users = () => {
         },
 
         {
+            name: 'Login Status',
+
+            // sortable: true,
+            cell: (row, index) => (
+                <>
+                    <div className='d-flex align-items-center gap-2'>
+                        <div className='d-flex align-items-center'>
+                            <label htmlFor={`isLoggedIn-${row._id}`} className="switch">
+                                <input
+                                    type="checkbox"
+                                    title="Status"
+                                    className="tooltiped"
+                                    id={`isLoggedIn-${row._id}`}
+                                    checked={row.isLoggedIn === true}
+                                    disabled={row.isLoggedIn === false}
+                                    onChange={() => handleLoginStatusChangeClick(row)}
+                                />
+                                <span className="switch-status"></span>
+                            </label>
+                        </div>
+                    </div>
+                </>
+            )
+        },
+
+        {
+            name: 'Created At',
+            selector: row => moment(row.createdAt).format('Do MMM YYYY'),
+            // sortable: true,
+        },
+
+        {
             name: 'Actions',
             cell: (row) => (
                 <div className="pu_datatable_btns ">
-                        <a onClick={() => getEditedData(row)} className="pu_dt_btn ps_tooltip_icon">
-                              <span class="tooltiptext">Update User</span>
-                            {svg.app.dash_edit}
-                        </a>
+                    <a onClick={() => getEditedData(row)} className="pu_dt_btn ps_tooltip_icon">
+                        <span className="tooltiptext">Update User</span>
+                        {svg.app.dash_edit}
+                    </a>
                 </div>
             )
         },
@@ -361,6 +453,7 @@ const Users = () => {
         setFullName('');
         setEmail('');
         setPassword('');
+        setUpdatedPassword(false);
         setAddCategoryPopup(!addCategoryPopup)
     };
 
@@ -379,39 +472,39 @@ const Users = () => {
             <AdminLayout />
             <div className='ps_admin_p5'>
                 <div className='skipg_dashboard_box_section'>
-                    <div class="skipg_dashboard_boxes">
+                    <div className="skipg_dashboard_boxes">
                         <div>
                             <h5>Total Users</h5>
                             <span>{totalData.totalUsers}</span>
                         </div>
-                        <div class="skipg_dashboard_boxes_icon">
+                        <div className="skipg_dashboard_boxes_icon">
                             {svg.app.total_user_icon}
                         </div>
                     </div>
-                    <div class="skipg_dashboard_boxes">
+                    <div className="skipg_dashboard_boxes">
                         <div>
                             <h5>Active Users</h5>
                             <span>{totalData.ActiveUsers}</span>
                         </div>
-                        <div class="skipg_dashboard_boxes_icon">
+                        <div className="skipg_dashboard_boxes_icon">
                             {svg.app.active_user_icon}
                         </div>
                     </div>
-                    <div class="skipg_dashboard_boxes">
+                    <div className="skipg_dashboard_boxes">
                         <div>
                             <h5>Inactive Users</h5>
                             <span>{totalData.InActiveUsers}</span>
                         </div>
-                        <div class="skipg_dashboard_boxes_icon">
+                        <div className="skipg_dashboard_boxes_icon">
                             {svg.app.inactice_user_icon}
                         </div>
                     </div>
-                    <div class="skipg_dashboard_boxes">
+                    <div className="skipg_dashboard_boxes">
                         <div>
                             <h5>Total Matches</h5>
                             <span>{totalData.ToalMatches}</span>
                         </div>
-                        <div class="skipg_dashboard_boxes_icon">
+                        <div className="skipg_dashboard_boxes_icon">
                             {svg.app.total_matches_icon}
                         </div>
                     </div>
@@ -449,7 +542,18 @@ const Users = () => {
 
                                     <li>
                                         <div className="pu_search_wrapper">
-                                            <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target?.value)} onKeyUp={handleSearchKeyupEvent} />
+                                            <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        const trimmedValue = search.trim();
+                                                        if (trimmedValue !== '') {
+                                                            setHasSubmittedSearch(true);
+                                                            loadUserData(page, perPage, SelectedStatus, trimmedValue);
+                                                        }
+                                                    }
+                                                }}
+
+                                            />
                                             {search.length > 0 && (
                                                 <span className="pu_clear_icon" onClick={clearSearch}>
                                                     {svg.app.clear_icon}
@@ -472,7 +576,14 @@ const Users = () => {
                                     paginationServer
                                     paginationTotalRows={totalRows}
                                     onChangeRowsPerPage={handlePerRowsChange}
-                                    onChangePage={(page) => setPage(page)}
+                                    onChangePage={(newPage) => {
+                                        setPage((prevPage) => {
+                                            if (prevPage !== newPage) {
+                                                return newPage;
+                                            }
+                                            return prevPage;
+                                        });
+                                    }}
                                     progressComponent={<PageLoader />}
                                     //  striped={true} 
                                     highlightOnHover={true}
@@ -497,8 +608,12 @@ const Users = () => {
                         <label className='skipg_form_input_label '>Email</label>
                         <input type="text" className="form-control " placeholder="Email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
+                    {isEdit && <div>
+                        <input type="checkbox" value={updatedPassword} onChange={(e) => setUpdatedPassword(!updatedPassword)} />
+                        <label className='skipg_form_input_label '>Update Password</label>
+                    </div>}
 
-                    {isEdit ? "" : <div className='d-flex align-items-center gap-2 '>
+                    {(isEdit && !updatedPassword) ? "" : <div className='d-flex align-items-center gap-2 '>
                         <div className="skipg_input_wrapper w-100 ps_position_relative">
                             <label className='skipg_form_input_label '>Password</label>
                             <input
@@ -508,10 +623,9 @@ const Users = () => {
                                 name="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                disabled={isEdit}
                             />
                             <span
-                                onClick={() => setShowPassword(!showPassword)} // Toggle password visibility on click
+                                onClick={() => setShowPassword(!showPassword)}
                                 style={{ cursor: 'pointer', position: 'absolute', right: '20px', bottom: '20%' }}
                             >
                                 {showPassword ? (
@@ -536,6 +650,15 @@ const Users = () => {
                 subTitle={`Are you sure you want to change the status of ${userToChangeStatus?.name}?`}
                 type={"User"}
                 removeAction={() => userToChangeStatus && confirmStatusChange(userToChangeStatus)}
+            />
+
+            <ConfirmationPopup
+                shownPopup={!!loginChange}
+                closePopup={() => setLoginChange(false)}
+                title="Confirm Login Status Change"
+                subTitle={`Are you sure you want to change the login status of ${userToChangeStatus?.name}?`}
+                type={"User"}
+                removeAction={() => userToChangeStatus && confirmLoginStatusChange(userToChangeStatus)}
             />
 
         </>

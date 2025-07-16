@@ -77,13 +77,9 @@ const MatchesList = (props) => {
         }
     }
 
-
-
     useEffect(() => {
         loadData(page, perPage, status);
     }, [page, perPage, status]);
-
-
 
     const handlePerRowsChange = (newPerPage, page) => {
         setPerPage(newPerPage);
@@ -171,7 +167,6 @@ const MatchesList = (props) => {
         { value: 'ongoing', label: 'Ongoing' },
         { value: 'cancel', label: 'Canceled' },
     ]
-
 
    const handleChange = (event, row) => {
         const value = event.target.value;
@@ -263,25 +258,25 @@ const MatchesList = (props) => {
         {
             name: 'Team 1', wrap: true,
             selector: row => row?.team1,
-            sortable: true,
+            // sortable: true,
         },
 
         {
             name: '', wrap: true,
             // selector: row => row?.team1,
-            sortable: true,
+            // sortable: true,
             cell: (row) => (
                 <div className='ps-process'>vs</div>
             )
         },
-        { name: 'Team 2', selector: row => row.team2, sortable: true, },
-        { name: 'Overs', selector: row => row.totalOvers, sortable: true, },
-        { name: 'Overs/Skin', selector: row => row.oversPerSkin, sortable: true, },
+        { name: 'Team 2', selector: row => row.team2, },
+        { name: 'Overs', selector: row => row.totalOvers, },
+        { name: 'Overs/Skin', selector: row => row.oversPerSkin, },
 
         {
             name: 'Status',
             width: '200px',
-            sortable: false,
+            // sortable: false,
             cell: (row) => (
                 renderMatchStatus(row)
             )
@@ -291,7 +286,7 @@ const MatchesList = (props) => {
         {
             name: 'Date',
             selector: row => moment(row.createdAt).format('Do MMM YYYY'),
-            sortable: true,
+            // sortable: true,
         },
 
         {
@@ -330,14 +325,11 @@ const MatchesList = (props) => {
     };
 
 
-
     return (
         <>
 
          <AdminLayout showBackButton={true} onBackClick={handleBackClick} />
             <div className='ps_table_box ps_admin_p5'>
-
-                
                 <div className="ps-table-design ">
 
                     <div className="pu_datatable_wrapper skipg_dash_table">

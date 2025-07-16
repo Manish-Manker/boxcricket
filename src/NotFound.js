@@ -17,7 +17,8 @@ const NotFound = () => {
                             </div>
                             <h3>Oops!</h3>
                             <p class="mb-4">The page you are looking for does not exist</p>
-                            <a class="box_cric_btn" onClick={handleBackClick}>Go To Home Page</a>
+                            {/* <a  class="box_cric_btn" onClick={handleBackClick}>Go To Home Page</a> */}
+                            <button className="box_cric_btn" onClick={handleBackClick}>Go To Home Page</button>
                         </div>
                     </div>
                 </div>

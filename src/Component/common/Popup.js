@@ -14,7 +14,7 @@ const Popup = (props) => {
     useEffect(() => {
         setShow(props.show);
         document.body.addEventListener('keyup', function (e) {
-            if (e.key == "Escape") {
+            if (e.key === "Escape") {
                 closeHandler()
             }
         });

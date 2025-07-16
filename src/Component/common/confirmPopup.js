@@ -21,14 +21,14 @@ function ConfirmationPopup({
                         e.stopPropagation();
                     }}
                 >
-                    <a className="rz_closeIcon" onClick={closePopup}>
+                    <a  className="rz_closeIcon" onClick={closePopup}>
                         {svg.app.close_icon}
                     </a>
                     <div className='modal-body '>
                         <div className='rz_confirmModal'>
                            
                             <div className='rz_textCOntent '>
-                                <div className="skipg_delete_img"><img src="/images/warning.png" /></div>
+                                <div className="skipg_delete_img"><img alt="" src="/images/warning.png" /></div>
                                 <h4>{title ? title : `Are you sure you want to delete this ${type ? type : 'item'} ?`}</h4>
                                 <p>{subTitle ? subTitle : `This ${type ? type : 'item'} will be deleted immediately.`}</p>                           
 

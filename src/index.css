@@ -1136,6 +1136,8 @@ h6 {
     top: 15px;
     z-index: 9;
     cursor: pointer;
+    border: none;
+    background-color: none;
     /* width: 25px;
     height: 25px;
     border-radius: 30px; */

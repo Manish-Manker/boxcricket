@@ -27,7 +27,7 @@ const ScoreTable = () => {
   const navigate = useNavigate();
   const DEV_API = process.env.REACT_APP_DEV_API;
 
-  const [allNames, setAllNames] = useState(['manish', 'manker', 'mohit', 'rohit', 'rahul']);
+  const [allNames, setAllNames] = useState([]);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [focusedFieldKey, setFocusedFieldKey] = useState(null);
 
