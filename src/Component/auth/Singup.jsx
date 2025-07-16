@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import PageLoader from '../common/pageLoader';
@@ -9,7 +9,7 @@ import svg from '../common/svg';
 const Signup = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,13 +23,6 @@ const Signup = () => {
     if (token) {
       navigate('/');
     }
-  }, []);
-
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
   }, []);
 
   const validateForm = () => {
@@ -47,11 +40,15 @@ const Signup = () => {
       newErrors.email = 'Please enter a valid email address';
     }
 
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const isValidPassword = passwordRegex.test(formData.password);
+
     // Password validation
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters long';
+    } else if (!isValidPassword) {
+      newErrors.password = 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character and must be at least 8 characters long';
     }
 
     setErrors(newErrors);
@@ -132,7 +129,7 @@ const Signup = () => {
                     <div className="mb-3 ps_position_relative">
                       <label className="form-label">Password</label>
                       <input
-                         type={showPassword ? 'text' : 'password'}
+                        type={showPassword ? 'text' : 'password'}
                         className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                         placeholder='Enter your password'
                         value={formData.password}
@@ -158,12 +155,12 @@ const Signup = () => {
                       </div>
                     )}
 
-                    <button type="submit" disabled={true} className={`box_cric_btn ${true ? 'ps_btn_disabled' : ''}`} >Sign Up</button>
+                    <button type="submit" className={`box_cric_btn `} >Sign Up</button>
 
 
                     <div className="mt-4 text-center">
-                      <h5 className='ps_sign_link_fade mb-3'>Sign up is Coming Soon </h5>
-                      <p>Already have an account? <a href="/login" className="ps_sign_link">Login here</a></p>
+                      {/* <h5 className='ps_sign_link_fade mb-3'>Sign up is Coming Soon </h5> */}
+                      <p className='ps_sign_link_fade mb-3'>Already have an account? <Link to="/login" className="ps_sign_link">Login here</Link></p>
                     </div>
                   </form>
                 </div>

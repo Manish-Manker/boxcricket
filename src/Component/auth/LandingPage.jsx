@@ -75,7 +75,7 @@ export default function LandingPage() {
                         <Link to="#" onClick={() => testimonialsRef.current.scrollIntoView({ behavior: 'smooth' })}>Testimonials</Link>
                         <Link to="#start">Download Sample Report</Link>
                         <Link to="/login" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}>Get Started</Link>
-                        <Link to="/login" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}><button className="ps_lp_btn">Book a demo</button> </Link>
+                        <Link to="/signup" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}><button className="ps_lp_btn">Try for Free</button> </Link>
                     </div>
                 </div>
             </nav>
@@ -89,7 +89,7 @@ export default function LandingPage() {
                                 <h6>Record. Display. Analyze. All in Real Time.</h6>
                                 <p className="lead">Score every ball, generate detailed match PDFs, and broadcast the action live with PixaScore. Live scoring, real-time display, and automatic match stats — all from your phone.</p>
                                 <div className="ps_lp_banner_btns">
-                                    <Link to="/login" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}><button className="ps_lp_btn">Book a demo</button> </Link>
+                                    <Link to="/signup" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}><button className="ps_lp_btn">Try for Free</button> </Link>
                                     <button className="ps_lp_btn ps_lp_btn_dark">Watch in action</button>
                                 </div>
                             </div>
@@ -394,7 +394,7 @@ export default function LandingPage() {
                         <h6>Record. Display. Analyze. All in Real Time.</h6>
                         <p className="lead">Ready to take your indoor cricket matches to the next level? <br></br>Score every ball, generate detailed match PDFs, and broadcast the action live with PixaScore.</p>
                         <div className="ps_lp_banner_btns justify-content-center">
-                            <Link to="/login" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}><button className="ps_lp_btn">Book a demo</button> </Link>
+                            <Link to="/signup" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}><button className="ps_lp_btn">Try for Free</button> </Link>
                             <button className="ps_lp_btn ps_lp_btn_dark">Watch in action</button>
                         </div>
                     </div>

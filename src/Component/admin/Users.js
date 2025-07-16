@@ -203,7 +203,6 @@ const Users = () => {
                 })
 
                 if (responce.data.status === 200) {
-                    setLoading(false)
                     loadUserData();
                     toast.success(responce?.data?.message);
                 }

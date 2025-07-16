@@ -6,6 +6,7 @@ import PageLoader from '../common/pageLoader';
 import { toast } from 'react-toastify';
 import svg from '../common/svg';
 
+
 const Login = () => {
 
   const navigate = useNavigate();
@@ -35,12 +36,12 @@ const Login = () => {
     setBtnLoading(false);
   }, []);
 
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-  }, []);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 1500);
+  // }, []);
 
   const validateForm = () => {
     const newErrors = {};
@@ -170,7 +171,7 @@ const Login = () => {
                       </div>
                     )}
 
-                    
+
                     <button type="submit" className="box_cric_btn" disabled={btnLoading}>
                       {btnLoading ? (
                         <span className="spinner-border spinner-border-sm mr-3" />
@@ -179,11 +180,12 @@ const Login = () => {
                     </button>
 
                     <div className="d-flex justify-content-between mt-4 ">
-                     <p onClick={() => navigate('/')}  style={{cursor:"pointer"}}> Back To Home</p>
+                      <Link to="/" >Back To <span className="ps_sign_link">Home</span></Link>
                       <p><Link to="/forgotPassword" className="ps_sign_link">Forgot Password</Link></p>
                     </div>
+                    <Link to="/signup" >Don't have an account?  <span className="ps_sign_link">Sign Up</span></Link>
                     <div className="mt-4 text-center">
-                     
+
                     </div>
                   </form>
                 </div>
