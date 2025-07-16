@@ -6,6 +6,7 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 import { Autoplay, FreeMode, Scrollbar } from 'swiper/modules';
+import Popup from '../common/Popup';
 
 const testimonials = [
     { name: 'Jessica Barnes', role: 'Assistant Coach, New York Youth Cricket Club', quote: 'PixaScore made our weekend tournaments feel like professional events. The live scoreboard on the big screen was a huge hit with players and spectators.' },
@@ -19,6 +20,7 @@ const testimonials = [
 export default function LandingPage() {
     const [navBlack, setNavBlack] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+     const [addVideoPopup, setAddVideoPopup] = useState(false);
 
     const whyRef = useRef(null);
     const featuresRef = useRef(null);
@@ -50,6 +52,10 @@ export default function LandingPage() {
 
     const handleToggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
+    };
+
+     const categoryPopupCloseHandler = () => {
+        setAddVideoPopup(false);
     };
 
     return (
@@ -89,8 +95,8 @@ export default function LandingPage() {
                                 <h6>Record. Display. Analyze. All in Real Time.</h6>
                                 <p className="lead">Score every ball, generate detailed match PDFs, and broadcast the action live with PixaScore. Live scoring, real-time display, and automatic match stats — all from your phone.</p>
                                 <div className="ps_lp_banner_btns">
-                                    <Link to="/signup" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}><button className="ps_lp_btn">Try for Free</button> </Link>
-                                    <button className="ps_lp_btn ps_lp_btn_dark">Watch in action</button>
+                                    <Link to="/login" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}><button className="ps_lp_btn">Book a demo</button> </Link>
+                                    <button className="ps_lp_btn ps_lp_btn_dark" onClick={() => setAddVideoPopup((prev) => !prev)}>Watch in action</button>
                                 </div>
                             </div>
 
@@ -297,6 +303,55 @@ export default function LandingPage() {
                 </div>
             </section>
 
+
+             <section className="pricing-section">
+                <div className="text-center ps_lp_title_box ps_lp_title_box_width">
+                    <h2>Plan And Pricing</h2>
+                    <p>What Coaches, Organizers &amp; Players Are Saying About PixaScore</p>
+                </div>
+                <div className='row'>
+                    <div className='col-md-12 d-flex gap-5 justify-content-center'>
+                        <div className="auth_plan_container_box">
+                            <span aria-label="SGOne" className=""><h4>Basic Plan</h4></span>
+                            <div className="auth_plan_price_box">
+                                <h5>$9.99<span> / Month</span></h5>
+                            </div>
+                            <div className="auth_plan_h4 bb1">
+                                <p className="mb-2">Payment Type :Recurring </p>
+                            </div>
+                            <div className="auth_plan_h4 pb-0">
+                                <ul className="ps_lb_list-unstyled ps_lb_price_box pb-1">
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Account Aggregation</span></li>
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Preority Support</span></li>
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Expence Tracking</span></li>
+                                </ul>
+                            </div>
+                            <button className="ps_lp_btn" style={{ margin: "auto", width: "100%" }}>Buy Now</button>
+                        </div>
+                   
+                        <div className="auth_plan_container_box">
+                            <span aria-label="SGOne" className=""><h4>Basic Plan</h4></span>
+                            <div className="auth_plan_price_box">
+                                <h5>$19.99<span> / Month</span></h5>
+                            </div>
+                            <div className="auth_plan_h4 bb1">
+                                <p className="mb-2">Payment Type :Recurring </p>
+                            </div>
+                            <div className="auth_plan_h4 pb-0">
+                                <ul className="ps_lb_list-unstyled ps_lb_price_box pb-1">
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Account Aggregation</span></li>
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Preority Support</span></li>
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Expence Tracking</span></li>
+                                </ul>
+                            </div>
+                            <button className="ps_lp_btn" style={{ margin: "auto", width: "100%" }}>Buy Now</button>
+                        </div>
+                    </div>
+                   
+                </div>
+
+            </section>
+
             <section ref={testimonialsRef} id="testimonials" className="testimonials-section ">
                 <div className="container-fluid">
                     <div className="text-center ps_lp_title_box ps_lp_title_box_width">
@@ -416,6 +471,25 @@ export default function LandingPage() {
             </footer>
 
         </div>
+
+          <Popup
+                heading="Video"
+                show={addVideoPopup}
+                onClose={categoryPopupCloseHandler}
+                 maxWidth={"970px"}
+            >
+                <div>
+                    <iframe
+                        width="100%"
+                            height="500"
+                        src="https://www.youtube.com/embed/YOUR_VIDEO_URL"
+                        title="Sample Video"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    ></iframe>
+                </div>
+            </Popup>
         </>
     );
 }
