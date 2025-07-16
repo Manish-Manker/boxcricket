@@ -2637,6 +2637,149 @@ circle {
     display: none;
 }
 
+
+
+.pricing-section {
+  padding: 60px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+ 
+.pricing-subtitle {
+  color: #888;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+ 
+.pricing-title {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 40px;
+}
+ 
+.pricing-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+ 
+.pricing-card {
+  background-color: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 30px 20px;
+  width: 300px;
+  text-align: left;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+ 
+ 
+ .auth_plan_container_box {
+    position: relative;
+    border: 1px solid #eaeaea;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+    transition: .4s ease-in-out;
+    max-width: 370px;
+    /* margin:auto; */
+}
+ 
+ .auth_plan_container_box:hover{
+     border: 1px solid var(--bc-primary-color)!important;
+     box-shadow: 0px 0px 30px 0px #2D48AA1A;
+ }
+ 
+.skipg_main_auth_page .auth_plan_container_box:hover {
+    border: 1px solid var(--main-color)!important
+}
+ 
+ .auth_plan_container_box h4 {
+    line-height: 25px;
+    margin: 0 auto 20px;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--bc-lp-title-color);
+}
+ 
+.skipg_main_auth_page .auth_plan_h4 {
+    text-align: center;
+    margin-top: 20px;
+    padding-bottom: 20px
+}
+ 
+.skipg_main_auth_page .bb1 {
+    border-bottom: 1px solid #eaeaea
+}
+ 
+ .auth_plan_h4 h3 {
+    height: 34px;
+    font-size: 34px;
+    font-weight: 800;
+    color: #434347;
+    margin: 0 0 10px
+}
+ 
+ .auth_plan_h4 h6 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #434347;
+    margin: 0
+}
+ 
+ .auth_plan_h4 p {
+    font-size: 14px;
+    font-weight: 500;
+    color: #84858c;
+    margin: 0;
+    height: 20px
+}
+ 
+ .auth_plan_price_box {
+    min-width: 260px;
+    border: 1px solid var(--bc-primary-color);
+    background: #ffdbbc14;
+    border-radius: 5px;
+    padding: 8px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+ 
+.auth_plan_container_box .bb1 {
+    border-bottom: 1px solid #eaeaea;
+}
+ 
+.auth_plan_h4 {
+    text-align: center;
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+ 
+ .auth_plan_price_box h5 {
+    font-size: 30px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--bc-primary-color);;
+}
+ 
+ .auth_plan_price_box span {
+    font-size: 20px;
+    font-weight: 700;
+    color:  var(--bc-primary-color);;
+}
+ 
+.ps_lb_price_box li{
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    color: #2D3958 !important;
+}
+
 .ps_landing_logonone {
     display: none;
 }
