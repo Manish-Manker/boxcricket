@@ -74,7 +74,7 @@ export default function LandingPage() {
                 <div className="container">
                     <div className="ps_lp_logo">
                         <Link to="/" className="wpa_logo">
-                            <img src="./images/logo.svg" alt="logo" />
+                            <img src="./images/logo/darklogo.svg" alt="logo" />
                         </Link>
                     </div>
                     <button className="toggle_btn" onClick={handleToggleSidebar}>
@@ -187,7 +187,7 @@ export default function LandingPage() {
 
                     <div className='row ps_lp_about_section '>
                         <div className='col-lg-6'>
-                            {/* <div className='ps_lp_about_img'> <img src="./images/LandingPage/banner1.png" alt="banner" /></div> */}
+                            <div className='ps_lp_about_img'> <img src="./images/LandingPage/about1.png" alt="banner" /></div>
                         </div>
                         <div className='col-lg-6'>
                             <div className='ps_lp_title_box'>
@@ -257,7 +257,7 @@ export default function LandingPage() {
                             </div>
                         </div>
                         <div className='col-lg-6'>
-                            {/* <div className='ps_lp_about_img'> <img src="./images/LandingPage/banner1.png" alt="banner" /></div> */}
+                            <div className='ps_lp_about_img ps-4 pe-0'> <img src="./images/LandingPage/about2.png" alt="banner" /></div>
                         </div>
                     </div>
                 </div>
@@ -266,7 +266,7 @@ export default function LandingPage() {
                 <div className="container">
                     <div className='row ps_lp_about_section '>
                         <div className='col-lg-6'>
-                            {/* <div className='ps_lp_about_img'> <img src="./images/LandingPage/banner1.png" alt="banner" /></div> */}
+                            <div className='ps_lp_about_img'><div className='ps_lg_about_pdf_animi'><img className='ps_lg_zoom_animation' src="./images/LandingPage/pdf.svg" alt="svg" /></div> <img src="./images/LandingPage/about3.png" alt="banner" /></div>
                         </div>
                         <div className='col-lg-6'>
                             <div className='ps_lp_title_box'>
@@ -316,51 +316,51 @@ export default function LandingPage() {
 
 
             <section ref={planeRef} id="plan" className="pricing-section">
-                <div className="text-center ps_lp_title_box ps_lp_title_box_width">
-                    <h2>Plan And Pricing</h2>
-                    <p>What Coaches, Organizers &amp; Players Are Saying About PixaScore</p>
-                </div>
-                <div className='row'>
-                    <div className='col-md-12 d-flex gap-5 justify-content-center'>
-                        <div className="auth_plan_container_box">
-                            <span aria-label="SGOne" className=""><h4>Basic Plan</h4></span>
-                            <div className="auth_plan_price_box">
-                                <h5>$9.99<span> / Month</span></h5>
-                            </div>
-                            <div className="auth_plan_h4 bb1">
-                                <p className="mb-2">Payment Type :Recurring </p>
-                            </div>
-                            <div className="auth_plan_h4 pb-0">
-                                <ul className="ps_lb_list-unstyled ps_lb_price_box pb-1">
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Account Aggregation</span></li>
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Preority Support</span></li>
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Expence Tracking</span></li>
-                                </ul>
-                            </div>
-                            {/* <button className="ps_lp_btn" style={{ margin: "auto", width: "100%" }}>Buy Now</button> */}
-                            <CheckoutButton planeName={'Basic'} />
-                        </div>
 
-                        <div className="auth_plan_container_box">
-                            <span aria-label="SGOne" className=""><h4>Pro Plan</h4></span>
-                            <div className="auth_plan_price_box">
-                                <h5>$19.99<span> / Month</span></h5>
-                            </div>
-                            <div className="auth_plan_h4 bb1">
-                                <p className="mb-2">Payment Type :Recurring </p>
-                            </div>
-                            <div className="auth_plan_h4 pb-0">
-                                <ul className="ps_lb_list-unstyled ps_lb_price_box pb-1">
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Account Aggregation</span></li>
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Preority Support</span></li>
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Expence Tracking</span></li>
-                                </ul>
-                            </div>
-                            {/* <button className="ps_lp_btn" style={{ margin: "auto", width: "100%" }}>Buy Now</button> */}
-                            <CheckoutButton planeName={'Pro'} />
+                <div className='row'>
+                    <div className='col-lg-5'>
+                        <div className=" ps_lp_title_box ps_lp_price_box">
+                            <h2>Plan And Pricing</h2>
+                            <p>Affordable Plans for Leagues, Tournaments & Academies. Start Free — Upgrade When You're Ready for More</p>
                         </div>
                     </div>
+                    <div className="col-lg-7">
+                        <div className='ps_lp_price_flex_box'>
+                            <div className="pricing-card basic ps_lp_right">
+                                <h5 className="plan-title">Basic Plan</h5>
+                                <div className="price">
+                                    <span className="amount">$9.99</span><span className="duration">/month</span>
+                                </div>
+                                <h6 className="features-title">Features Like</h6>
+                                <ul className="features-list">
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>live score board</span></li>
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>PDF</span></li>
+                                    <li className='ps_lp_disabled_list'><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload own logo</span></li>
+                                    <li className='ps_lp_disabled_list'><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload sponsor's log</span></li>
+                                </ul>
+                                  <CheckoutButton planeName={'Basic'} btnTheame={"dark"} />
+                            </div>
 
+
+                            {/* Premium Plan */}
+
+                            <div className="pricing-card premium">
+                                <div className="tag">Most Popular & Best Value</div>
+                                <h5 className="plan-title text-orange">Premium Plan</h5>
+                                <div className="price text-orange">
+                                    <span className="amount">$19.99</span><span className="duration">/month</span>
+                                </div>
+                                <h6 className="features-title">Features Like</h6>
+                                <ul className="features-list">
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>live score board</span></li>
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>PDF</span></li>
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload own logo</span></li>
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload sponsor's log</span></li>
+                                </ul>
+                                <CheckoutButton planeName={'Pro'} btnTheame={"light"} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </section>

@@ -9,7 +9,7 @@ const DEV_API = process.env.REACT_APP_DEV_API;
 const PKey = process.env.REACT_APP_DEV_PublishableKey;
 const stripePromise = loadStripe(PKey + '');
 
-const CheckoutButton = ({ planeName }) => {
+const CheckoutButton = ({ planeName, btnTheame }) => {
 
     const navigate = useNavigate();
 
@@ -80,7 +80,7 @@ const CheckoutButton = ({ planeName }) => {
         }
     };
 
-    return <button className="ps_lp_btn" style={{ margin: "auto", width: "100%" }} onClick={handleCheckout}>Buy Now</button>;
+    return <button className={`ps_lp_btn ${btnTheame === "dark" ? "ps_lp_btn_dark" : ""} `} style={{ margin: "auto", width: "100%" }} onClick={handleCheckout}>Buy Now</button>;
 };
 
 export default CheckoutButton;
