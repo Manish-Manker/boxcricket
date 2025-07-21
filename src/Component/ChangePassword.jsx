@@ -76,6 +76,11 @@ const ChangePassword = () => {
                         'Content-Type': 'application/json'
                     }
                 });
+                if (response.data.status === 401 || response.data.status === 403) {
+                    toast.error(response?.data?.message);
+                    navigate('/login');
+                    return
+                }
                 if (response.data.status === 200) {
                     toast.success(response?.data?.message || 'Password changed successfully');
 
@@ -155,7 +160,7 @@ const ChangePassword = () => {
 
                                             <span
                                                 onClick={() => setShowCfmPassword(!showCfmPassword)}
-                                                style={{ cursor: 'pointer', position: 'absolute', right: '30px',  top: '48px' }}
+                                                style={{ cursor: 'pointer', position: 'absolute', right: '30px', top: '48px' }}
                                             >
                                                 {showCfmPassword ? (
                                                     svg.app.open_eye_icon

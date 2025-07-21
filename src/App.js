@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import InputInfo from './Component/InputInfo'
 import ScoreTable from './Component/ScoreTable'
 import './index.css';
-import FinalScore from './Component/FinalScore'
 import Display from './Component/Display';
 import Signup from './Component/auth/Singup';
 import Login from './Component/auth/Login';
@@ -13,8 +12,9 @@ import MatchesList from './Component/admin/MatchesList';
 import ForgotPassword from './Component/auth/ForgotPassword';
 import ProtectedRoute from './Component/ProtectedRoute'
 import ChangePassword from './Component/ChangePassword';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Varifyemail from './Component/auth/Varifyemail.jsx';
 
 import ResetPassword from './Component/auth/ResetPassword.jsx';
 import LandingPage from './Component/auth/LandingPage.jsx';
@@ -44,8 +44,8 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
-            <Route path="/resetPassword" element={<ResetPassword />} />
-
+          <Route path="/resetPassword" element={<ResetPassword />} />
+          <Route path="/verifyemail" element={<Varifyemail />} />
 
           <Route element={<ProtectedRoute />} >
 
@@ -55,7 +55,7 @@ const App = () => {
             <Route path="/admin/users" element={<Users />} />
             <Route path="/admin/matchList" element={<MatchesList />} />
             <Route path="/changePassword" element={<ChangePassword />} />
-
+            
           </Route>
 
 

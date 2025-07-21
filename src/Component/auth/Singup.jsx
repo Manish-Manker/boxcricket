@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import PageLoader from '../common/pageLoader';
 import svg from '../common/svg';
+import { toast } from 'react-toastify';
 
 
 const Signup = () => {
@@ -21,8 +22,15 @@ const Signup = () => {
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (token) {
-      navigate('/');
+      navigate('/input');
     }
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 800);
   }, []);
 
   const validateForm = () => {
@@ -63,7 +71,11 @@ const Signup = () => {
         const response = await axios.post(`${DEV_API}/api/signup`, formData);
         if (response.data.status === 201) {
           // Redirect to login page after successful signup
-          navigate('/login');
+          toast.success(response?.data?.message);
+          setTimeout(() => {
+            // navigate('/login');          
+            navigate('/verifyemail?' + response.data.token);
+          }, 1500);
         }
       } catch (error) {
         console.error('Error signing up:', error);

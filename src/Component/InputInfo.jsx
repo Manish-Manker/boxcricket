@@ -67,11 +67,15 @@ const InputInfo = () => {
       });
       if (response?.data?.status === 401 || response?.data?.status === 403 || response?.status === 401 || response?.status === 403) {
         console.log("+-+-+-", response);
-
         logout();
-        // navigate('/login');
         return
       }
+      // if (response.data.status === 301) {
+      //   toast.error(response?.data?.message);
+      //     navigate('/');
+      //   return
+      // }
+
 
       if (response.data.status === 200) {
         // toast.success(response?.data?.message);
@@ -169,6 +173,15 @@ const InputInfo = () => {
           navigate('/login');
           return
         }
+
+        if (response.data.status === 301) {
+          toast.error(response?.data?.message);
+          setTimeout(() => {
+            navigate('/#plan');
+          }, 1500);
+          return
+        }
+
         toast.success(response?.data?.message);
         const matchId = response.data.data._id;
 

@@ -22,9 +22,9 @@ const Users = () => {
     const [isEdit, setIsEdit] = useState(false);
     const navigate = useNavigate();
 
-    const [totalData, setTotalData] = useState({ totalUsers: 0, ActiveUsers: 0, InActiveUsers: 0, ToalMatches: 0 });
+    const [totalData, setTotalData] = useState({ totalUsers: 0, ActiveUsers: 0, InActiveUsers: 0, TotalMatches: 0 });
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const [totalRows, setTotalRows] = useState(10);
     const [perPage, setPerPage] = useState(10);
@@ -48,8 +48,19 @@ const Users = () => {
 
     useEffect(() => {
         loadUserData(page, perPage, SelectedStatus, search);
-        localStorage.removeItem('userId');
-        localStorage.removeItem('userName');
+
+        const interval = setInterval(() => {
+            loadUserData(page, perPage, SelectedStatus, search, false);
+        }, 15000); 
+
+        if (localStorage.getItem('userName')) {
+            localStorage.removeItem('userName');
+        }
+        if (localStorage.getItem('userId')) {
+            localStorage.removeItem('userId');
+        }
+
+        return () => clearInterval(interval);
     }, [page, perPage, SelectedStatus]);
 
     const loadTotalData = () => {
@@ -73,9 +84,9 @@ const Users = () => {
         })
     }
 
-    const loadUserData = async (page, perPage, status, search) => {
+    const loadUserData = async (page, perPage, status, search , Rloding=true) => {
 
-        setLoading(true)
+        if(Rloding) setLoading(true)
         try {
             let token = localStorage.getItem('authToken');
             const DEV_API = process.env.REACT_APP_DEV_API;
@@ -87,7 +98,7 @@ const Users = () => {
             })
             if (responce.data.status === 200) {
                 loadTotalData();
-                setLoading(false);
+                if(Rloding) setLoading(false);
                 let totalUsers = responce?.data?.totalUsers
                 let data = responce?.data?.data
                 setcustomerList(data);
@@ -135,12 +146,14 @@ const Users = () => {
             errorMessages.push(newErrors.email);
         }
 
-        if (!isUpdate && !formData.password) {
-            newErrors.password = 'Password is required';
-            errorMessages.push(newErrors.password);
-        } else if (!isUpdate && formData.password.length < 6) {
-            newErrors.password = 'Password must be at least 6 characters long';
-            errorMessages.push(newErrors.password);
+        if ('password' in formData) {
+            if (!formData.password) {
+                newErrors.password = 'Password is required';
+                errorMessages.push(newErrors.password);
+            } else if (formData.password.length < 6) {
+                newErrors.password = 'Password must be at least 6 characters long';
+                errorMessages.push(newErrors.password);
+            }
         }
 
         if (errorMessages.length > 0) {
@@ -350,6 +363,10 @@ const Users = () => {
             name: 'Email', selector: row => row.email,
             // sortable: true,
         },
+        {
+            name: 'Email Verified',
+            selector: row => row?.emailVerified ? <span className='text-success'>Yes</span> : <span className='text-danger'>No</span>,
+        },
 
         {
             name: 'No of Matches',
@@ -501,10 +518,20 @@ const Users = () => {
                     <div className="skipg_dashboard_boxes">
                         <div>
                             <h5>Total Matches</h5>
-                            <span>{totalData.ToalMatches}</span>
+                            <span>{totalData.TotalMatches}</span>
                         </div>
                         <div className="skipg_dashboard_boxes_icon">
                             {svg.app.total_matches_icon}
+                        </div>
+                    </div>
+
+                    <div className="skipg_dashboard_boxes">
+                        <div>
+                            <h5>Log In Users</h5>
+                            <span>{totalData.LogedInUsers}</span>
+                        </div>
+                        <div className="skipg_dashboard_boxes_icon">
+                            {svg.app.active_user_icon}
                         </div>
                     </div>
 
@@ -605,7 +632,7 @@ const Users = () => {
                     </div>
                     <div className="skipg_input_wrapper">
                         <label className='skipg_form_input_label '>Email</label>
-                        <input type="text" className="form-control " placeholder="Email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input type="text" className="form-control " disabled={isEdit} placeholder="Email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     {isEdit && <div>
                         <input type="checkbox" value={updatedPassword} onChange={(e) => setUpdatedPassword(!updatedPassword)} />

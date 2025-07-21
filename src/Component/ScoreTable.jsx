@@ -48,43 +48,43 @@ const ScoreTable = () => {
     localStorage.removeItem('currentOverData');
   }, []);
 
-    const logout = async () => {
-        let token = localStorage.getItem('authToken');
-        let userData = localStorage.getItem('userData');
-        const DEV_API = process.env.REACT_APP_DEV_API;
+  const logout = async () => {
+    let token = localStorage.getItem('authToken');
+    let userData = localStorage.getItem('userData');
+    const DEV_API = process.env.REACT_APP_DEV_API;
 
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('userData');
-        localStorage.removeItem('currentBall');
-        localStorage.removeItem('currentSkinIndex');
-        localStorage.removeItem('isSet');
-        localStorage.removeItem('matchId');
-        localStorage.removeItem('matchInfo');
-        localStorage.removeItem('previousBall');
-        localStorage.removeItem('team1ScoreData');
-        localStorage.removeItem('team2ScoreData');
-        localStorage.removeItem('consecutiveZerosCount');
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    localStorage.removeItem('currentBall');
+    localStorage.removeItem('currentSkinIndex');
+    localStorage.removeItem('isSet');
+    localStorage.removeItem('matchId');
+    localStorage.removeItem('matchInfo');
+    localStorage.removeItem('previousBall');
+    localStorage.removeItem('team1ScoreData');
+    localStorage.removeItem('team2ScoreData');
+    localStorage.removeItem('consecutiveZerosCount');
 
-        // try {
-        //     let response = await axios.post(`${DEV_API}/api/logOut`,
-        //         { userId: JSON.parse(userData)?.id },
-        //         {
-        //             headers: { 'Authorization': `Bearer ${token}` }
-        //         }
-        //     );
+    // try {
+    //     let response = await axios.post(`${DEV_API}/api/logOut`,
+    //         { userId: JSON.parse(userData)?.id },
+    //         {
+    //             headers: { 'Authorization': `Bearer ${token}` }
+    //         }
+    //     );
 
-        //     if (response?.data?.status === 200) {
-        //         toast.success(response?.data?.message);
-        //     }
-        // } catch (error) {
-        //     console.log("error", error);
-        // }
-        // finally {
-        //     navigate('/login');
-        // }
-        
-            navigate('/login');
-    };
+    //     if (response?.data?.status === 200) {
+    //         toast.success(response?.data?.message);
+    //     }
+    // } catch (error) {
+    //     console.log("error", error);
+    // }
+    // finally {
+    //     navigate('/login');
+    // }
+
+    navigate('/login');
+  };
 
 
   const handleInputFocus = (value, fieldKey) => {
@@ -172,9 +172,9 @@ const ScoreTable = () => {
         }
       });
 
-       if (response.status == 401 || response.data.status == 403) {
+      if (response.status == 401 || response.data.status == 403) {
         console.log("+-+-+-", response);
-        
+
         logout();
         return;
       }
@@ -664,7 +664,31 @@ const ScoreTable = () => {
     }
     localStorage.setItem('currentOverData', JSON.stringify(data));
 
+  }
 
+  const changeIsDemoCompleted = async () => {
+    let token = localStorage.getItem('authToken');
+    console.log(token);
+    
+    const response = await axios.post(`${DEV_API}/api/changeIsDemoCompleted`,{}, {
+      headers: {
+        'authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.status == 401 || response.data.status == 403) {
+      console.log("+-+-+-", response);
+
+      logout();
+      return
+    }
+
+    if (response.data.status === 200) {
+      setTimeout(() => {
+        navigate('/input');
+      }, 520);
+    }
   }
 
 
@@ -689,7 +713,9 @@ const ScoreTable = () => {
                           <input
                             type="checkbox"
                             id={`checkbox-${teamNumber}-${rowIndex}-${i}`}
-                            className='ps_check_btn_displayover'
+                            // className='ps_check_btn_displayover'
+                            className={`ps_check_btn_displayover ${status === 'ongoing' ? 'ps_btn_disabled' : ''}`}
+                            disabled={status === 'ongoing' ? false : true}
                             checked={teamNumber === rowOverIndex?.teamNumber && rowIndex === rowOverIndex?.rowIndex && i === rowOverIndex?.overIndex}
                             onChange={() => handelTick(teamNumber, rowIndex, i, `${pair.pairId * numberOfCols - numberOfCols + i + 1}`)}
                           />
@@ -978,13 +1004,13 @@ const ScoreTable = () => {
             <div className=" box_cric_score_all_btn box_cric_btn_score justify-content-between">
 
               <div>
-                <div className='box_cric_back_btn' onClick={() => navigate('/')}>
+                <div className='box_cric_back_btn' onClick={() => navigate('/input')}>
                   {svg.app.back_icon} Back
                 </div>
               </div>
               <div className='box_cric_score_all_btn m-0'>
 
-                <div style={{ }}>
+                <div style={{}}>
                   <MicAnnouncer />
                 </div>
 
@@ -996,7 +1022,8 @@ const ScoreTable = () => {
                   </div>
                 </div>
                 <button
-                  className="box_cric_btn"
+                  className={`box_cric_btn ${status !== 'ongoing' ? 'ps_btn_disabled' : ''}`}
+                  disabled={status === 'ongoing' ? false : true}
                   onClick={() => window.open('/display', '_blank')}
                 >
                   Open Final Score
@@ -1025,7 +1052,7 @@ const ScoreTable = () => {
 
 
                       }
-                      return loading ? <div >  <span className=" spinner-border spinner-border-sm mr-3" /> Preparing PDF...</div> : <>  <span>Download Match PDF</span></>;
+                      return loading ? <div >  <span className=" spinner-border spinner-border-sm mr-3" /> Preparing PDF...</div> : <>  <span onClick={() => changeIsDemoCompleted()}  >Download Match PDF</span></>;
                     }}
                   </PDFDownloadLink>
                 )}
@@ -1034,13 +1061,17 @@ const ScoreTable = () => {
 
                 {!showPDF && (
                   <button
-                    className="box_cric_btn"
+                    className={`box_cric_btn ${status === 'ongoing' ? 'ps_btn_disabled' : ''}`}
                     onClick={() => setShowPDF(true)}
+                    disabled={status === 'ongoing' ? true : false}
                   >
-                    {svg.app.pdf_download} Create Match PDF
+                    {svg.app.pdf_download}Create Match PDF
                   </button>
                 )}
-                <button type="submit" className="box_cric_btn" onClick={() => setIsCreateNew(true)} > {svg.app.create} Create New Match</button>
+                <button type="submit"
+                  disabled={status === 'ongoing' ? true : false}
+                  className={`box_cric_btn ${status === 'ongoing' ? 'ps_btn_disabled' : ''}`}
+                  onClick={() => setIsCreateNew(true)} > {svg.app.create} Create New Match</button>
                 <Logout />
               </div>
             </div>

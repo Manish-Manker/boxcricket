@@ -25,7 +25,7 @@ const ForgotPassword = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 1500);
+    }, 800);
   }, []);
 
   const validateEmail = (email) => {

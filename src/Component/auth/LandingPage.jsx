@@ -7,6 +7,9 @@ import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 import { Autoplay, FreeMode, Scrollbar } from 'swiper/modules';
 import Popup from '../common/Popup';
+import { useLocation } from 'react-router-dom';
+
+import CheckoutButton from '../CheckoutButton'
 
 const testimonials = [
     { name: 'Jessica Barnes', role: 'Assistant Coach, New York Youth Cricket Club', quote: 'PixaScore made our weekend tournaments feel like professional events. The live scoreboard on the big screen was a huge hit with players and spectators.' },
@@ -20,13 +23,14 @@ const testimonials = [
 export default function LandingPage() {
     const [navBlack, setNavBlack] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-     const [addVideoPopup, setAddVideoPopup] = useState(false);
+    const [addVideoPopup, setAddVideoPopup] = useState(false);
 
     const whyRef = useRef(null);
     const featuresRef = useRef(null);
     const testimonialsRef = useRef(null);
     const startRef = useRef(null);
-
+    const planeRef = useRef(null);
+    const location = useLocation();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -38,6 +42,12 @@ export default function LandingPage() {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
+
+    useEffect(() => {
+        if (location.hash === '#plan' && planeRef.current) {
+            planeRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [location]);
 
 
     // const handleToggleSidebar = () => {
@@ -54,7 +64,7 @@ export default function LandingPage() {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
-     const categoryPopupCloseHandler = () => {
+    const categoryPopupCloseHandler = () => {
         setAddVideoPopup(false);
     };
 
@@ -79,6 +89,7 @@ export default function LandingPage() {
                         <Link to="#" onClick={() => whyRef.current.scrollIntoView({ behavior: 'smooth' })}>Why PixaScore?</Link>
                         <Link to="#" onClick={() => featuresRef.current.scrollIntoView({ behavior: 'smooth' })}>Features</Link>
                         <Link to="#" onClick={() => testimonialsRef.current.scrollIntoView({ behavior: 'smooth' })}>Testimonials</Link>
+                        <Link to="#" onClick={() => planeRef.current.scrollIntoView({ behavior: 'smooth' })}>Plan</Link>
                         <Link to="#start">Download Sample Report</Link>
                         <Link to="/login" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}>Get Started</Link>
                         <Link to="/signup" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}><button className="ps_lp_btn">Try for Free</button> </Link>
@@ -95,7 +106,7 @@ export default function LandingPage() {
                                 <h6>Record. Display. Analyze. All in Real Time.</h6>
                                 <p className="lead">Score every ball, generate detailed match PDFs, and broadcast the action live with PixaScore. Live scoring, real-time display, and automatic match stats — all from your phone.</p>
                                 <div className="ps_lp_banner_btns">
-                                    <Link to="/login" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}><button className="ps_lp_btn">Book a demo</button> </Link>
+                                    <Link to="/signup" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}><button className="ps_lp_btn">Try for Free</button> </Link>
                                     <button className="ps_lp_btn ps_lp_btn_dark" onClick={() => setAddVideoPopup((prev) => !prev)}>Watch in action</button>
                                 </div>
                             </div>
@@ -304,7 +315,7 @@ export default function LandingPage() {
             </section>
 
 
-             <section className="pricing-section">
+            <section ref={planeRef} id="plan" className="pricing-section">
                 <div className="text-center ps_lp_title_box ps_lp_title_box_width">
                     <h2>Plan And Pricing</h2>
                     <p>What Coaches, Organizers &amp; Players Are Saying About PixaScore</p>
@@ -326,11 +337,12 @@ export default function LandingPage() {
                                     <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Expence Tracking</span></li>
                                 </ul>
                             </div>
-                            <button className="ps_lp_btn" style={{ margin: "auto", width: "100%" }}>Buy Now</button>
+                            {/* <button className="ps_lp_btn" style={{ margin: "auto", width: "100%" }}>Buy Now</button> */}
+                            <CheckoutButton planeName={'Basic'} />
                         </div>
-                   
+
                         <div className="auth_plan_container_box">
-                            <span aria-label="SGOne" className=""><h4>Basic Plan</h4></span>
+                            <span aria-label="SGOne" className=""><h4>Pro Plan</h4></span>
                             <div className="auth_plan_price_box">
                                 <h5>$19.99<span> / Month</span></h5>
                             </div>
@@ -344,10 +356,11 @@ export default function LandingPage() {
                                     <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span>Expence Tracking</span></li>
                                 </ul>
                             </div>
-                            <button className="ps_lp_btn" style={{ margin: "auto", width: "100%" }}>Buy Now</button>
+                            {/* <button className="ps_lp_btn" style={{ margin: "auto", width: "100%" }}>Buy Now</button> */}
+                            <CheckoutButton planeName={'Pro'} />
                         </div>
                     </div>
-                   
+
                 </div>
 
             </section>
@@ -472,16 +485,16 @@ export default function LandingPage() {
 
         </div>
 
-          <Popup
+            <Popup
                 heading="Video"
                 show={addVideoPopup}
                 onClose={categoryPopupCloseHandler}
-                 maxWidth={"970px"}
+                maxWidth={"970px"}
             >
                 <div>
                     <iframe
                         width="100%"
-                            height="500"
+                        height="500"
                         src="https://www.youtube.com/embed/YOUR_VIDEO_URL"
                         title="Sample Video"
                         frameBorder="0"
