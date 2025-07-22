@@ -15,6 +15,7 @@ const ChangePassword = () => {
     const [cfmPassword, setCfmPassword] = useState('');
     const [errors, setErrors] = useState({});
     const DEV_API = process.env.REACT_APP_DEV_API;
+    const [fullname, setFullName] = useState('');
 
 
     const logout = async () => {
@@ -104,93 +105,108 @@ const ChangePassword = () => {
 
 
     return (
-        <div className='boxc_input_box'>
-            {loading ? (
-                <PageLoader />
-            ) : (
-                <div className="container mt-5">
-                    <div className="row justify-content-center">
-                        <div className="col-md-12">
-                            <div className='boxc_input_box_form'>
-                                <div className='w-100'>
-                                    <div className="bc_login_logo">
-                                        <Link to="/" className="wpa_logo">
-                                            <img src="./images/logo.svg" alt="logo" />
-                                        </Link>
-                                    </div>
-                                    <div className='bc_form_head'>
-                                        <h3>Change Your Account Password?</h3>
-                                    </div>
-
-                                    <form onSubmit={handleSubmit}>
 
 
-                                        <div className="mb-3 ps_position_relative">
-                                            <label className="form-label">New Password</label>
-                                            <input
-                                                type={showPassword ? 'text' : 'password'}
-                                                className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-                                                placeholder='Enter your password'
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                            />
-
-                                            <span
-                                                onClick={() => setShowPassword(!showPassword)}
-                                                style={{ cursor: 'pointer', position: 'absolute', right: '30px', top: '48px' }}
-                                            >
-                                                {showPassword ? (
-                                                    svg.app.open_eye_icon
-                                                ) : (
-                                                    svg.app.close_eye_icon
-                                                )}
-                                            </span>
-                                            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
-                                        </div>
-
-                                        <div className="mb-3 ps_position_relative">
-                                            <label className="form-label">Confirm Password</label>
-                                            <input
-                                                type={showCfmPassword ? 'text' : 'password'}
-                                                className={`form-control ${errors.cfmPassword ? 'is-invalid' : ''}`}
-                                                placeholder='Enter your confirm password'
-                                                value={cfmPassword}
-                                                onChange={(e) => setCfmPassword(e.target.value)}
-                                            />
-
-                                            <span
-                                                onClick={() => setShowCfmPassword(!showCfmPassword)}
-                                                style={{ cursor: 'pointer', position: 'absolute', right: '30px', top: '48px' }}
-                                            >
-                                                {showCfmPassword ? (
-                                                    svg.app.open_eye_icon
-                                                ) : (
-                                                    svg.app.close_eye_icon
-                                                )}
-                                            </span>
-                                            {errors.cfmPassword && <div className="invalid-feedback">{errors.cfmPassword}</div>}
-                                        </div>
+        // <div className='boxc_input_box'>
+        //     {loading ? (
+        //         <PageLoader />
+        //     ) : (
+        //         <div className="container mt-5">
+        //             <div className="row justify-content-center">
+        //                 <div className="col-md-12">
+        //                     <div className='boxc_input_box_form'>
+        //                         <div className='w-100'>
+        //                             <div className="bc_login_logo">
+        //                                 <Link to="/" className="wpa_logo">
+        //                                     <img src="./images/logo.svg" alt="logo" />
+        //                                 </Link>
+        //                             </div>
+        //                             <div className='bc_form_head'>
+        //                                 <h3>Change Your Account Password?</h3>
+        //                             </div>
 
 
-                                        {errors.submit && (
-                                            <div className="alert alert-danger" role="alert">
-                                                {errors.submit}
-                                            </div>
-                                        )}
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     )}
+        // </div>
 
-                                        <button type="submit" className={`box_cric_btn `} >Submit</button>
+        <div className=' ps_setting_'>
+            <div className='w-100'>
 
-                                        <div className="mt-4 text-center">
-
-                                            <p className='mb-0'>Back to <Link to="/" className="ps_sign_link">Home </Link></p>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div className='bc_form_head'>
+                    <h3>Change Your Account Info?</h3>
                 </div>
-            )}
+                <form onSubmit={handleSubmit}>
+
+
+                    <div className="skipg_input_wrapper">
+                        <label className='skipg_form_input_label '>Name</label>
+                        <input type="text" className="form-control " placeholder="Full Name" name="fullname" value={fullname} onChange={(e) => setFullName(e.target.value)} />
+                    </div>
+
+
+                    <div className="skipg_input_wrapper ps_position_relative">
+                        <label className="skipg_form_input_label">New Password</label>
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                            placeholder='Enter your password'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+
+                        <span
+                            onClick={() => setShowPassword(!showPassword)}
+                            style={{ cursor: 'pointer', position: 'absolute', right: '30px', top: '48px' }}
+                        >
+                            {showPassword ? (
+                                svg.app.open_eye_icon
+                            ) : (
+                                svg.app.close_eye_icon
+                            )}
+                        </span>
+                        {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                    </div>
+
+                    <div className="skipg_input_wrapper ps_position_relative">
+                        <label className="skipg_form_input_label">Confirm Password</label>
+                        <input
+                            type={showCfmPassword ? 'text' : 'password'}
+                            className={`form-control ${errors.cfmPassword ? 'is-invalid' : ''}`}
+                            placeholder='Enter your confirm password'
+                            value={cfmPassword}
+                            onChange={(e) => setCfmPassword(e.target.value)}
+                        />
+
+                        <span
+                            onClick={() => setShowCfmPassword(!showCfmPassword)}
+                            style={{ cursor: 'pointer', position: 'absolute', right: '30px', top: '48px' }}
+                        >
+                            {showCfmPassword ? (
+                                svg.app.open_eye_icon
+                            ) : (
+                                svg.app.close_eye_icon
+                            )}
+                        </span>
+                        {errors.cfmPassword && <div className="invalid-feedback">{errors.cfmPassword}</div>}
+                    </div>
+
+
+                    {errors.submit && (
+                        <div className="alert alert-danger" role="alert">
+                            {errors.submit}
+                        </div>
+                    )}
+
+                    <button type="submit" className={`box_cric_btn `} >Submit</button>
+
+
+                </form>
+            </div>
         </div>
     );
 };

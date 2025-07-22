@@ -2641,6 +2641,51 @@ circle {
     object-fit: contain;
 }
 
+.ps_col_50 {
+    width: 50%;
+    background-color: #ffffff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.ps_input_box_input .boxc_input_box_form {
+    box-shadow: none !important;
+    background-color: transparent;
+    margin-left: 40px;
+}
+
+.ps_navbar_profile_box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ps_navbar_profile_box h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 0px;
+}
+
+.ps_navbar_profile_img {
+    background-color: #dde8f1;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 4px;
+}
+
+.ps_navbar_profile_img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
 .ps_lg_about_pdf_animi {
     position: absolute;
     right: 180px;
@@ -2690,6 +2735,34 @@ circle {
 }
 
 
+.ps_input_dropdown-menu {
+    position: absolute;
+    right: 20px;
+    width: 120px;
+    padding: 10px;
+    top: 60px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.ps_input_dropdown-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ps_input_dropdown-menu  li {
+    padding: 5px 5px; 
+    cursor: pointer;
+}
+
+.ps_input_dropdown-menu li:hover {
+    background-color: #f0f0f0; 
+}
+
+
 
 .pricing-section {
     padding: 60px 20px;
@@ -2698,37 +2771,65 @@ circle {
     text-align: center;
 }
 
-/* .pricing-subtitle {
-    color: #888;
-    font-size: 13px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    margin-bottom: 10px;
+.ps_setting_tabs .tab-list {
+    max-width: 550px;
+  height: 50px;
+  display: flex;
+  list-style: none;
+  font-size: 18px;
+  padding: 0;
+  margin: 0 0 30px;
 }
 
-.pricing-title {
-    font-size: 24px;
-    font-weight: 500;
-    margin-bottom: 40px;
+.ps_setting_tabs .tabs {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background: #80808013; */
+  position: relative;
+  cursor: pointer;
+}
+
+.content-container{
+    padding: 40px;
+    background-color: #ffffff;
+}
+
+/* .ps_setting_tabs .tabs:not(:last-child) {
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
 } */
 
-/* .pricing-cards {
+/* .ps_setting_tabs .active-tabs {
+  background: #eeeded;
+} */
+
+.ps_setting_tabs .active-tabs::before {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% + 2px);
+  height: 4px;
+  background: var(--bc-primary-color);
+}
+
+.ps_setting_tabs .content {
+    /* background-color: #eeeded; */
+    display: none;
+    padding: 10px;
+}
+
+.ps_setting_tabs .active-content {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
 }
 
-.pricing-card {
-    background-color: #fff;
-    border: 1px solid #eaeaea;
-    border-radius: 8px;
-    padding: 30px 20px;
-    width: 300px;
-    text-align: left;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-} */
 
+.ps_setting_tabs{
+    padding: 90px 30px 30px;
+}
 
 .auth_plan_container_box {
     position: relative;

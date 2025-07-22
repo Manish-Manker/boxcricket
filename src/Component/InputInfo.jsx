@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import axios from 'axios';
 import PageLoader from './common/pageLoader';
-import ConfirmationPopup from './common/confirmPopup';
-import svg from './common/svg';
 import { toast } from 'react-toastify';
 import Logout from './common/logout';
+import NavbarUser from './common/NavbarUser';
 
 const InputInfo = () => {
 
@@ -15,7 +14,6 @@ const InputInfo = () => {
   const navigate = useNavigate();
   const [btnLoading, setBtnLoading] = useState(false);
   const [userMatchList, setUserMatchList] = useState([]);
-
 
   const logout = async () => {
     let token = localStorage.getItem('authToken');
@@ -101,9 +99,6 @@ const InputInfo = () => {
   useEffect(() => {
     setBtnLoading(false);
   }, []);
-
-
-
 
   const [formData, setFormData] = useState({
     team1: '',
@@ -260,36 +255,40 @@ const InputInfo = () => {
     );
   };
 
+   const handleBackClick = () => {
+        window.history.go(-1);
+    };
+
 
   return (<>
-    <div className='boxc_input_box'>
+    <NavbarUser showBackButton={true} onBackClick={handleBackClick} />
+    <div className='boxc_input_box ps_input_box_input'>
 
-      {loading ? <PageLoader />
-        : ''}
+      {loading ? <PageLoader /> : ''}
 
       <div className='ps_form_logut_div'>
         <div></div>
 
         <div>  <button className='box_cric_btn' onClick={() => navigate('/')} >Home Page</button></div>
         <div>  <button className='box_cric_btn' onClick={() => navigate('/changePassword')} >Change Password</button></div>
-
         <div>  <Logout /></div>
       </div>
-      <div className="container mt-5">
+      <div className="container-fluid mt-5">
+        <div className='ps_col_50'></div>
         <div className="row justify-content-center">
-          <div className="col-md-12">
+          <div className="col-md-12 ">
             <div className='ps_cricket_box_flex'>
               <div className='boxc_input_box_form'>
 
 
                 <div className='w-100'>
-                  <div className="bc_login_logo">
+                  {/* <div className="bc_login_logo">
                     <a href="/#" className="wpa_logo"><img src="./images/logo.svg" alt="logo" /></a>
-                  </div>
+                  </div> */}
 
                   <div className='bc_form_head'>
-                    <h3>Hello, {user && user.name}  Welcome to Pixa-Score!</h3>
-                    <h4>Create New Match</h4>
+                    <h3 className=''>Create New Match</h3>
+                    {/* <h4>Create New Match</h4> */}
                   </div>
                   <form onSubmit={handleSubmit}>
                     <div className="mb-3">

@@ -150,6 +150,10 @@ svg.app.sidebar_toggle_cross = (
 );
 
 
+svg.app.dropdown_arrow = (
+    <svg xmlns="http://www.w3.org/2000/svg" id="Bold" viewBox="0 0 24 24" width="15" height="15"><path d="M6.414,9H17.586a1,1,0,0,1,.707,1.707l-5.586,5.586a1,1,0,0,1-1.414,0L5.707,10.707A1,1,0,0,1,6.414,9Z"/></svg>
+)
+
 
 
 svg.app.LP_list_check = (

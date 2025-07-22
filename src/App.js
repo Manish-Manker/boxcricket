@@ -18,6 +18,7 @@ import Varifyemail from './Component/auth/Varifyemail.jsx';
 
 import ResetPassword from './Component/auth/ResetPassword.jsx';
 import LandingPage from './Component/auth/LandingPage.jsx';
+import UserSetting from './Component/UserSetting.jsx';
 
 const App = () => {
 
@@ -55,6 +56,7 @@ const App = () => {
             <Route path="/admin/users" element={<Users />} />
             <Route path="/admin/matchList" element={<MatchesList />} />
             <Route path="/changePassword" element={<ChangePassword />} />
+             <Route path="/Usersetting" element={<UserSetting />} />
             
           </Route>
 
