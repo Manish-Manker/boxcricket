@@ -51,7 +51,7 @@ const Users = () => {
 
         const interval = setInterval(() => {
             loadUserData(page, perPage, SelectedStatus, search, false);
-        }, 15000); 
+        }, 120000);
 
         if (localStorage.getItem('userName')) {
             localStorage.removeItem('userName');
@@ -362,6 +362,10 @@ const Users = () => {
         {
             name: 'Email', selector: row => row.email,
             // sortable: true,
+        },
+        {
+            name:"Plan",
+            selector: row => row?.plan ? <span style={{ color: 'orange' }} >{row.plan}</span> : <span>No Plan</span>,
         },
         {
             name: 'Email Verified',
