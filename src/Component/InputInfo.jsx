@@ -287,7 +287,7 @@ const InputInfo = () => {
                   </div> */}
 
                   <div className='bc_form_head'>
-                    <h3 className=''>Create New Match</h3>
+                    <h3 className='text-start'>Create New Match</h3>
                     {/* <h4>Create New Match</h4> */}
                   </div>
                   <form onSubmit={handleSubmit}>

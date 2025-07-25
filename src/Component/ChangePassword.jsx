@@ -137,8 +137,10 @@ const ChangePassword = () => {
         <div className=' ps_setting_'>
             <div className='w-100'>
 
+                {/* <div className="box_cric_team_heading"><h3 className="m-0">Users List</h3></div> */}
+
                 <div className='bc_form_head'>
-                    <h3>Change Your Account Info?</h3>
+                    <h3 className='text-start'>Change Your Account Info?</h3>
                 </div>
                 <form onSubmit={handleSubmit}>
 
@@ -149,51 +151,64 @@ const ChangePassword = () => {
                     </div>
 
 
-                    <div className="skipg_input_wrapper ps_position_relative">
-                        <label className="skipg_form_input_label">New Password</label>
-                        <input
-                            type={showPassword ? 'text' : 'password'}
-                            className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-                            placeholder='Enter your password'
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-
-                        <span
-                            onClick={() => setShowPassword(!showPassword)}
-                            style={{ cursor: 'pointer', position: 'absolute', right: '30px', top: '48px' }}
-                        >
-                            {showPassword ? (
-                                svg.app.open_eye_icon
-                            ) : (
-                                svg.app.close_eye_icon
-                            )}
-                        </span>
-                        {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                    <div className='ps_setting_info_cp'>
+                        <h4>Change Password</h4>
                     </div>
 
-                    <div className="skipg_input_wrapper ps_position_relative">
-                        <label className="skipg_form_input_label">Confirm Password</label>
-                        <input
-                            type={showCfmPassword ? 'text' : 'password'}
-                            className={`form-control ${errors.cfmPassword ? 'is-invalid' : ''}`}
-                            placeholder='Enter your confirm password'
-                            value={cfmPassword}
-                            onChange={(e) => setCfmPassword(e.target.value)}
-                        />
+                    <div className='row'>
+                        <div className='col-md-6'>
+                            <div className="skipg_input_wrapper ps_position_relative">
+                                <label className="skipg_form_input_label">New Password</label>
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                                    placeholder='Enter your password'
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
 
-                        <span
-                            onClick={() => setShowCfmPassword(!showCfmPassword)}
-                            style={{ cursor: 'pointer', position: 'absolute', right: '30px', top: '48px' }}
-                        >
-                            {showCfmPassword ? (
-                                svg.app.open_eye_icon
-                            ) : (
-                                svg.app.close_eye_icon
-                            )}
-                        </span>
-                        {errors.cfmPassword && <div className="invalid-feedback">{errors.cfmPassword}</div>}
+                                <span
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    style={{ cursor: 'pointer', position: 'absolute', right: '30px', top: '48px' }}
+                                >
+                                    {showPassword ? (
+                                        svg.app.open_eye_icon
+                                    ) : (
+                                        svg.app.close_eye_icon
+                                    )}
+                                </span>
+                                {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                            </div>
+                        </div>
+                        <div className='col-md-6'>
+                            <div className="skipg_input_wrapper ps_position_relative">
+                                <label className="skipg_form_input_label">Confirm Password</label>
+                                <input
+                                    type={showCfmPassword ? 'text' : 'password'}
+                                    className={`form-control ${errors.cfmPassword ? 'is-invalid' : ''}`}
+                                    placeholder='Enter your confirm password'
+                                    value={cfmPassword}
+                                    onChange={(e) => setCfmPassword(e.target.value)}
+                                />
+
+                                <span
+                                    onClick={() => setShowCfmPassword(!showCfmPassword)}
+                                    style={{ cursor: 'pointer', position: 'absolute', right: '30px', top: '48px' }}
+                                >
+                                    {showCfmPassword ? (
+                                        svg.app.open_eye_icon
+                                    ) : (
+                                        svg.app.close_eye_icon
+                                    )}
+                                </span>
+                                {errors.cfmPassword && <div className="invalid-feedback">{errors.cfmPassword}</div>}
+                            </div>
+                        </div>
                     </div>
+
+
+
+
 
 
                     {errors.submit && (
@@ -202,7 +217,7 @@ const ChangePassword = () => {
                         </div>
                     )}
 
-                    <button type="submit" className={`box_cric_btn `} >Submit</button>
+                    <button type="submit" style={{ maxWidth: "fit-content" }} className={`box_cric_btn mt-4`} >Update</button>
 
 
                 </form>

@@ -121,8 +121,8 @@ h6 {
 }
 
 .boxc_input_box_previous {
-    box-shadow: 0 30px 108px 12px rgb(80 52 255 / 8%);
-    background: #fff;
+    /* box-shadow: 0 30px 108px 12px rgb(80 52 255 / 8%);
+    background: #fff; */
     margin: 0 auto;
     position: relative;
     max-width: 580px;
@@ -136,6 +136,10 @@ h6 {
 
 .boxc_input_box_previous .bc_form_head {
     padding: 40px 40px 0px;
+}
+
+.ps_drop_down_arrow svg{
+    transform: rotate(180deg);
 }
 
 .boxc_input_box_form form {
@@ -217,6 +221,68 @@ h6 {
     min-height: 28px;
     padding: 0;
 }
+
+.ps_setting_logos_img {
+    width: 120px;
+    height: 90px;
+    border: 1px solid #f4f4f4;
+    padding: 4px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.ps_setting_logos_img img {
+    width: 100%;
+    height: 100%;
+}
+
+.ps_setting_image_name {
+    max-width: 150px;
+}
+
+.ps_setting_image_name label {
+    color: #bbbbbb;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 0px;
+}
+
+.ps_setting_upload_img_flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    height: 120px;
+    border-bottom: 1px solid #dee9f1;
+}
+
+
+.sylb_upload_modal_box .upload-box:hover {
+    background-color: #f0f8ff;
+}
+
+.sylb_upload_modal_box .upload-icon {
+    font-size: 35px;
+    color: var(--bc-primary-color);
+}
+
+.sylb_upload_modal_box .upload-text {
+    font-size: 16px;
+    color: var(--bc-primary-color);
+    font-weight: 600;
+}
+
+.sylb_upload_modal_box label {
+    display: flex;
+    border: 1px solid var(--bc-primary-color);
+    border-radius: 10px;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+}
+
 
 .ps_btn_disabled {
     cursor: not-allowed;
@@ -2753,13 +2819,13 @@ circle {
     margin: 0;
 }
 
-.ps_input_dropdown-menu  li {
-    padding: 5px 5px; 
+.ps_input_dropdown-menu li {
+    padding: 5px 5px;
     cursor: pointer;
 }
 
 .ps_input_dropdown-menu li:hover {
-    background-color: #f0f0f0; 
+    background-color: #f0f0f0;
 }
 
 
@@ -2773,27 +2839,35 @@ circle {
 
 .ps_setting_tabs .tab-list {
     max-width: 550px;
-  height: 50px;
-  display: flex;
-  list-style: none;
-  font-size: 18px;
-  padding: 0;
-  margin: 0 0 30px;
+    display: flex;
+    list-style: none;
+    font-size: 18px;
+    padding: 5px 20px 0;
+    margin: 0 auto 30px;
+    background-color: #ffffff;
+    border-radius: 5px;
 }
 
 .ps_setting_tabs .tabs {
-  width: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* background: #80808013; */
-  position: relative;
-  cursor: pointer;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background: #80808013; */
+    position: relative;
+    cursor: pointer;
+    line-height: 50px;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--bc-title-color);
 }
 
-.content-container{
-    padding: 40px;
+.content-container {
+    padding: 35px;
     background-color: #ffffff;
+    border-radius: 10px;
+    max-width: calc(100% - 600px);
+    margin: auto;
 }
 
 /* .ps_setting_tabs .tabs:not(:last-child) {
@@ -2805,15 +2879,31 @@ circle {
 } */
 
 .ps_setting_tabs .active-tabs::before {
-  content: "";
-  display: block;
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% + 2px);
-  height: 4px;
-  background: var(--bc-primary-color);
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% + 2px);
+    height: 4px;
+    border-radius: 10px 10px 0px 0px;
+    background: var(--bc-primary-color);
+}
+
+.ps_setting_info_cp {
+    margin-top: 35px;
+    padding-top: 30px;
+    margin-bottom: 20px;
+    border-top: 1px solid #f4f4f4;
+}
+
+.ps_setting_info_cp h4 {
+    font-size: 18px;
+    letter-spacing: 0px;
+    color: #221f25;
+    font-weight: 600;
+    margin-bottom: 2px;
 }
 
 .ps_setting_tabs .content {
@@ -2823,11 +2913,10 @@ circle {
 }
 
 .ps_setting_tabs .active-content {
-    display: flex;
+    display: block;
 }
 
-
-.ps_setting_tabs{
+.ps_setting_tabs {
     padding: 90px 30px 30px;
 }
 

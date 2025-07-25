@@ -33,7 +33,7 @@ const NavbarUser = ({ children, showBackButton, onBackClick }) => {
                     </div>
                     <h4>User Board</h4>
                     <div onClick={toggleDropdown} className="dropdown-icon">
-                        {svg.app.dropdown_arrow}
+                      { dropdownOpen ? <span className='ps_drop_down_arrow'>{svg.app.dropdown_arrow}</span>: <span className=''>{svg.app.dropdown_arrow}</span>}
                     </div>
                     {dropdownOpen && (
                         <div className="ps_input_dropdown-menu">

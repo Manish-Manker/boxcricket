@@ -7,6 +7,8 @@ import svg from '../Component/common/svg';
 import { toast } from 'react-toastify';
 import NavbarUser from './common/NavbarUser';
 import ChangePassword from './ChangePassword';
+import UploadLogo from './UploadLogo';
+import SubscriptionPlan from './SubscriptionPlan';
 
 const UserSetting = () => {
 
@@ -51,10 +53,10 @@ const UserSetting = () => {
                                    <ChangePassword/>
                                 </div>
                                 <div className={`content ${getActiveClass(2, "active-content")}`}>
-                                    <h2>Ipsum</h2>
+                                    <UploadLogo />
                                 </div>
                                 <div className={`content ${getActiveClass(3, "active-content")}`}>
-                                    <h2>Dolor</h2>
+                                    <SubscriptionPlan/>
                                 </div>
                             </div>
                         </div>
