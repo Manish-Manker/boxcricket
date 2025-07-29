@@ -254,10 +254,13 @@ const InputInfo = () => {
       </div>
     );
   };
+  const completedMatches = userMatchList.filter(match => match.status === 'completed');
+  const ongoingMatches = userMatchList.filter(match => match.status === 'ongoing');
+  const canceledMatches = userMatchList.filter(match => match.status === 'cancelled');
 
-   const handleBackClick = () => {
-        window.history.go(-1);
-    };
+  const handleBackClick = () => {
+    window.history.go(-1);
+  };
 
 
   return (<>
@@ -273,19 +276,20 @@ const InputInfo = () => {
         <div>  <button className='box_cric_btn' onClick={() => navigate('/changePassword')} >Change Password</button></div>
         <div>  <Logout /></div>
       </div>
-      <div className="container-fluid mt-5">
-        <div className='ps_col_50'></div>
-        <div className="row justify-content-center">
-          <div className="col-md-12 ">
+      <div className="container-fluid " >
+      
+        <div className="row justify-content-center" style={{ position: "relative" }}>
+            <div className='ps_col_50'></div>
+          <div className="col-md-6 " >
+
+
             <div className='ps_cricket_box_flex'>
               <div className='boxc_input_box_form'>
-
-
                 <div className='w-100'>
                   {/* <div className="bc_login_logo">
                     <a href="/#" className="wpa_logo"><img src="./images/logo.svg" alt="logo" /></a>
                   </div> */}
-
+                  <h2 className='ps_main_input_heading'>Hello, Welcome to Pixascore</h2>
                   <div className='bc_form_head'>
                     <h3 className='text-start'>Create New Match</h3>
                     {/* <h4>Create New Match</h4> */}
@@ -337,42 +341,88 @@ const InputInfo = () => {
                       />
                       {errors.oversPerSkin && <div className="invalid-feedback">{errors.oversPerSkin}</div>}
                     </div>
-                    <button type="submit" className="box_cric_btn">   {btnLoading ? (
+                    <button type="submit" className="box_cric_btn mt-4">   {btnLoading ? (
                       <span className="spinner-border spinner-border-sm mr-3" />
                     ) : ("")}  &nbsp; Submit</button>
                     <br></br>
 
                   </form>
                 </div>
-
-
               </div>
-              {Array.isArray(userMatchList) && userMatchList.length > 0 && (<div className='boxc_input_box_previous'>
-
-                <div className='bc_form_head'>
-                  <h3> Previous Matches</h3>
-                </div>
-
-                <div className='boxc_input_box_previous_matches'>
-                  <ul>
-                    {userMatchList.map((match) => (
-                      <li className='match-item' onClick={() => handleMatchClick(match)} key={match._id} >
-                        <div className="match-details">
-                          <div className="team-name"><h5><span>T1</span> {match.team1}</h5></div>
-                          <div className="team-name"><h5><span>T2</span>{match.team2}</h5></div>
-                        </div>
-                        <div className="ps_match_status">
-                          <h5> {new Date(match.createdAt).toLocaleDateString('en-GB').replace(/\//g, '-')}</h5>
-                          {renderMatchStatus(match.status)}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              )}
             </div>
+          </div>
+          <div className='col-md-6'>
+            {Array.isArray(userMatchList) && userMatchList.length > 0 && (
+              <div className='p-5'>
+                <div className='boxc_input_box_previous_matches boxC_input_match_box'>
+                  <h4>Ongoing Matches</h4>
+                  {ongoingMatches.length === 0 ? (
+                    <div className='ps_no_match_avalble'>No ongoing matches available</div>
+                  ) : (
+                    <ul>
+                      {ongoingMatches.map((match) => (
+                        <li className='match-item' onClick={() => handleMatchClick(match)} key={match._id}>
+                          <div className="match-details">
+                            <div className="team-name"><h5><span>T1</span> {match.team1}</h5></div>
+                            <div className="team-name"><h5><span>T2</span>{match.team2}</h5></div>
+                          </div>
+                          <div className="ps_match_status">
+                            <h5>{new Date(match.createdAt).toLocaleDateString('en-GB').replace(/\//g, '-')}</h5>
+                            {renderMatchStatus(match.status)}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
 
+                <div className='boxc_input_box_previous_matches boxC_input_match_box'>
+                  <h4>Completed Matches</h4>
+                  {completedMatches.length === 0 ? (
+                    <div className='ps_no_match_avalble'>No completed matches available</div>
+                  ) : (
+                    <ul>
+                      {completedMatches.map((match) => (
+                        <li className='match-item' onClick={() => handleMatchClick(match)} key={match._id}>
+                          <div className="match-details">
+                            <div className="team-name"><h5><span>T1</span> {match.team1}</h5></div>
+                            <div className="team-name"><h5><span>T2</span>{match.team2}</h5></div>
+                          </div>
+                          <div className="ps_match_status">
+                            <h5>{new Date(match.createdAt).toLocaleDateString('en-GB').replace(/\//g, '-')}</h5>
+                            {renderMatchStatus(match.status)}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                <div className='boxc_input_box_previous_matches boxC_input_match_box'>
+                  <h4>Canceled Matches</h4>
+                  {canceledMatches.length === 0 ? (
+                    <div className='ps_no_match_avalble'>
+                      No canceled matches available
+                      </div>
+                  ) : (
+                    <ul>
+                      {canceledMatches.map((match) => (
+                        <li className='match-item' onClick={() => handleMatchClick(match)} key={match._id}>
+                          <div className="match-details">
+                            <div className="team-name"><h5><span>T1</span> {match.team1}</h5></div>
+                            <div className="team-name"><h5><span>T2</span>{match.team2}</h5></div>
+                          </div>
+                          <div className="ps_match_status">
+                            <h5>{new Date(match.createdAt).toLocaleDateString('en-GB').replace(/\//g, '-')}</h5>
+                            {renderMatchStatus(match.status)}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

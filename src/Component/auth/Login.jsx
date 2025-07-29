@@ -121,7 +121,7 @@ const Login = () => {
                 <div className='w-100'>
                   <div className="bc_login_logo">
                     <Link to="/" className="wpa_logo">
-                      <img src="./images/logo.svg" alt="logo" />
+                      <img src="./images/logo/DarkLogo.svg" alt="logo" />
                     </Link>
                   </div>
                   <div className='bc_form_head'>
