@@ -166,6 +166,44 @@ h6 {
     font-weight: 700;
 }
 
+.ps_setting_active_plan .ps_lp_right{
+    margin: 5px;
+}
+.ps_setting_active_plan .pricing-card {
+    border: 2px solid #0dcd94;
+    border-radius: 15px 15px 15px 15px;
+    padding: 25px;
+    background: #fff;
+    text-align: center;
+    position: relative;
+    margin-bottom: 20px;
+    max-width: 360px;
+    max-height: 400px;
+    width: 100%;
+}
+.ps_setting_active_plan h3{
+    color: #0dcd94;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.ps_setting_more_plan h3{
+     font-size: 18px;
+    font-weight: 600;
+}
+.ps_setting_more_plan .pricing-card {
+    border: 2px solid #272727;
+    border-radius: 15px 15px 15px 15px;
+    padding: 25px;
+    background: #fff;
+    text-align: center;
+    position: relative;
+    margin-bottom: 20px;
+    max-width: 360px;
+    max-height: 400px;
+    width: 100%;
+}
+
 .boxc_input_box_form form input:focus {
     box-shadow: 0 4px 19.2px .8px var(--bc-box-shadow);
     border: 1px solid var(--bc-primary-color);
