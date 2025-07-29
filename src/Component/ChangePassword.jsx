@@ -142,7 +142,7 @@ const ChangePassword = () => {
                 <div className='bc_form_head'>
                     <h3 className='text-start'>Change Your Account Info?</h3>
                 </div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} >
 
 
                     <div className="skipg_input_wrapper">

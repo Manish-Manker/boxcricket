@@ -1392,7 +1392,7 @@ h6 {
 }
 
 .boxc_input_box_previous_matches {
-    max-height: 586px;
+  max-height: calc(100vh - 268px);
     overflow: auto;
     padding: 0px 40px;
 }
@@ -2860,6 +2860,9 @@ circle {
 .ps_input_dropdown-menu li {
     padding: 5px 5px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
 }
 
 .ps_input_dropdown-menu li:hover {
@@ -3208,6 +3211,25 @@ circle {
     font-family: "Caveat", cursive;
 }
 
+.ps_navbar_profile_logout .box_cric_btn_logout{
+    background: none !important;
+    border: none !important;
+
+}
+.ps_navbar_profile_logout .box_cric_btn.ps_navbar_logout{
+     background: none !important;
+    border: none !important;
+    font-size: 14px !important;
+    color: #000 !important;
+    justify-content: start !important;
+    font-weight: 500 !important;
+    padding: 0px !important;
+    text-transform: none;
+    min-height: auto !important;
+}
+.ps_navbar_profile_logout .box_cric_btn.ps_navbar_logout svg{
+    display: none;
+}
 .text-orange {
     color: var(--bc-primary-color);
     ;

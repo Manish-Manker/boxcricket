@@ -34,7 +34,7 @@ function ConfirmationPopup({
 
                                
                                 <div className="ps_conforms_btns">
-                                    <button className="box_cric_btn box_cric_btn_logout" style={{minWidth: "150px"}} onClick={closePopup}  >
+                                    <button className="box_cric_btn box_cric_btn_logout " style={{minWidth: "150px"}} onClick={closePopup}  >
                                         No
                                     </button>
                                     <button className="box_cric_btn " style={{minWidth: "160px"}} onClick={removeAction}>

@@ -61,7 +61,7 @@ const Logout = () => {
 
     return (
         <>
-            <button className="box_cric_btn box_cric_btn_logout bc_btn_logoutMob" onClick={handleLogoutClick}>
+            <button className="box_cric_btn box_cric_btn_logout bc_btn_logoutMob ps_navbar_logout" onClick={handleLogoutClick}>
                 {svg.app.logout} <span>Log Out</span>
             </button>
 

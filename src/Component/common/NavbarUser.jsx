@@ -12,7 +12,7 @@ const NavbarUser = ({ children, showBackButton, onBackClick }) => {
     };
 
     const handleLogout = () => {
-         <Logout />
+       
     };
 
     const handleSettings = () => {
@@ -39,7 +39,7 @@ const NavbarUser = ({ children, showBackButton, onBackClick }) => {
                         <div className="ps_input_dropdown-menu">
                             <ul>
                                 <li onClick={handleSettings}>Settings</li>
-                                <li onClick={handleLogout}>Logout</li>
+                                <li className='ps_navbar_profile_logout'>  <Logout /></li>
                             </ul>
                         </div>
                     )}
