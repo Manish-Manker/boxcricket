@@ -17,6 +17,15 @@ const ChangePassword = () => {
     const DEV_API = process.env.REACT_APP_DEV_API;
     const [fullname, setFullName] = useState('');
 
+    useEffect(() => {
+        setErrors('')
+    }, [password, cfmPassword,fullname])
+
+    useEffect(() => {
+        let userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData?.name) setFullName(userData.name)
+    }, [])
+
 
     const logout = async () => {
         let token = localStorage.getItem('authToken');
@@ -56,6 +65,7 @@ const ChangePassword = () => {
 
 
     const validatePassword = (password) => {
+        if(password.length < 1) return true;
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         return passwordRegex.test(password);
     };
@@ -64,6 +74,11 @@ const ChangePassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (fullname.length < 1) {
+            setErrors({ fullname: 'Please enter your full name' });
+            return;
+        }
+
         if (password != cfmPassword) {
             setErrors({ cfmPassword: 'Passwords is not matching with Confirm Password' });
             return
@@ -71,7 +86,7 @@ const ChangePassword = () => {
 
         if (validatePassword(password)) {
             try {
-                const response = await axios.post(`${DEV_API}/api/changePassword`, { password }, {
+                const response = await axios.post(`${DEV_API}/api/changePassword`, { password , fullname }, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
                         'Content-Type': 'application/json'
@@ -147,7 +162,8 @@ const ChangePassword = () => {
 
                     <div className="skipg_input_wrapper">
                         <label className='skipg_form_input_label '>Name</label>
-                        <input type="text" className="form-control " placeholder="Full Name" name="fullname" value={fullname} onChange={(e) => setFullName(e.target.value)} />
+                        <input type="text" className={`form-control ${errors.fullname ? 'is-invalid' : ''} `} placeholder="Full Name" name="fullname" value={fullname} onChange={(e) => setFullName(e.target.value)} />
+                        {errors.fullname && <div className="invalid-feedback">{errors.fullname}</div>}
                     </div>
 
 

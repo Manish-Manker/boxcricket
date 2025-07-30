@@ -338,7 +338,7 @@ export default function LandingPage() {
                                     <li className='ps_lp_disabled_list'><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload own logo</span></li>
                                     <li className='ps_lp_disabled_list'><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload sponsor's log</span></li>
                                 </ul>
-                                  <CheckoutButton planeName={'Basic'} btnTheame={"dark"} />
+                                  <CheckoutButton planeName={'Basic Plan'} btnTheame={"dark"} />
                             </div>
 
 
@@ -357,7 +357,7 @@ export default function LandingPage() {
                                     <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload own logo</span></li>
                                     <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload sponsor's log</span></li>
                                 </ul>
-                                <CheckoutButton planeName={'Pro'} btnTheame={"light"} />
+                                <CheckoutButton planeName={'Pro Plan'} btnTheame={"light"} />
                             </div>
                         </div>
                     </div>

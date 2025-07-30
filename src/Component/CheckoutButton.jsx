@@ -25,9 +25,9 @@ const CheckoutButton = ({ planeName, btnTheame }) => {
         }
 
         let priceId;
-        if (planeName === "Basic") {
+        if (planeName === "Basic Plan") {
             priceId = process.env.REACT_APP_DEV_Basic_PriceId + '';
-        } else if (planeName === "Pro") {
+        } else if (planeName === "Pro Plan") {
             priceId = process.env.REACT_APP_DEV_Pro_PriceId + '';
         } else {
             toast.error("Invalid plan selected.");
@@ -47,7 +47,7 @@ const CheckoutButton = ({ planeName, btnTheame }) => {
         }
 
         try {
-            let res = await axios.post(`${DEV_API}/api/createSubscriptionSession`, { priceId , userEmail, userId }, {
+            let res = await axios.post(`${DEV_API}/api/createSubscriptionSession`, { priceId , userEmail, userId , planeName }, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

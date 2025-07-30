@@ -31,7 +31,6 @@ const UploadLogo = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //  Here you would handle the upload to your backend using axios.  This is a placeholder.
         try {
             const formData = new FormData();
             formData.append('mainLogo', mainLogo);
@@ -41,7 +40,7 @@ const UploadLogo = () => {
                 }
             });
 
-            const response = await axios.post('/api/upload', formData, { // Replace '/api/upload' with your endpoint
+            const response = await axios.post('/api/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -66,7 +65,6 @@ const UploadLogo = () => {
                     <label htmlFor="mainLogo" className="skipg_form_input_label">Main Logo</label>
                     <div className="d-flex justify-content-between align-items-center">
 
-                        {/* <input type="file" className="form-control" id="mainLogo" onChange={handleMainLogoChange} /> */}
                         <div className='d-flex align-items-center gap-4'>
                             <div className='ps_setting_image_name'><label className="form-label">Logo </label></div>
                             <div class="sylb_upload_modal_box">
