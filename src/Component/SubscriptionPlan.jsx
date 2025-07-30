@@ -14,7 +14,8 @@ const SubscriptionPlan = () => {
                     <h3 className='text-start'>Subscription Plan</h3>
                 </div>
                 <div className='row'>
-                    <div className='col-md-6'>
+                    <div className='col-md-9 m-auto'>
+                    <div className='ps_flex_subsciption_plan'>
                         <div className='ps_setting_active_plan'>
                             <h3>Active Plan</h3>
                             <div className='ps_lp_price_flex_box'>
@@ -35,9 +36,8 @@ const SubscriptionPlan = () => {
                             </div>
 
                         </div>
-                    </div>
-                    <div className='col-md-6'>
-                        <div className='ps_setting_more_plan'>
+
+                         <div className='ps_setting_more_plan'>
                             <h3>More Plans</h3>
                             <div className='ps_lp_price_flex_box'>
                                 <div className="pricing-card basic">
@@ -58,6 +58,8 @@ const SubscriptionPlan = () => {
 
                         </div>
                     </div>
+                    </div>
+                   
                 </div>
 
 

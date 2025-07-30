@@ -1,23 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Logout from '../common/logout';
 import svg from '../common/svg';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 const NavbarUser = ({ children, showBackButton, onBackClick }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
-     const navigate = useNavigate();
+    const dropdownRef = useRef(null);
+    const navigate = useNavigate();
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        setUser(JSON.parse(localStorage.getItem('userData')));
+    }, [])
+    console.log("userData", user);
+
 
     const toggleDropdown = () => {
         setDropdownOpen(prevState => !prevState);
     };
 
-    const handleLogout = () => {
-       
+    const handleSettings = () => {
+        navigate('/UserSetting');
+        setDropdownOpen(false);
     };
 
-    const handleSettings = () => {
-         navigate('/UserSetting');
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setDropdownOpen(false);
+        }
     };
+
+    useEffect(() => {
+        // Bind the event listener for clicks outside of the dropdown
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            // Cleanup the event listener on component unmount
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <div>
@@ -27,19 +47,29 @@ const NavbarUser = ({ children, showBackButton, onBackClick }) => {
                         <img src="../images/logo/DarkLogo.svg" alt="logo" />
                     </a>
                 </div>
-                <div className='ps_navbar_profile_box'>
+                <div className='ps_navbar_profile_box' onClick={toggleDropdown} ref={dropdownRef} style={{ cursor: "pointer" }}>
+                    
                     <div className='ps_navbar_profile_img'>
-                        <img src="./images/cricket_legends.png" alt="profile" />
+                         <span className='profile-initial'>{user.name ? user.name.charAt(0).toUpperCase() : '?'}</span>
+                        {/* <img src="./images/cricket_legends.png" alt="profile" /> */}
                     </div>
-                    <h4>User Board</h4>
-                    <div onClick={toggleDropdown} className="dropdown-icon">
-                      { dropdownOpen ? <span className='ps_drop_down_arrow'>{svg.app.dropdown_arrow}</span>: <span className=''>{svg.app.dropdown_arrow}</span>}
+                    <h4>{user.name}</h4>
+                    <div  className="dropdown-icon" >
+                        {dropdownOpen ?
+                            <span className='ps_drop_down_arrow'>{svg.app.dropdown_arrow}</span> :
+                            <span className=''>{svg.app.dropdown_arrow}</span>
+                        }
                     </div>
                     {dropdownOpen && (
                         <div className="ps_input_dropdown-menu">
                             <ul>
                                 <li onClick={handleSettings}>Settings</li>
-                                <li className='ps_navbar_profile_logout'>  <Logout /></li>
+                                {/* <li onClick={handleLogout} className='ps_navbar_profile_logout'>
+                                    Logout
+                                </li> */}
+                                <li className='ps_navbar_profile_logout'>
+                                    <Logout />
+                                </li>
                             </ul>
                         </div>
                     )}

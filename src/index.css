@@ -156,11 +156,11 @@ h6 {
     background: #fff; */
     margin: 0 auto;
     position: relative;
-    max-width: 580px;
+    /* max-width: 580px; */
     width: 100%;
     border-radius: 20px;
     overflow-y: auto;
-    min-height: 480px;
+    min-height: calc(100% - 400px);
     /* padding: 40px; */
     transition: ease-in-out .5s;
 }
@@ -210,17 +210,26 @@ h6 {
     margin-bottom: 20px;
     max-width: 360px;
     max-height: 400px;
+    min-height: 390px;
     width: 100%;
 }
 .ps_setting_active_plan h3{
     color: #0dcd94;
     font-size: 18px;
     font-weight: 600;
+    text-align: center;
+}
+
+.ps_flex_subsciption_plan{
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
 }
 
 .ps_setting_more_plan h3{
      font-size: 18px;
     font-weight: 600;
+    text-align: center;
 }
 .ps_setting_more_plan .pricing-card {
     border: 2px solid #272727;
@@ -325,6 +334,39 @@ h6 {
     height: 120px;
     border-bottom: 1px solid #dee9f1;
 }
+
+
+/* .sylb_upload_modal_box .upload-box:hover {
+    background-color: #f0f8ff;
+}
+
+.sylb_upload_modal_box .upload-icon {
+    font-size: 45px;
+    color: var(--bc-primary-color);
+}
+
+.sylb_upload_modal_box .upload-text {
+    font-size: 16px;
+    color: var(--bc-primary-color);
+    font-weight: 600;
+}
+
+.sylb_upload_modal_box label {
+    display: flex;
+    border: 1px solid var(--bc-primary-color);
+    border-radius: 20px;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+} */
+
+.ps_matches_status_section{
+    padding: 30px;
+    position: relative;
+    z-index: 9999;
+}
+
 
 
 .sylb_upload_modal_box .upload-box:hover {
@@ -1369,7 +1411,7 @@ h6 {
 .boxc_input_box_previous_matches ul {
     list-style: none;
     padding-left: 0px;
-    max-height: 230px;
+    max-height: calc(100% - 200px);
     overflow: auto;
     margin-bottom: 0px;
     padding-right: 25px;
@@ -1385,12 +1427,12 @@ h6 {
     border-radius: 10px;
     background-color: #fff;
     border: 1px solid #f1f1f8;
-    padding: 6px 15px 4px;
+    padding: 15px 15px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     cursor: pointer;
     transition: ease-in-out 0.3s;
 }
@@ -1433,8 +1475,8 @@ h6 {
 }
 
 .team-name span {
-    width: 20px;
-    height: 20px;
+    width: 26px;
+    height: 26px;
     border: 1px solid #f1f1f8;
     background-color: var(--bc-primary-color);
     border-radius: 50%;
@@ -1442,7 +1484,7 @@ h6 {
     flex: none;
     align-items: center;
     justify-content: center;
-    font-size: 9px;
+    font-size: 12px;
     color: #fff;
     font-weight: 600;
 }
@@ -2813,14 +2855,17 @@ circle {
 
 .ps_navbar_profile_img {
     background-color: #dde8f1;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     padding: 4px;
+}
+.skipg_mt_100{
+    padding-top: 100px;
 }
 
 .ps_navbar_profile_img img {
@@ -3251,7 +3296,7 @@ circle {
 }
 
 .ps_navbar_profile_logout .box_cric_btn_logout{
-    background: none !important;
+    background: none ;
     border: none !important;
 
 }
@@ -3276,6 +3321,21 @@ circle {
 
 .ps_lp_price_flex_box {
     display: flex;
+}
+.profile-initial {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--bc-primary-color);
+    color: white;
+    text-align: center;
+    line-height: 32px;
+    font-size: 18px;
+}
+.ps_flex_subsciption_plan .ps_lp_price_flex_box {
+    display: flex;
+    justify-content: center;
 }
 
 @media (max-width: 768px) {
@@ -3453,6 +3513,9 @@ circle {
         line-height: 2.5 !important;
         font-size: 3rem !important;
     }
+    .ps_input_box_input .boxc_input_box_form{
+        margin-left: 30px;
+    }
 }
 
 @media screen and (max-width: 1500px) {
@@ -3516,6 +3579,9 @@ circle {
 }
 
 @media screen and (max-width: 1200px) {
+    .ps_col_50{
+        display: none;
+    }
     .bc_finalScore {
         width: 100%;
         height: auto;
@@ -3752,6 +3818,9 @@ circle {
 
     .pricing-card.premium {
         margin: 20px auto 0px;
+    }
+    .ps_navbar_profile_logout .box_cric_btn_logout span {
+        display: block;
     }
 
 }

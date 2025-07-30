@@ -69,14 +69,24 @@ const UploadLogo = () => {
                         {/* <input type="file" className="form-control" id="mainLogo" onChange={handleMainLogoChange} /> */}
                         <div className='d-flex align-items-center gap-4'>
                             <div className='ps_setting_image_name'><label className="form-label">Logo </label></div>
-                            <div class="sylb_upload_modal_box">
-                                <label for="mainLogo" class="upload-box text-center">
-                                    <input type="file" id="mainLogo" onChange={handleMainLogoChange} class="d-none" />
-                                    <div class="upload-content"><div class="upload-icon">+</div>
+                            <div className="sylb_upload_modal_box">
+                                <label for="mainLogo" className="upload-box text-center">
+                                    <input type="file" id="mainLogo" onChange={handleMainLogoChange} className="d-none" />
+                                    <div className="upload-content"><div class="upload-icon">+</div>
 
                                     </div>
                                 </label>
                             </div>
+
+                            {/* <div className="sylb_upload_modal_box">
+                                <label for="file-upload" className="upload-box text-center">
+                                    <input type="file" id="file-upload" className="d-none" />
+                                    <div className="upload-content">
+                                        <div className="upload-icon">+</div>
+                                        <div className="upload-text">Logo</div>
+                                    </div>
+                                </label>
+                            </div> */}
                         </div>
                         {mainLogoPreview && (
                             <img src={mainLogoPreview} alt="Main Logo Preview" className="ps_setting_logos_img img-fluid mt-2" />
