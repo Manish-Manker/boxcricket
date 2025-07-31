@@ -47,10 +47,10 @@ const SubscriptionPlan = () => {
                     <h3 className='text-start'>Subscription Plan</h3>
                 </div>
                 <div className='row'>
-
-                    <div className='col-md-6'>
-                        <div className={activePlan !== "Pro Plan" ? 'ps_setting_active_plan':'ps_setting_more_plan'}  >
-                            <h3> {activePlan == "Pro Plan" ? "" : <spam>Active Plan</spam>} </h3>
+                    <div className='col-md-9 m-auto'>
+                    <div className='ps_flex_subsciption_plan'>
+                        <div className='ps_setting_active_plan'>
+                            <h3>Active Plan</h3>
                             <div className='ps_lp_price_flex_box'>
                                 <div className="pricing-card basic ps_lp_right">
                                     <h5 className="plan-title">Basic Plan</h5>
@@ -70,11 +70,9 @@ const SubscriptionPlan = () => {
                             </div>
 
                         </div>
-                    </div>
 
-                    <div className='col-md-6'>
-                        <div className={activePlan == "Pro Plan" ? 'ps_setting_active_plan':'ps_setting_more_plan'}>
-                            <h3>{activePlan == "Pro Plan" ? <spam>Active Plan</spam> : ""}</h3>
+                         <div className='ps_setting_more_plan'>
+                            <h3>More Plans</h3>
                             <div className='ps_lp_price_flex_box'>
                                 <div className="pricing-card basic">
                                     <h5 className="plan-title text-orange">Premium Plan</h5>
@@ -94,7 +92,8 @@ const SubscriptionPlan = () => {
 
                         </div>
                     </div>
-
+                    </div>
+                   
                 </div>
 
 

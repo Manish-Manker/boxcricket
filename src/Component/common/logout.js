@@ -47,6 +47,8 @@ const Logout = () => {
     };
 
     const handleLogoutClick = () => {
+        console.log("Logout button clicked");
+        
         setIsRemove(true);
     };
 

@@ -16,6 +16,7 @@ const ChangePassword = () => {
     const [errors, setErrors] = useState({});
     const DEV_API = process.env.REACT_APP_DEV_API;
     const [fullname, setFullName] = useState('');
+    const [email,setEmail] = useState('');
 
     useEffect(() => {
         setErrors('')
@@ -24,6 +25,7 @@ const ChangePassword = () => {
     useEffect(() => {
         let userData = JSON.parse(localStorage.getItem('userData'));
         if (userData?.name) setFullName(userData.name)
+        if (userData?.email) setEmail(userData.email)
     }, [])
 
 
@@ -157,15 +159,22 @@ const ChangePassword = () => {
                 <div className='bc_form_head'>
                     <h3 className='text-start'>Change Your Account Info?</h3>
                 </div>
-                <form onSubmit={handleSubmit} >
+                <form onSubmit={handleSubmit} autoComplete='off'>
 
-
-                    <div className="skipg_input_wrapper">
-                        <label className='skipg_form_input_label '>Name</label>
-                        <input type="text" className={`form-control ${errors.fullname ? 'is-invalid' : ''} `} placeholder="Full Name" name="fullname" value={fullname} onChange={(e) => setFullName(e.target.value)} />
-                        {errors.fullname && <div className="invalid-feedback">{errors.fullname}</div>}
+                    <div className='row'>
+                        <div className='col-md-6'>
+                            <div className="skipg_input_wrapper">
+                                <label className='skipg_form_input_label '>Name</label>
+                                <input type="text" className="form-control " placeholder="Full Name" name="fullname" value={fullname} onChange={(e) => setFullName(e.target.value)} />
+                            </div>
+                        </div>
+                        <div className='col-md-6'>
+                            <div className="skipg_input_wrapper">
+                                <label className='skipg_form_input_label '>Email</label>
+                                <input type="text" className="form-control " disabled="true" placeholder="Full Name" name="fullname" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            </div>
+                        </div>
                     </div>
-
 
                     <div className='ps_setting_info_cp'>
                         <h4>Change Password</h4>
