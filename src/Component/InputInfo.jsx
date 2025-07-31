@@ -309,7 +309,7 @@ const InputInfo = () => {
                   {/* <div className="bc_login_logo">
                     <a href="/#" className="wpa_logo"><img src="./images/logo.svg" alt="logo" /></a>
                   </div> */}
-                  <h2 className='ps_main_input_heading'>Hello  {user && user.name}, Welcome to Pixascore</h2>
+                  <h2 className='ps_main_input_heading'>Hello  {user && user.name}, Welcome to PixaScore</h2>
                   <div className='bc_form_head'>
                     <h3 className='text-start'>Create New Match</h3>
                     {/* <h4>Create New Match</h4> */}

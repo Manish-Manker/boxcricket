@@ -76,6 +76,9 @@ h6 {
 
 /* input form  page*/
 
+.ps_auth_white_bg {
+    background-color: #ffffff !important;
+}
 
 .boxc_input_box {
     background-color: #dee9f1;
@@ -110,7 +113,7 @@ h6 {
     color: var(--bc-bg-dark);
     margin-bottom: 35px;
 }
- 
+
 .ps_no_match_avalble {
     display: flex;
     align-items: center;
@@ -121,13 +124,14 @@ h6 {
     font-weight: 500;
     color: var(--bc-title-color);
 }
+
 .boxC_input_match_box {
     background: #fff;
     padding: 16px 0px 5px 25px !important;
     border-radius: 10px;
     margin-bottom: 12px;
 }
- 
+
 .boxC_input_match_box h4 {
     font-size: 18px;
     font-weight: 600;
@@ -169,7 +173,7 @@ h6 {
     padding: 40px 40px 0px;
 }
 
-.ps_drop_down_arrow svg{
+.ps_drop_down_arrow svg {
     transform: rotate(180deg);
 }
 
@@ -197,9 +201,10 @@ h6 {
     font-weight: 700;
 }
 
-.ps_setting_active_plan .ps_lp_right{
+.ps_setting_active_plan .ps_lp_right {
     margin: 5px;
 }
+
 .ps_setting_active_plan .pricing-card {
     border: 2px solid #0dcd94;
     border-radius: 15px 15px 15px 15px;
@@ -213,24 +218,26 @@ h6 {
     min-height: 390px;
     width: 100%;
 }
-.ps_setting_active_plan h3{
+
+.ps_setting_active_plan h3 {
     color: #0dcd94;
     font-size: 18px;
     font-weight: 600;
     text-align: center;
 }
 
-.ps_flex_subsciption_plan{
+.ps_flex_subsciption_plan {
     display: flex;
     justify-content: center;
     /* align-items: center; */
 }
 
-.ps_setting_more_plan h3{
-     font-size: 18px;
+.ps_setting_more_plan h3 {
+    font-size: 18px;
     font-weight: 600;
     text-align: center;
 }
+
 .ps_setting_more_plan .pricing-card {
     border: 2px solid #272727;
     border-radius: 15px 15px 15px 15px;
@@ -361,7 +368,7 @@ h6 {
     width: 100%;
 } */
 
-.ps_matches_status_section{
+.ps_matches_status_section {
     padding: 30px;
     position: relative;
     z-index: 9999;
@@ -1424,13 +1431,13 @@ h6 {
     margin-bottom: 0px;
     padding-right: 25px;
 }
- 
+
 .match-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
- 
+
 .match-item {
     border-radius: 10px;
     background-color: #fff;
@@ -1477,7 +1484,7 @@ h6 {
 }
 
 .boxc_input_box_previous_matches {
-  max-height: calc(100vh - 268px);
+    max-height: calc(100vh - 268px);
     overflow: auto;
     padding: 0px 40px;
 }
@@ -2831,7 +2838,7 @@ circle {
 }
 
 .ps_col_50 {
-   background-color: #ffffff;
+    background-color: #ffffff;
     position: absolute;
     top: 0;
     left: 0;
@@ -2841,13 +2848,13 @@ circle {
     right: 0;
     min-height: 100vh;
 }
- 
+
 .ps_input_box_input .boxc_input_box_form {
     box-shadow: none !important;
     background-color: transparent;
     margin-left: 100px;
 }
- 
+
 
 .ps_navbar_profile_box {
     display: flex;
@@ -2872,7 +2879,8 @@ circle {
     overflow: hidden;
     padding: 4px;
 }
-.skipg_mt_100{
+
+.skipg_mt_100 {
     padding-top: 100px;
 }
 
@@ -3200,6 +3208,19 @@ circle {
     margin-left: 5px;
 }
 
+.premium .price .duration {
+    color: #ff9c4a;
+}
+
+.premium .features-list li {
+    color: #2B3133;
+}
+
+.ps_logo_bb1 {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 50px;
+}
+
 .features-title {
     font-size: 16px;
     font-weight: 500;
@@ -3303,13 +3324,14 @@ circle {
     font-family: "Caveat", cursive;
 }
 
-.ps_navbar_profile_logout .box_cric_btn_logout{
-    background: none ;
+.ps_navbar_profile_logout .box_cric_btn_logout {
+    background: none;
     border: none !important;
 
 }
-.ps_navbar_profile_logout .box_cric_btn.ps_navbar_logout{
-     background: none !important;
+
+.ps_navbar_profile_logout .box_cric_btn.ps_navbar_logout {
+    background: none !important;
     border: none !important;
     font-size: 14px !important;
     color: #000 !important;
@@ -3319,9 +3341,11 @@ circle {
     text-transform: none;
     min-height: auto !important;
 }
-.ps_navbar_profile_logout .box_cric_btn.ps_navbar_logout svg{
+
+.ps_navbar_profile_logout .box_cric_btn.ps_navbar_logout svg {
     display: none;
 }
+
 .text-orange {
     color: var(--bc-primary-color);
     ;
@@ -3330,6 +3354,7 @@ circle {
 .ps_lp_price_flex_box {
     display: flex;
 }
+
 .profile-initial {
     display: inline-block;
     width: 32px;
@@ -3341,9 +3366,177 @@ circle {
     line-height: 32px;
     font-size: 18px;
 }
+
 .ps_flex_subsciption_plan .ps_lp_price_flex_box {
     display: flex;
     justify-content: center;
+}
+
+
+.ps_box_signup_css .boxc_input_box_form {
+    box-shadow: none;
+    background: transparent;
+    margin: 0 auto;
+    position: relative;
+    max-width: 100%;
+    width: 100%;
+    border-radius: 0px;
+    overflow: auto;
+    display: flex;
+    min-height: 100%;
+    padding: 0px;
+    transition: ease-in-out .5s;
+}
+
+.ps_box_signup_css .bc_form_head h3 {
+    font-size: 28px;
+    line-height: 30px;
+    margin-bottom: 12px;
+}
+
+.ps_box_signup_css .bc_form_head p {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 24px;
+    color: #212121;
+    text-align: center;
+}
+
+.ps_testimonial_header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.ps_testimonial_header .ps_testimonial_user_img {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps_testimonial_header .ps_testimonial_user_img img {
+    max-width: 34px;
+    min-width: 34px;
+    max-height: 34px;
+    min-height: 34px;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.ps_testimonial_header .ps_tm_user_details {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ps_tm_user_details .reting_thumb {
+    width: 70px;
+    height: 14px;
+    object-fit: cover;
+}
+
+.ps_tm_user_details h6 .user_icon {
+    width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ps_tm_user_details h6 .user_icon>img {
+    max-width: 15px;
+    min-width: 15px;
+    max-height: 15px;
+    min-height: 15px;
+    object-fit: contain;
+}
+
+.ps_tm_user_details h6 {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #000000;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ps_tm_user_msg_wrapper {
+    padding: 15px;
+    background: #F8F8F8;
+    border-radius: 6px;
+}
+
+.ps_tm_user_msg_wrapper .view_details {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #141414;
+    margin-bottom: 4px;
+}
+
+.ps_tm_user_msg_wrapper .user_msg {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #212121;
+    margin-bottom: 0;
+}
+
+.ps_section-title {
+    margin-bottom: 15px;
+    text-align: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    position: relative;
+}
+
+.ps_section-title p {
+    font-size: 18px;
+    font-weight: 500;
+    color: #212121;
+}
+
+.ps_section_brand {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    /* gap: 20px; */
+    margin: 0 100px;
+}
+
+.ps_site_footer {
+    border-top: 1px solid #eee;
+    padding: 20px 0;
+    color: #9e9e9e;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ps_site_footer p {
+    margin-bottom: 0px;
+}
+
+.ps_site_footer p a {
+    color: #808080;
+    font-weight: 500;
+}
+
+.ps_box_signup_css .boxc_input_box_form form input{
+border: 1px solid #ebebeb;
 }
 
 @media (max-width: 768px) {
@@ -3521,7 +3714,8 @@ circle {
         line-height: 2.5 !important;
         font-size: 3rem !important;
     }
-    .ps_input_box_input .boxc_input_box_form{
+
+    .ps_input_box_input .boxc_input_box_form {
         margin-left: 30px;
     }
 }
@@ -3587,9 +3781,10 @@ circle {
 }
 
 @media screen and (max-width: 1200px) {
-    .ps_col_50{
+    .ps_col_50 {
         display: none;
     }
+
     .bc_finalScore {
         width: 100%;
         height: auto;
@@ -3827,6 +4022,7 @@ circle {
     .pricing-card.premium {
         margin: 20px auto 0px;
     }
+
     .ps_navbar_profile_logout .box_cric_btn_logout span {
         display: block;
     }

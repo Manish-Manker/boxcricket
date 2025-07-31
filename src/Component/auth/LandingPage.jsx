@@ -91,7 +91,7 @@ export default function LandingPage() {
                         <Link to="#" onClick={() => testimonialsRef.current.scrollIntoView({ behavior: 'smooth' })}>Testimonials</Link>
                         <Link to="#" onClick={() => planeRef.current.scrollIntoView({ behavior: 'smooth' })}>Plan</Link>
                         <Link to="#start">Download Sample Report</Link>
-                        <Link to="/login" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}>Get Started</Link>
+                        <Link to="/login" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}>Login</Link>
                         <Link to="/signup" onClick={() => startRef.current.scrollIntoView({ behavior: 'smooth' })}><button className="ps_lp_btn">Try for Free</button> </Link>
                     </div>
                 </div>
@@ -333,10 +333,10 @@ export default function LandingPage() {
                                 </div>
                                 <h6 className="features-title">Features Like</h6>
                                 <ul className="features-list">
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"></path></svg></span><span>live score board</span></li>
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"></path></svg></span><span>Live score board</span></li>
                                     <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"></path></svg></span><span>PDF</span></li>
-                                    <li className='ps_lp_disabled_list'><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload own logo</span></li>
-                                    <li className='ps_lp_disabled_list'><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload sponsor's log</span></li>
+                                    <li ><span className="check-icon me-2">{svg.app.landing_price_disable}</span><span className='ps_lp_disabled_list'>Upload own logo</span></li>
+                                    <li ><span className="check-icon me-2">{svg.app.landing_price_disable}</span><span className='ps_lp_disabled_list'>Upload sponsor's log</span></li>
                                 </ul>
                                   <CheckoutButton planeName={'Basic Plan'} btnTheame={"dark"} />
                             </div>
@@ -352,10 +352,10 @@ export default function LandingPage() {
                                 </div>
                                 <h6 className="features-title">Features Like</h6>
                                 <ul className="features-list">
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>live score board</span></li>
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>Live score board</span></li>
                                     <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>PDF</span></li>
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload own logo</span></li>
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload sponsor's log</span></li>
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>Upload own logo</span></li>
+                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>Upload sponsor's log</span></li>
                                 </ul>
                                 <CheckoutButton planeName={'Pro Plan'} btnTheame={"light"} />
                             </div>
@@ -472,12 +472,12 @@ export default function LandingPage() {
             <footer className="ps_lb_container_sm ps_lb_footer">
                 <div className="container">
                     <div className='row'>
-                        <div className='col-md-6 order-md-1 order-2 '>
-                            <h6> Copyrights 2025. All Rights Reserved.</h6>
+                        <div className='col-md-12 order-md-1 order-2 '>
+                            <h6>Copyright © 2025.  Made with ❤️ by <Link to="https://pixelnx.ae">PixelNX</Link>   </h6>
                         </div>
-                        <div className='col-md-6 order-md-2 order-1 mb-md-0 mb-4'>
+                        {/* <div className='col-md-6 order-md-2 order-1 mb-md-0 mb-4'>
                             <h6> <Link to="/" >Privacy Policy </Link> <span className='px-4'>| </span> <Link to="/">Terms & Conditions</Link></h6>
-                        </div>
+                        </div> */}
                     </div>
 
                 </div>
@@ -486,7 +486,7 @@ export default function LandingPage() {
         </div>
 
             <Popup
-                heading="Video"
+                heading="Experience PixaScrore in action"
                 show={addVideoPopup}
                 onClose={categoryPopupCloseHandler}
                 maxWidth={"970px"}
