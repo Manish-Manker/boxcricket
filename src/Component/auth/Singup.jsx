@@ -189,6 +189,9 @@ const Signup = () => {
     // </div>
 
     <div className='boxc_input_box ps_auth_white_bg'>
+      {loading ? (
+        <PageLoader />
+      ) : (
       <div className='ps_box_signup_css'>
         <div className="container pt-4">
 
@@ -370,6 +373,7 @@ const Signup = () => {
           </footer>
         </div>
       </div>
+      )}
     </div>
   );
 };

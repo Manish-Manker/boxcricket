@@ -3514,6 +3514,23 @@ circle {
     margin: 0 100px;
 }
 
+.ps_login_auth_title h3{
+    font-size: 42px !important;
+    line-height: 42px !important;
+}
+
+.ps_login_auth_title p{
+    font-size: 20px !important;
+    line-height: 30px !important;
+    margin-bottom: 0px;
+}
+
+.ps_login_auth_border{ 
+   border: 1px solid #e6e6e6;
+    border-radius: 8px !important;
+    padding: 40px 40px 20px !important;
+}
+
 .ps_site_footer {
     border-top: 1px solid #eee;
     padding: 20px 0;
@@ -3524,6 +3541,11 @@ circle {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: fixed;
+    justify-content: space-between;
+    bottom: 0;
+    max-width: 1300px;
+    width: 100%;
 }
 
 .ps_site_footer p {
@@ -3537,6 +3559,10 @@ circle {
 
 .ps_box_signup_css .boxc_input_box_form form input{
 border: 1px solid #ebebeb;
+}
+.ps_box_signup_css .boxc_input_box_form form input:focus {
+    box-shadow: 0 4px 19.2px .8px var(--bc-box-shadow);
+    border: 1px solid var(--bc-primary-color);
 }
 
 @media (max-width: 768px) {
