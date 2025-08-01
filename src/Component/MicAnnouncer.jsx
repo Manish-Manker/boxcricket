@@ -1,7 +1,7 @@
 // components/MicAnnouncer.js
 import React, { useState, useRef } from "react";
 import svg from "./common/svg";
-import { toast } from "react-toastify";
+import { toast } from 'react-hot-toast';
 
 const MicAnnouncer = () => {
   const [isRecording, setIsRecording] = useState(false);

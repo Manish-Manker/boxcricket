@@ -12,9 +12,10 @@ import MatchesList from './Component/admin/MatchesList';
 import ForgotPassword from './Component/auth/ForgotPassword';
 import ProtectedRoute from './Component/ProtectedRoute'
 import ChangePassword from './Component/ChangePassword';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import { ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 import Varifyemail from './Component/auth/Varifyemail.jsx';
+import { Toaster } from 'react-hot-toast';
 
 import ResetPassword from './Component/auth/ResetPassword.jsx';
 import LandingPage from './Component/auth/LandingPage.jsx';
@@ -25,7 +26,8 @@ const App = () => {
   return (
     <>
 
-      <ToastContainer
+ <Toaster position="top-center" toastOptions={{ duration: 2500 }} />
+      {/* <ToastContainer
         position="bottom-right"
         autoClose={2000}
         newestOnTop={false}
@@ -35,7 +37,7 @@ const App = () => {
         draggable
         theme="light"
         limit={1}
-      />
+      /> */}
 
       <BrowserRouter>
         <Routes>

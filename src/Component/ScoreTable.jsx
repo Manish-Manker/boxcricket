@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import PageLoader from './common/pageLoader';
 import svg from './common/svg';
 import ConfirmationPopup from './common/confirmPopup';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Logout from './common/logout';
 import MicAnnouncer from './MicAnnouncer';
 

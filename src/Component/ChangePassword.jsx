@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import PageLoader from '../Component/common/pageLoader';
 import svg from '../Component/common/svg';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const ChangePassword = () => {
     const navigate = useNavigate();
