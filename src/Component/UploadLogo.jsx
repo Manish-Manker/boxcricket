@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios'; // You'll likely need to configure axios for your backend
-import PageLoader from '../Component/common/pageLoader';
-import svg from '../Component/common/svg';
+import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const UploadLogo = () => {
     const [mainLogo, setMainLogo] = useState(null);
     const [mainLogoPreview, setMainLogoPreview] = useState(null);
-    const [ads, setAds] = useState([{ image: null, preview: null }]); // Start with one ad slot
+    const [ads, setAds] = useState([{ image: null, preview: null }]);
 
     const handleMainLogoChange = (e) => {
         const file = e.target.files[0];
@@ -69,7 +66,7 @@ const UploadLogo = () => {
                             <div className='ps_setting_image_name'><label className="form-label">Logo </label></div>
                             <div className="sylb_upload_modal_box">
                                 <label for="mainLogo" className="upload-box text-center">
-                                    <input type="file" id="mainLogo" onChange={handleMainLogoChange} className="d-none" />
+                                    <input type="file"  accept=".png, .jpeg, .jpg"  id="mainLogo" onChange={handleMainLogoChange} className="d-none" />
                                     <div className="upload-content"><div class="upload-icon">+</div>
 
                                     </div>
@@ -104,7 +101,7 @@ const UploadLogo = () => {
                                     <div className='ps_setting_image_name'><label htmlFor={`ad${index + 1}`} className="form-label">Ad {index + 1}</label></div>
                                     <div class="sylb_upload_modal_box">
                                         <label for={`ad${index + 1}`} class="upload-box text-center">
-                                            <input type="file" id={`ad${index + 1}`} onChange={(e) => handleAdChange(index, e)} class="d-none" />
+                                            <input type="file"  accept=".png, .jpeg, .jpg"  id={`ad${index + 1}`} onChange={(e) => handleAdChange(index, e)} class="d-none" />
                                             <div class="upload-content"><div class="upload-icon">+</div>
 
                                             </div>
