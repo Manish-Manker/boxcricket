@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const UploadLogo = () => {
     const [mainLogo, setMainLogo] = useState(null);
@@ -72,16 +72,6 @@ const UploadLogo = () => {
                                     </div>
                                 </label>
                             </div>
-
-                            {/* <div className="sylb_upload_modal_box">
-                                <label for="file-upload" className="upload-box text-center">
-                                    <input type="file" id="file-upload" className="d-none" />
-                                    <div className="upload-content">
-                                        <div className="upload-icon">+</div>
-                                        <div className="upload-text">Logo</div>
-                                    </div>
-                                </label>
-                            </div> */}
                         </div>
                         {mainLogoPreview && (
                             <img src={mainLogoPreview} alt="Main Logo Preview" className="ps_setting_logos_img img-fluid mt-2" />
