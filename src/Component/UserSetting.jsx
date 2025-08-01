@@ -42,7 +42,7 @@ const UserSetting = () => {
 
                 setActiveP(response.data.activePlan);
                 console.log('Active Plan State:', activeP);
-                
+
             }
         } catch (error) {
             console.error('Error signing up:', error);
@@ -64,19 +64,21 @@ const UserSetting = () => {
                 <div className="container-fluid mt-5">
                     <div className="row justify-content-center">
                         <div className="col-md-12 px-0">
-                            <div>
-                                <div className='box_cric_back_btn' onClick={() => navigate('/input')}>
-                                    {svg.app.back_icon} Back
+                             <div className='ps_back_absolute_setting'>
+                                    <div className='box_cric_back_btn' onClick={() => navigate('/input')}>
+                                        {svg.app.back_icon} Back
+                                    </div>
                                 </div>
-                            </div>
+
                             <ul className="tab-list">
+                               
                                 <li
                                     className={`tabs ${getActiveClass(1, "active-tabs")}`}
                                     onClick={() => toggleTab(1)}
                                 >
                                     Personal Info
                                 </li>
-                                {(activeP === "Pro Plan" ) &&
+                                {(activeP === "Pro Plan") &&
                                     <li
                                         className={`tabs ${getActiveClass(2, "active-tabs")}`}
                                         onClick={() => toggleTab(2)}
@@ -95,7 +97,7 @@ const UserSetting = () => {
                                 <div className={`content ${getActiveClass(1, "active-content")}`}>
                                     <ChangePassword />
                                 </div>
-                                {(activeP == "Pro Plan" )&&
+                                {(activeP == "Pro Plan") &&
                                     <div className={`content ${getActiveClass(2, "active-content")}`}>
                                         <UploadLogo />
                                     </div>}

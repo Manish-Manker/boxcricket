@@ -2987,6 +2987,18 @@ circle {
     margin: 0 auto 30px;
     background-color: #ffffff;
     border-radius: 5px;
+    position: relative;
+}
+
+.ps_back_absolute_setting{
+    position: absolute;
+    left: 30px;
+    top: 140px;
+}
+
+.ps_btn_disabled_check_btn{
+   background-color: #e9ecef !important;
+    pointer-events: none;
 }
 
 .ps_setting_tabs .tabs {
