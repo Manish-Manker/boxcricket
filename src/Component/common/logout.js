@@ -1,7 +1,7 @@
 // Logout.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import ConfirmationPopup from './confirmPopup';
 import svg from './svg';
 import axios from 'axios';

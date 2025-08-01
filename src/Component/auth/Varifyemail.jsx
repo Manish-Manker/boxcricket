@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios';
 import PageLoader from '../common/pageLoader';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 
 const Varifyemail = () => {
 

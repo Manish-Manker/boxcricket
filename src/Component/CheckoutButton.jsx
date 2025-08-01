@@ -2,7 +2,7 @@
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import React, { useEffect } from 'react';
 
 const DEV_API = process.env.REACT_APP_DEV_API;

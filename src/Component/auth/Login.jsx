@@ -3,13 +3,14 @@ import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import PageLoader from '../common/pageLoader';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import svg from '../common/svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 import { Autoplay } from 'swiper/modules';
+import { toast } from 'react-hot-toast';
 
 
 const Login = () => {
@@ -77,6 +78,7 @@ const Login = () => {
         const response = await axios.post(`${DEV_API}/api/login`, formData);
 
         if (response.data.status === 200) {
+          
           toast.success(response?.data?.message);
           // Store the token
           localStorage.setItem('authToken', response.data.token);

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import Select from 'react-select';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import svg from '../common/svg';
 import ConfirmationPopup from '../common/confirmPopup';
 import PageLoader from '../common/pageLoader';

@@ -2,6 +2,7 @@ import React, { useState, useEffect, use } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CheckoutButton from './CheckoutButton';
+import svg from './common/svg';
 
 
 
@@ -38,8 +39,8 @@ const SubscriptionPlan = ({activeP}) => {
                                         <ul className="features-list">
                                             <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"></path></svg></span><span>live score board</span></li>
                                             <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"></path></svg></span><span>PDF</span></li>
-                                            <li className='ps_lp_disabled_list'><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload own logo</span></li>
-                                            <li className='ps_lp_disabled_list'><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>upload sponsor's logo</span></li>
+                                            <li ><span className="check-icon me-2">{svg.app.landing_price_disable}</span><span className='ps_lp_disabled_list'>upload own logo</span></li>
+                                            <li ><span className="check-icon me-2">{svg.app.landing_price_disable}</span><span className='ps_lp_disabled_list'>upload sponsor's logo</span></li>
                                         </ul>
                                         {/* <CheckoutButton planeName={'Basic'} btnTheame={"dark"} /> */}
                                         {activePlan == "Pro Plan" && <CheckoutButton planeName={"Basic Plan"} btnTheame={"light"} /> || activePlan === null && <CheckoutButton planeName={"Basic Plan"} btnTheame={"light"} />}
