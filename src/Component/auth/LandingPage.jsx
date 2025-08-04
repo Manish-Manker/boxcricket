@@ -352,10 +352,10 @@ export default function LandingPage() {
                                 </div>
                                 <h6 className="features-title">Features Like</h6>
                                 <ul className="features-list">
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>Live score board</span></li>
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>PDF</span></li>
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>Upload own logo</span></li>
-                                    <li><span className="check-icon me-2"><svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="15" height="15" rx="7.5" fill="#14B082"></rect><path d="M10.8334 5.25L6.25002 9.75L4.16669 7.70455" stroke="white" strokeWidth="1.25" strokeLinecap="round" stroke-linejoin="round"></path></svg></span><span>Upload sponsor's logo</span></li>
+                                    <li><span className="check-icon me-2">{svg.app.plan_list_check}</span><span>Live score board</span></li>
+                                    <li><span className="check-icon me-2">{svg.app.plan_list_check}</span><span>PDF</span></li>
+                                    <li><span className="check-icon me-2">{svg.app.plan_list_check}</span><span>Upload own logo</span></li>
+                                    <li><span className="check-icon me-2">{svg.app.plan_list_check}</span><span>Upload sponsor's logo</span></li>
                                 </ul>
                                 <CheckoutButton planeName={'Pro Plan'} btnTheame={"light"} />
                             </div>

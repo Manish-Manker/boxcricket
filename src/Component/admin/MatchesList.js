@@ -293,7 +293,7 @@ const MatchesList = (props) => {
             name: 'Action',
             cell: (row) => (
                 <div className="pu_datatable_btns ">
-                    <a className="pu_dt_btn ps_tooltip_icon" onClick={() => viewMatchesPDF(row)} ><span class="tooltiptext">Download Match PDF</span> {svg.app.pdf_download_icon}</a>
+                    <a className="pu_dt_btn ps_tooltip_icon" onClick={() => viewMatchesPDF(row)} ><span className="tooltiptext">Download Match PDF</span> {svg.app.pdf_download_icon}</a>
                 </div>
             )
         },
