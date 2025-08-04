@@ -1068,10 +1068,10 @@ const ScoreTable = () => {
                     {svg.app.pdf_download}Create Match PDF
                   </button>
                 )}
-                <button type="submit"
+                {/* <button type="submit"
                   disabled={status === 'ongoing' ? true : false}
                   className={`box_cric_btn ${status === 'ongoing' ? 'ps_btn_disabled' : ''}`}
-                  onClick={() => setIsCreateNew(true)} > {svg.app.create} Create New Match</button>
+                  onClick={() => setIsCreateNew(true)} > {svg.app.create} Create New Match</button> */}
                 <Logout />
               </div>
             </div>

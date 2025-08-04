@@ -12,7 +12,6 @@ const NavbarUser = ({ children, showBackButton, onBackClick }) => {
     useEffect(() => {
         setUser(JSON.parse(localStorage.getItem('userData')));
     }, [])
-    console.log("userData", user);
 
 
     const toggleDropdown = () => {

@@ -10,7 +10,6 @@ import ChangePassword from './ChangePassword';
 import UploadLogo from './UploadLogo';
 import SubscriptionPlan from './SubscriptionPlan';
 
-import CheckoutButton from './CheckoutButton';
 
 const DEV_API = process.env.REACT_APP_DEV_API;
 

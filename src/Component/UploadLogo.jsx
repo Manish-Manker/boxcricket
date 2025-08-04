@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+const DEV_API = process.env.REACT_APP_DEV_API;
+
 
 const UploadLogo = () => {
     const [mainLogo, setMainLogo] = useState(null);
@@ -26,24 +28,75 @@ const UploadLogo = () => {
         setAds([...ads, { image: null, preview: null }]);
     };
 
+    useEffect(() => {
+        getimages();
+        // Cleanup function to revoke object URLs
+        return () => {
+            if (mainLogoPreview) {
+                URL.revokeObjectURL(mainLogoPreview);
+            }
+            ads.forEach(ad => {
+                if (ad.preview) {
+                    URL.revokeObjectURL(ad.preview);
+                }
+            });
+        };
+    }, []);
+
+    const getimages = async () => {
+        try {
+            const response = await axios.get(`${DEV_API}/api/getimages`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
+
+            const { mainLogo, ads } = response.data.data;
+
+            if (mainLogo) {
+                setMainLogoPreview(DEV_API + mainLogo);
+                console.log('Main Logo URL:', DEV_API + mainLogo);
+            }
+            if (ads && ads.length > 0) {
+                const updatedAds = ads.map(ad => ({
+                    image: ad.field,
+                    preview: DEV_API + ad.path
+                }));
+                setAds(updatedAds);
+            } else {
+                setAds([{ image: null, preview: null }]);
+            }
+
+        } catch (error) {
+            console.log('Error fetching images:', error);
+            toast.error('Error fetching images. Please try again later.');
+
+        }
+    }
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const formData = new FormData();
+
             formData.append('mainLogo', mainLogo);
+
             ads.forEach((ad, index) => {
                 if (ad.image) {
                     formData.append(`ad${index + 1}`, ad.image);
                 }
             });
 
-            const response = await axios.post('/api/upload', formData, {
+            const response = await axios.post(`${DEV_API}/api/upload`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+
                 }
             });
             console.log('Upload successful:', response.data);
-            toast.success('Upload successful!');
+            toast.success('Upload successful!', response.data.message || 'Logos and ads uploaded successfully.');
 
         } catch (error) {
             console.error('Upload failed:', error);
@@ -51,6 +104,20 @@ const UploadLogo = () => {
         }
     };
 
+    const handleDelete = (data) => {
+        console.log("---->."+data);
+
+        
+        
+        if (data === 'mainLogo') {
+            setMainLogo(null);
+            setMainLogoPreview(null);
+        } else {
+            const updatedAds = ads.filter((ad, index) => index !== data);
+            setAds(updatedAds);
+        }
+        toast.success('Image deleted successfully!');
+    }
 
     return (
         <div className='ps_setting_'>
@@ -64,17 +131,23 @@ const UploadLogo = () => {
 
                         <div className='d-flex align-items-center gap-4'>
                             <div className='ps_setting_image_name'><label className="form-label">Logo </label></div>
-                            <div className="sylb_upload_modal_box">
-                                <label for="mainLogo" className="upload-box text-center">
-                                    <input type="file"  accept=".png, .jpeg, .jpg"  id="mainLogo" onChange={handleMainLogoChange} className="d-none" />
-                                    <div className="upload-content"><div class="upload-icon">+</div>
+                            {!mainLogoPreview &&
+                                <div className="sylb_upload_modal_box">
+                                    <label for="mainLogo" className="upload-box text-center">
+                                        <input type="file" accept=".png, .jpeg, .jpg" id="mainLogo" onChange={handleMainLogoChange} className="d-none" />
+                                        <div className="upload-content"><div class="upload-icon">+</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            }
 
-                                    </div>
-                                </label>
-                            </div>
                         </div>
                         {mainLogoPreview && (
-                            <img src={mainLogoPreview} alt="Main Logo Preview" className="ps_setting_logos_img img-fluid mt-2" />
+                            <div>
+                                <img src={mainLogoPreview} alt="Main Logo Preview" className="ps_setting_logos_img img-fluid mt-2" />
+                                <button onClick={(e)=>{e.preventDefault(); handleDelete('mainLogo')}} >Delete</button>
+                            </div>
+
                         )}
                     </div>
 
@@ -89,19 +162,23 @@ const UploadLogo = () => {
 
                                 <div className='d-flex align-items-center gap-4'>
                                     <div className='ps_setting_image_name'><label htmlFor={`ad${index + 1}`} className="form-label">Ad {index + 1}</label></div>
-                                    <div class="sylb_upload_modal_box">
-                                        <label for={`ad${index + 1}`} class="upload-box text-center">
-                                            <input type="file"  accept=".png, .jpeg, .jpg"  id={`ad${index + 1}`} onChange={(e) => handleAdChange(index, e)} class="d-none" />
-                                            <div class="upload-content"><div class="upload-icon">+</div>
+                                    {!ad.preview &&
+                                        <div class="sylb_upload_modal_box">
+                                            <label for={`ad${index + 1}`} class="upload-box text-center">
+                                                <input type="file" accept=".png, .jpeg, .jpg" id={`ad${index + 1}`} onChange={(e) => handleAdChange(index, e)} class="d-none" />
+                                                <div class="upload-content"><div class="upload-icon">+</div>
 
-                                            </div>
-                                        </label>
-                                    </div>
-
+                                                </div>
+                                            </label>
+                                        </div>
+                                    }
                                 </div>
                                 {/* <div> <input type="file" className="form-control" id={`ad${index + 1}`} onChange={(e) => handleAdChange(index, e)} /></div> */}
                                 {ad.preview && (
+                                    <div>
                                     <img src={ad.preview} alt={`Ad ${index + 1} Preview`} className="ps_setting_logos_img img-fluid mt-2" />
+                                    <button onClick={(e)=>{e.preventDefault(); handleDelete(index)}} >Delete</button>
+                                    </div>
                                 )}
                             </div>
                         ))}
