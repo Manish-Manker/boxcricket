@@ -269,18 +269,19 @@ const InputInfo = () => {
 
       {loading ? <PageLoader /> : ''}
 
-      
+
       <div className="container-fluid " >
 
-        <div className="row justify-content-center" style={{ position: "relative" , marginTop:"75px"}}>
-          <div className='ps_col_50'></div>
-          <div className="col-xl-6 " >
-            {Array.isArray(userMatchList) && userMatchList.length > 0 && (<div className='boxc_input_box_previous'>
+        <div className="row justify-content-center" style={{ position: "relative", marginTop: "75px" }}>
 
+          {Array.isArray(userMatchList) && userMatchList.length > 0 && (<>
+            <div className='ps_col_50'></div>
+
+            <div className="col-xl-6 " >
+              <div className='boxc_input_box_previous'>
                 <div className='bc_form_head'>
                   <h3> Previous Matches</h3>
                 </div>
-
                 <div className='boxc_input_box_previous_matches'>
                   <ul>
                     {userMatchList.map((match) => (
@@ -298,10 +299,7 @@ const InputInfo = () => {
                   </ul>
                 </div>
               </div>
-              )}
-            {/* </div> */}
-
-          </div>
+            </div></>)}
           <div className='col-xl-6'>
             <div className='ps_cricket_box_flex'>
               <div className='boxc_input_box_form'>

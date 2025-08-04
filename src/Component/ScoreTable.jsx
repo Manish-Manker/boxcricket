@@ -720,7 +720,7 @@ const ScoreTable = () => {
                             onChange={() => handelTick(teamNumber, rowIndex, i, `${pair.pairId * numberOfCols - numberOfCols + i + 1}`)}
                           />
 
-                          <label htmlFor={`checkbox-${teamNumber}-${rowIndex}-${i}`}></label>
+                          <label className={`${status === 'ongoing' ? '' : 'ps_btn_disabled_check_btn'}`} htmlFor={`checkbox-${teamNumber}-${rowIndex}-${i}`}></label>
                         </div>
                       </td>
                     ))}
