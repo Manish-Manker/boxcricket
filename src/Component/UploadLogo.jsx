@@ -96,7 +96,7 @@ const UploadLogo = () => {
                 }
             });
             console.log('Upload successful:', response.data);
-            toast.success('Upload successful!', response.data.message || 'Logos and ads uploaded successfully.');
+            toast.success('Upload successful!', response.data?.message);
 
         } catch (error) {
             console.error('Upload failed:', error);

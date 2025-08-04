@@ -979,7 +979,6 @@ const ScoreTable = () => {
 
       if (responce.status === 200) {
         toast.success(responce?.data?.message);
-        console.log("praveen", responce.data);
         setStatus(value);
         setLoading(false);
         // navigate('/');
