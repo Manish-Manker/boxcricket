@@ -2,6 +2,7 @@ import React, { useState, useEffect, use } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import svg from './common/svg';
 const DEV_API = process.env.REACT_APP_DEV_API;
 
 
@@ -133,41 +134,36 @@ const UploadLogo = () => {
                             <div className='ps_setting_image_name'><label className="form-label">Logo </label></div>
                             {!mainLogoPreview &&
                                 <div className="sylb_upload_modal_box">
-                                    <label for="mainLogo" className="upload-box text-center">
+                                    <label htmlFor="mainLogo" className="upload-box text-center">
                                         <input type="file" accept=".png, .jpeg, .jpg" id="mainLogo" onChange={handleMainLogoChange} className="d-none" />
-                                        <div className="upload-content"><div class="upload-icon">+</div>
+                                        <div className="upload-content"><div className="upload-icon">+</div>
                                         </div>
                                     </label>
                                 </div>
                             }
-
                         </div>
                         {mainLogoPreview && (
-                            <div>
+                            <div className='d-flex align-items-center gap-3'>
                                 <img src={mainLogoPreview} alt="Main Logo Preview" className="ps_setting_logos_img img-fluid mt-2" />
-                                <button onClick={(e)=>{e.preventDefault(); handleDelete('mainLogo')}} >Delete</button>
+                                <button className='box_cric_btn box_cric_btn_sm' onClick={(e)=>{e.preventDefault(); handleDelete('mainLogo')}}>{svg.app.dash_delete} </button>
                             </div>
-
                         )}
                     </div>
 
                     <div className='ps_setting_info_cp d-flex justify-content-between '>
                         <h4>Ads</h4>
-                        <button type="button" className="box_cric_btn box_cric_btn_sm" onClick={addAd}>+</button>
+                        <button  type="button" className="box_cric_btn_light " onClick={addAd}>+ Add</button>
                     </div>
                     <div>
-
                         {ads.map((ad, index) => (
                             <div key={index} className="ps_setting_upload_img_flex ">
-
                                 <div className='d-flex align-items-center gap-4'>
                                     <div className='ps_setting_image_name'><label htmlFor={`ad${index + 1}`} className="form-label">Ad {index + 1}</label></div>
                                     {!ad.preview &&
-                                        <div class="sylb_upload_modal_box">
-                                            <label for={`ad${index + 1}`} class="upload-box text-center">
-                                                <input type="file" accept=".png, .jpeg, .jpg" id={`ad${index + 1}`} onChange={(e) => handleAdChange(index, e)} class="d-none" />
-                                                <div class="upload-content"><div class="upload-icon">+</div>
-
+                                        <div className="sylb_upload_modal_box">
+                                            <label htmlFor={`ad${index + 1}`} className="upload-box text-center">
+                                                <input type="file" accept=".png, .jpeg, .jpg" id={`ad${index + 1}`} onChange={(e) => handleAdChange(index, e)} className="d-none" />
+                                                <div className="upload-content"><div className="upload-icon">+</div>
                                                 </div>
                                             </label>
                                         </div>
@@ -175,9 +171,9 @@ const UploadLogo = () => {
                                 </div>
                                 {/* <div> <input type="file" className="form-control" id={`ad${index + 1}`} onChange={(e) => handleAdChange(index, e)} /></div> */}
                                 {ad.preview && (
-                                    <div>
+                                    <div className='d-flex align-items-center gap-3'>
                                     <img src={ad.preview} alt={`Ad ${index + 1} Preview`} className="ps_setting_logos_img img-fluid mt-2" />
-                                    <button onClick={(e)=>{e.preventDefault(); handleDelete(index)}} >Delete</button>
+                                    <button className='box_cric_btn box_cric_btn_sm' onClick={(e)=>{e.preventDefault(); handleDelete(index)}} >{svg.app.dash_delete}</button>
                                     </div>
                                 )}
                             </div>
