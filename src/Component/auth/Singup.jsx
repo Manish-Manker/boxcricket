@@ -115,7 +115,7 @@ const Signup = () => {
     //                 </a>
     //               </div>
     //               <div className='bc_form_head'>
-    //                 <h3>Create your Pixa-Score Account</h3>
+    //                 <h3>Create your PixaScore Account</h3>
     //               </div>
 
     //               <form onSubmit={handleSubmit}>
@@ -248,7 +248,7 @@ const Signup = () => {
 
                     <span
                       onClick={() => setShowPassword(!showPassword)}
-                      style={{ cursor: 'pointer', position: 'absolute', right: '20px', top: '52%' }}
+                      style={{ cursor: 'pointer', position: 'absolute', right: '20px', top: '50px' }}
                     >
                       {showPassword ? (
                         svg.app.open_eye_icon
@@ -321,7 +321,7 @@ const Signup = () => {
             </div>
           </div>
 
-          <div className="text-center mt-5 mb-4">
+          <div className="text-center mt-4 mb-4">
             <div className='ps_section-title'><p >Here are the brands who trust on us</p></div>
             <div className="ps_section_brand">
               <Swiper

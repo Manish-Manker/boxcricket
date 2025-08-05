@@ -13,8 +13,8 @@ const PageLoader = () => {
             </div>
           </div>
         </div>
-        <img alt='' src='./images/logo.svg'></img>
-        <h6>Pixa-Score created by PixelNX-FZCO</h6>
+        <img alt='' src='./images/logo/DarkLogo.svg'></img>
+        <h6>PixaScore created by PixelNX-FZCO</h6>
       </div>
     </div>
   );
