@@ -222,7 +222,7 @@ const Login = () => {
               <div className="col-md-4 ">
                 <div className='bc_form_head ps_login_auth_title'>
                   <h3>Login</h3>
-                  <p className="text-muted">Welcome Back to Pixa-Score!</p>
+                  <p className="text-muted">Welcome Back to PixaScore!</p>
                 </div>
 
                 <div className='boxc_input_box_form ps_login_auth_border' >
