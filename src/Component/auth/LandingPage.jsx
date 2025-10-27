@@ -74,7 +74,7 @@ export default function LandingPage() {
                 <div className="container">
                     <div className="ps_lp_logo">
                         <Link to="/" className="wpa_logo">
-                            <img src="./images/logo/darklogo.svg" alt="logo" />
+                            <img src="./images/logo/DarkLogo.svg" alt="logo" />
                         </Link>
                     </div>
                     <button className="toggle_btn" onClick={handleToggleSidebar}>
