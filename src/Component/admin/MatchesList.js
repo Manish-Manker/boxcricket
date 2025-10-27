@@ -188,7 +188,6 @@ const MatchesList = (props) => {
                     { headers: { 'Authorization': `Bearer ${token}` } });
 
                 if (response.status === 200) {
-                    console.log("Status updated:", response.data);
                     setCustomerList((prev) => prev.map((item) => item._id === matchId ? { ...item, status: statusToChange } : item));
                     toast.success(response?.data?.message);
                 }

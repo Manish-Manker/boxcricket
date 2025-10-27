@@ -19,7 +19,7 @@ const CheckoutButton = ({ planeName, btnTheame }) => {
         const user = localStorage.getItem('userData');
 
         if (!token || !user) {
-            toast.warning("You need to be logged in to make a purchase.");
+            toast.success("You need to be logged in to make a purchase.");
             navigate('/login');
             return;
         }
